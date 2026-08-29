@@ -1,6 +1,6 @@
 """
 ENERGYSCAPE: Multi-Seasonal Mathematical-Computational Framework for Predictive Energy Management and Carbon Reduction
-Main Streamlit Application — Custom Light Blue Design System (Solid White Plotly Canvas)
+Main Streamlit Application — Custom Light Blue Design System (Clean Typography & Spacing Fixes)
 """
 
 import streamlit as st
@@ -117,19 +117,9 @@ st.markdown("""
         box-sizing: border-box !important;
     }
 
-    /* Force 100% Solid White on ALL Plotly SVG canvas elements */
-    div[data-testid="stPlotlyChart"], 
-    .js-plotly-plot, 
-    .plotly, 
-    .plotly .main-svg, 
-    .plotly .bg, 
-    .plotly .bglayer, 
-    .plotly .bglayer rect,
-    .plotly .paper-bglayer rect,
-    .plotly .plot-bglayer rect,
-    .plotly .draglayer {
+    /* Solid White Chart Backgrounds */
+    div[data-testid="stPlotlyChart"], .js-plotly-plot .plotly, .plotly {
         background-color: #FFFFFF !important;
-        fill: #FFFFFF !important;
     }
 
     /* Dark Featured Savings Card (Deep Blue Theme) */
@@ -536,7 +526,7 @@ if navigation_option == "Dashboard":
                     margin=dict(l=0, r=0, t=10, b=10),
                     annotations=[dict(text="Energy Load", x=0.5, y=0.5, font=dict(size=14, family="Plus Jakarta Sans", color="#0F172A"), showarrow=False)]
                 )
-                st.plotly_chart(fig_donut, use_container_width=True, theme=None)
+                st.plotly_chart(fig_donut, use_container_width=True)
                 
                 st.markdown('<div style="margin-top: 0.5rem;">', unsafe_allow_html=True)
                 for idx, row in apps_processed.head(4).iterrows():
@@ -570,7 +560,7 @@ if navigation_option == "Dashboard":
             )
             fig_bar = apply_blue_theme(fig_bar)
             fig_bar.update_traces(marker_line_width=0, opacity=0.9)
-            st.plotly_chart(fig_bar, use_container_width=True, theme=None)
+            st.plotly_chart(fig_bar, use_container_width=True)
 
     exec_rec = generate_executive_summary_recommendation(
         load_summary.get("top_appliance", "Air Conditioner"),
@@ -607,7 +597,7 @@ elif navigation_option == "Historical Analysis":
                 plot_df = plot_df[plot_df['school'] == school_selection]
             fig = px.line(plot_df, x="date", y="bill_php", color="school", markers=True, color_discrete_sequence=["#1D4ED8", "#3B82F6"])
             fig = apply_blue_theme(fig, "Monthly Bill Trend")
-            st.plotly_chart(fig, use_container_width=True, theme=None)
+            st.plotly_chart(fig, use_container_width=True)
             
         with tab2:
             st.dataframe(metrics["yearly_summary"], use_container_width=True)
@@ -638,14 +628,14 @@ elif navigation_option == "Seasonal Analysis":
         with col_s1:
             fig_s = px.bar(seasonal_df, x="month", y="consumption_kwh", color="season", color_discrete_map={"Dry": "#1D4ED8", "Wet": "#93C5FD"})
             fig_s = apply_blue_theme(fig_s, "Monthly Seasonal Energy Consumption (kWh)")
-            st.plotly_chart(fig_s, use_container_width=True, theme=None)
+            st.plotly_chart(fig_s, use_container_width=True)
             
         with col_s2:
             s_idx_df = pd.DataFrame(list(s_metrics["seasonal_indices"].items()), columns=["Month", "Seasonal Index"])
             fig_idx = px.line(s_idx_df, x="Month", y="Seasonal Index", markers=True, color_discrete_sequence=["#1D4ED8"])
             fig_idx.add_hline(y=1.0, line_dash="dash", line_color="#94A3B8")
             fig_idx = apply_blue_theme(fig_idx, "Monthly Seasonal Index")
-            st.plotly_chart(fig_idx, use_container_width=True, theme=None)
+            st.plotly_chart(fig_idx, use_container_width=True)
 
 # --- 4. ENERGY LOAD ANALYSIS ---
 elif navigation_option == "Energy Load Analysis":
@@ -681,7 +671,7 @@ elif navigation_option == "Energy Load Analysis":
             plot_bgcolor="#FFFFFF",
             legend=dict(font=dict(color="#0F172A"))
         )
-        st.plotly_chart(fig_p, use_container_width=True, theme=None)
+        st.plotly_chart(fig_p, use_container_width=True)
 
 # --- 5. FORECASTING ---
 elif navigation_option == "Forecasting":
@@ -709,7 +699,7 @@ elif navigation_option == "Forecasting":
     fig_fc.add_trace(go.Scatter(x=fc_df['date_dt'], y=fc_df['lower_bound'], mode='lines', name='95% Interval', fill='tonexty', fillcolor='rgba(37, 99, 235, 0.15)', line=dict(width=0)))
     
     fig_fc = apply_blue_theme(fig_fc, f"Electricity Bill Forecast for {target_school}")
-    st.plotly_chart(fig_fc, use_container_width=True, theme=None)
+    st.plotly_chart(fig_fc, use_container_width=True)
     
     st.dataframe(fc_df[['date_str', 'month', 'forecast_bill', 'lower_bound', 'upper_bound']], use_container_width=True)
 
@@ -754,12 +744,12 @@ elif navigation_option == "Conservation Scenarios":
     with col_sc1:
         fig_sc_kwh = px.bar(scenarios_df, x="Scenario", y="Projected Monthly kWh", color="Scenario", color_discrete_sequence=["#0F4C81", "#1D4ED8", "#2563EB", "#3B82F6"])
         fig_sc_kwh = apply_blue_theme(fig_sc_kwh, "Projected Monthly Consumption (kWh)")
-        st.plotly_chart(fig_sc_kwh, use_container_width=True, theme=None)
+        st.plotly_chart(fig_sc_kwh, use_container_width=True)
         
     with col_sc2:
         fig_sc_co2 = px.bar(scenarios_df, x="Scenario", y="Annual Avoided CO₂e (kg)", color="Scenario", color_discrete_sequence=["#0F4C81", "#1D4ED8", "#2563EB", "#3B82F6"])
         fig_sc_co2 = apply_blue_theme(fig_sc_co2, "Annual Avoided CO₂ Emissions (kg)")
-        st.plotly_chart(fig_sc_co2, use_container_width=True, theme=None)
+        st.plotly_chart(fig_sc_co2, use_container_width=True)
 
 # --- 8. OPTIMIZATION ---
 elif navigation_option == "Optimization":
