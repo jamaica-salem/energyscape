@@ -1234,7 +1234,7 @@ elif navigation_option == "Conservation Scenarios":
                     <div class="kpi-label">5% Reduction</div>
                     <div class="kpi-val">{format_kwh(s_5["Projected Monthly kWh"])}</div>
                 </div>
-                <span class="pill-badge-green">-{format_kwh(s_5["Monthly kWh Savings"])}</span>
+                <span class="pill-badge-green">-{format_kwh(s_5["Monthly Energy Saved (kWh)"])}</span>
             </div>
             <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
                 Save {format_currency(s_5["Annual Cost Savings (₱)"])}/yr
@@ -1250,7 +1250,7 @@ elif navigation_option == "Conservation Scenarios":
                     <div class="kpi-label">10% Reduction</div>
                     <div class="kpi-val">{format_kwh(s_10["Projected Monthly kWh"])}</div>
                 </div>
-                <span class="pill-badge-green">-{format_kwh(s_10["Monthly kWh Savings"])}</span>
+                <span class="pill-badge-green">-{format_kwh(s_10["Monthly Energy Saved (kWh)"])}</span>
             </div>
             <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
                 Save {format_currency(s_10["Annual Cost Savings (₱)"])}/yr
@@ -1266,7 +1266,7 @@ elif navigation_option == "Conservation Scenarios":
                     <div class="kpi-label">15% Target</div>
                     <div class="kpi-val">{format_kwh(s_15["Projected Monthly kWh"])}</div>
                 </div>
-                <span class="pill-badge-green">-{format_kwh(s_15["Monthly kWh Savings"])}</span>
+                <span class="pill-badge-green">-{format_kwh(s_15["Monthly Energy Saved (kWh)"])}</span>
             </div>
             <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
                 Save {format_currency(s_15["Annual Cost Savings (₱)"])}/yr
