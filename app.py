@@ -513,17 +513,17 @@ if navigation_option == "Dashboard":
         st.plotly_chart(fig_bar, use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
-    st.markdown("""
-    <div class="ui-card" style="border-left: 6px solid #1D4ED8;">
-        <h3 style="font-size: 1.1rem; font-weight: 700; color: #1E3A8A; margin-bottom: 0.5rem;">Executive Management Recommendation</h3>
-    """, unsafe_allow_html=True)
     exec_rec = generate_executive_summary_recommendation(
         load_summary.get("top_appliance", "Air Conditioner"),
         load_summary.get("top_share", 34.60),
         opt_res["optimized_monthly_kwh"]
     )
-    st.markdown(f'<p style="font-size: 0.95rem; color: #334155; line-height: 1.6;">{exec_rec}</p>', unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown(f"""
+    <div class="ui-card" style="border-left: 6px solid #1D4ED8;">
+        <h3 style="font-size: 1.1rem; font-weight: 700; color: #1E3A8A; margin-bottom: 0.5rem;">Executive Management Recommendation</h3>
+        <p style="font-size: 0.95rem; color: #334155; line-height: 1.6; margin: 0;">{exec_rec}</p>
+    </div>
+    """, unsafe_allow_html=True)
 
 # --- 2. HISTORICAL ANALYSIS ---
 elif navigation_option == "Historical Analysis":

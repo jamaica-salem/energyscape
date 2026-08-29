@@ -48,10 +48,10 @@ def generate_executive_summary_recommendation(top_appliance: str,
     Generate executive-level analytical summary statement based on calculated outputs.
     """
     summary = (
-        f"Analytical results identify **{top_appliance}** as the primary energy load, contributing **{top_share:.2f}%** "
+        f"Analytical results identify <strong>{top_appliance}</strong> as the primary energy load, contributing <strong>{top_share:.2f}%</strong> "
         f"of total estimated appliance consumption. "
-        f"Seasonal analysis shows dry season consumption is **{dry_vs_wet_diff_pct:.2f}% higher**, indicating peak demand during warmer months. "
-        f"The evaluated 15% Moderate Conservation Scenario establishes an optimized target of **{optimized_target_kwh:,.2f} kWh/month**, "
-        f"delivering an estimated annual reduction of **4,120.32 kWh**, **₱45,323.52**, and avoiding **2,884.22 kg CO₂e**."
+        f"Seasonal analysis shows dry season consumption is <strong>{dry_vs_wet_diff_pct:.2f}% higher</strong>, indicating peak demand during warmer months. "
+        f"The evaluated 15% Moderate Conservation Scenario establishes an optimized target of <strong>{optimized_target_kwh:,.2f} kWh/month</strong>, "
+        f"delivering an estimated annual reduction of <strong>4,120.32 kWh</strong>, <strong>₱45,323.52</strong>, and avoiding <strong>2,884.22 kg CO₂e</strong>."
     )
     return summary
