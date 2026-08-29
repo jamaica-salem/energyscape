@@ -1186,28 +1186,127 @@ elif navigation_option == "Carbon & BAU":
 
 # --- 7. CONSERVATION SCENARIOS ---
 elif navigation_option == "Conservation Scenarios":
-    st.title("Conservation Scenarios (5%, 10%, 15%)")
-    st.write("Simulated scenario comparison against Business-as-Usual.")
+    st.markdown("""
+    <div class="user-greeting-banner">
+        <div>
+            <p class="greeting-title">Simulated Energy Interventions</p>
+            <h1 class="greeting-name">Conservation Scenarios (5%, 10%, 15%)</h1>
+        </div>
+        <div>
+            <span class="pill-badge-blue">Multi-Tier Reduction Modeling</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
     
     apps_processed = calculate_appliance_loads(appliance_df, electricity_rate, school_selection)
     load_sum = get_load_summary(apps_processed, electricity_rate)
     bau = calculate_bau_baseline(load_sum.get("total_kwh", 2289.10), electricity_rate, emission_factor)
     scenarios_df = simulate_conservation_scenarios(bau)
     
-    st.dataframe(scenarios_df, use_container_width=True)
+    s_bau = scenarios_df[scenarios_df["Scenario"] == "BAU Baseline"].iloc[0]
+    s_5 = scenarios_df[scenarios_df["Scenario"] == "5% Reduction"].iloc[0]
+    s_10 = scenarios_df[scenarios_df["Scenario"] == "10% Reduction"].iloc[0]
+    s_15 = scenarios_df[scenarios_df["Scenario"] == "15% Reduction"].iloc[0]
+    
+    sc1, sc2, sc3, sc4 = st.columns(4)
+    
+    with sc1:
+        st.markdown(f"""
+        <div class="ui-card">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                <div>
+                    <div class="kpi-label">BAU Baseline</div>
+                    <div class="kpi-val">{format_kwh(s_bau["Projected Monthly kWh"])}</div>
+                </div>
+                <span class="pill-badge-blue">0% Savings</span>
+            </div>
+            <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
+                Current monthly load
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+    with sc2:
+        st.markdown(f"""
+        <div class="ui-card">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                <div>
+                    <div class="kpi-label">5% Reduction</div>
+                    <div class="kpi-val">{format_kwh(s_5["Projected Monthly kWh"])}</div>
+                </div>
+                <span class="pill-badge-green">-{format_kwh(s_5["Monthly kWh Savings"])}</span>
+            </div>
+            <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
+                Save {format_currency(s_5["Annual Cost Savings (₱)"])}/yr
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+    with sc3:
+        st.markdown(f"""
+        <div class="ui-card">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                <div>
+                    <div class="kpi-label">10% Reduction</div>
+                    <div class="kpi-val">{format_kwh(s_10["Projected Monthly kWh"])}</div>
+                </div>
+                <span class="pill-badge-green">-{format_kwh(s_10["Monthly kWh Savings"])}</span>
+            </div>
+            <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
+                Save {format_currency(s_10["Annual Cost Savings (₱)"])}/yr
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+    with sc4:
+        st.markdown(f"""
+        <div class="ui-card">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                <div>
+                    <div class="kpi-label">15% Target</div>
+                    <div class="kpi-val">{format_kwh(s_15["Projected Monthly kWh"])}</div>
+                </div>
+                <span class="pill-badge-green">-{format_kwh(s_15["Monthly kWh Savings"])}</span>
+            </div>
+            <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
+                Save {format_currency(s_15["Annual Cost Savings (₱)"])}/yr
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with st.container(border=True):
+        st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem;">Simulated Conservation Scenarios Matrix</h3>', unsafe_allow_html=True)
+        st.dataframe(scenarios_df, use_container_width=True)
     
     col_sc1, col_sc2 = st.columns(2)
     with col_sc1:
-        fig_sc_kwh = px.bar(scenarios_df, x="Scenario", y="Projected Monthly kWh", color="Scenario", color_discrete_sequence=["#0F4C81", "#1D4ED8", "#2563EB", "#3B82F6"])
-        fig_sc_kwh = apply_blue_theme(fig_sc_kwh, "Projected Monthly Consumption (kWh)")
-        fig_sc_kwh.update_traces(marker=dict(cornerradius=6))
-        st.plotly_chart(fig_sc_kwh, use_container_width=True)
+        with st.container(border=True):
+            st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem;">Projected Monthly Consumption (kWh)</h3>', unsafe_allow_html=True)
+            fig_sc_kwh = px.bar(scenarios_df, x="Scenario", y="Projected Monthly kWh", color="Scenario", color_discrete_sequence=["#0F4C81", "#1D4ED8", "#2563EB", "#3B82F6"], height=340)
+            fig_sc_kwh = apply_blue_theme(fig_sc_kwh)
+            fig_sc_kwh.update_traces(marker=dict(cornerradius=6))
+            st.plotly_chart(fig_sc_kwh, use_container_width=True)
         
     with col_sc2:
-        fig_sc_co2 = px.bar(scenarios_df, x="Scenario", y="Annual Avoided CO₂e (kg)", color="Scenario", color_discrete_sequence=["#0F4C81", "#1D4ED8", "#2563EB", "#3B82F6"])
-        fig_sc_co2 = apply_blue_theme(fig_sc_co2, "Annual Avoided CO₂ Emissions (kg)")
-        fig_sc_co2.update_traces(marker=dict(cornerradius=6))
-        st.plotly_chart(fig_sc_co2, use_container_width=True)
+        with st.container(border=True):
+            st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem;">Annual Avoided CO₂ Emissions (kg)</h3>', unsafe_allow_html=True)
+            fig_sc_co2 = px.bar(scenarios_df, x="Scenario", y="Annual Avoided CO₂e (kg)", color="Scenario", color_discrete_sequence=["#0F4C81", "#1D4ED8", "#2563EB", "#3B82F6"], height=340)
+            fig_sc_co2 = apply_blue_theme(fig_sc_co2)
+            fig_sc_co2.update_traces(marker=dict(cornerradius=6))
+            st.plotly_chart(fig_sc_co2, use_container_width=True)
+
+    st.markdown(f"""
+    <div class="ui-card" style="border-left: 6px solid #1D4ED8; margin-top: 1.25rem; padding: 1.5rem 1.75rem;">
+        <h3 style="font-size: 1.05rem; font-weight: 700; color: #1E3A8A; margin-bottom: 0.5rem;">Conservation Intervention Insights</h3>
+        <p style="font-size: 0.90rem; color: #334155; line-height: 1.55; margin: 0;">
+            Simulating conservation scenarios demonstrates progressive financial and environmental savings. 
+            Achieving the <strong>15% reduction target</strong> reduces monthly usage from <strong>{format_kwh(s_bau['Projected Monthly kWh'])}</strong> to 
+            <strong>{format_kwh(s_15['Projected Monthly kWh'])}</strong>, generating annual financial savings of 
+            <strong>{format_currency(s_15['Annual Cost Savings (₱)'])}</strong> and preventing 
+            <strong>{format_co2(s_15['Annual Avoided CO₂e (kg)'])}</strong> of annual CO₂ emissions.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
 
 # --- 8. OPTIMIZATION ---
 elif navigation_option == "Optimization":
