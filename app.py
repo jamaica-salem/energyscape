@@ -1,6 +1,6 @@
 """
 ENERGYSCAPE: Multi-Seasonal Mathematical-Computational Framework for Predictive Energy Management and Carbon Reduction
-Main Streamlit Application — Custom Light Blue Design System (Clean Typography & Spacing Fixes)
+Main Streamlit Application — Custom Light Blue Design System (Aesthetic Rounded Chart Edges & Smooth Bar Corners)
 """
 
 import streamlit as st
@@ -117,9 +117,13 @@ st.markdown("""
         box-sizing: border-box !important;
     }
 
-    /* Solid White Chart Backgrounds */
-    div[data-testid="stPlotlyChart"], .js-plotly-plot .plotly, .plotly {
-        background-color: #FFFFFF !important;
+    /* Aesthetic Rounded Chart Container Edges */
+    div[data-testid="stPlotlyChart"], 
+    .js-plotly-plot, 
+    .plotly, 
+    .plotly .main-svg {
+        border-radius: 16px !important;
+        overflow: hidden !important;
     }
 
     /* Dark Featured Savings Card (Deep Blue Theme) */
@@ -369,8 +373,8 @@ def apply_blue_theme(fig, title=""):
     fig.update_layout(
         title=dict(text=title, font=dict(family="Plus Jakarta Sans", size=15, color="#0F172A")),
         font=dict(family="Plus Jakarta Sans", color="#475569"),
-        paper_bgcolor="#FFFFFF",
-        plot_bgcolor="#FFFFFF",
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
         margin=dict(l=10, r=10, t=30, b=10),
         xaxis=dict(
             title="",
@@ -521,8 +525,8 @@ if navigation_option == "Dashboard":
                 fig_donut.update_traces(textinfo="percent", hoverinfo="label+value+percent")
                 fig_donut.update_layout(
                     showlegend=False,
-                    paper_bgcolor="#FFFFFF",
-                    plot_bgcolor="#FFFFFF",
+                    paper_bgcolor="rgba(0,0,0,0)",
+                    plot_bgcolor="rgba(0,0,0,0)",
                     margin=dict(l=0, r=0, t=10, b=10),
                     annotations=[dict(text="Energy Load", x=0.5, y=0.5, font=dict(size=14, family="Plus Jakarta Sans", color="#0F172A"), showarrow=False)]
                 )
@@ -559,7 +563,7 @@ if navigation_option == "Dashboard":
                 height=380
             )
             fig_bar = apply_blue_theme(fig_bar)
-            fig_bar.update_traces(marker_line_width=0, opacity=0.9)
+            fig_bar.update_traces(marker=dict(cornerradius=6), marker_line_width=0, opacity=0.9)
             st.plotly_chart(fig_bar, use_container_width=True)
 
     exec_rec = generate_executive_summary_recommendation(
@@ -628,6 +632,7 @@ elif navigation_option == "Seasonal Analysis":
         with col_s1:
             fig_s = px.bar(seasonal_df, x="month", y="consumption_kwh", color="season", color_discrete_map={"Dry": "#1D4ED8", "Wet": "#93C5FD"})
             fig_s = apply_blue_theme(fig_s, "Monthly Seasonal Energy Consumption (kWh)")
+            fig_s.update_traces(marker=dict(cornerradius=6))
             st.plotly_chart(fig_s, use_container_width=True)
             
         with col_s2:
@@ -660,15 +665,15 @@ elif navigation_option == "Energy Load Analysis":
         apps_sorted['cum_share'] = apps_sorted['percentage_share'].cumsum()
         
         fig_p = go.Figure()
-        fig_p.add_trace(go.Bar(x=apps_sorted['appliance'], y=apps_sorted['monthly_kwh'], name="Monthly kWh", marker_color="#1D4ED8"))
+        fig_p.add_trace(go.Bar(x=apps_sorted['appliance'], y=apps_sorted['monthly_kwh'], name="Monthly kWh", marker=dict(color="#1D4ED8", cornerradius=6)))
         fig_p.add_trace(go.Scatter(x=apps_sorted['appliance'], y=apps_sorted['cum_share'], name="Cumulative Share (%)", yaxis="y2", mode="lines+markers", line=dict(color="#2563EB", width=3)))
         
         fig_p.update_layout(
             title=dict(text="Pareto Appliance Load Analysis", font=dict(color="#0F172A")),
             yaxis=dict(title="Energy (kWh)", gridcolor="#F1F5F9", tickfont=dict(color="#475569")),
             yaxis2=dict(title="Cumulative Share (%)", overlaying="y", side="right", range=[0, 105], tickfont=dict(color="#475569")),
-            paper_bgcolor="#FFFFFF",
-            plot_bgcolor="#FFFFFF",
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(0,0,0,0)",
             legend=dict(font=dict(color="#0F172A"))
         )
         st.plotly_chart(fig_p, use_container_width=True)
@@ -744,11 +749,13 @@ elif navigation_option == "Conservation Scenarios":
     with col_sc1:
         fig_sc_kwh = px.bar(scenarios_df, x="Scenario", y="Projected Monthly kWh", color="Scenario", color_discrete_sequence=["#0F4C81", "#1D4ED8", "#2563EB", "#3B82F6"])
         fig_sc_kwh = apply_blue_theme(fig_sc_kwh, "Projected Monthly Consumption (kWh)")
+        fig_sc_kwh.update_traces(marker=dict(cornerradius=6))
         st.plotly_chart(fig_sc_kwh, use_container_width=True)
         
     with col_sc2:
         fig_sc_co2 = px.bar(scenarios_df, x="Scenario", y="Annual Avoided CO₂e (kg)", color="Scenario", color_discrete_sequence=["#0F4C81", "#1D4ED8", "#2563EB", "#3B82F6"])
         fig_sc_co2 = apply_blue_theme(fig_sc_co2, "Annual Avoided CO₂ Emissions (kg)")
+        fig_sc_co2.update_traces(marker=dict(cornerradius=6))
         st.plotly_chart(fig_sc_co2, use_container_width=True)
 
 # --- 8. OPTIMIZATION ---
