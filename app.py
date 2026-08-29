@@ -1,6 +1,6 @@
 """
 ENERGYSCAPE: Multi-Seasonal Mathematical-Computational Framework for Predictive Energy Management and Carbon Reduction
-Main Streamlit Application — Custom Blue Design System (Inspired by Bankio UI)
+Main Streamlit Application — Custom Light Blue Design System (Theme Fixes)
 """
 
 import streamlit as st
@@ -34,21 +34,37 @@ st.set_page_config(
 )
 
 # ----------------------------------------------------
-# CUSTOM CSS DESIGN SYSTEM (BLUE THEME — INSPIRED BY BANKIO UI)
+# COMPREHENSIVE LIGHT BLUE THEME CSS FIXES
 # ----------------------------------------------------
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
+    /* Global Body & Background */
     html, body, [class*="css"] {
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        background-color: #F8FAFC;
-        color: #0F172A;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        background-color: #F8FAFC !important;
+        color: #0F172A !important;
     }
 
-    /* Main Container Background */
     .stApp {
-        background-color: #F8FAFC;
+        background-color: #F8FAFC !important;
+    }
+
+    /* Remove ugly black Streamlit header & decoration */
+    header[data-testid="stHeader"] {
+        background-color: #F8FAFC !important;
+        border-bottom: 1px solid #E2E8F0 !important;
+    }
+    div[data-testid="stDecoration"] {
+        display: none !important;
+    }
+
+    /* Headings Typography */
+    h1, h2, h3, h4, h5, h6 {
+        color: #0F172A !important;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        font-weight: 800 !important;
     }
 
     /* Top Greeting Banner */
@@ -58,126 +74,114 @@ st.markdown("""
         align-items: center;
         margin-bottom: 1.5rem;
         padding-bottom: 0.5rem;
-        border-bottom: 1px solid #E2E8F0;
     }
     .greeting-title {
-        font-size: 0.95rem;
-        color: #64748B;
-        margin: 0;
+        font-size: 0.95rem !important;
+        color: #64748B !important;
+        margin: 0 !important;
     }
     .greeting-name {
-        font-size: 1.75rem;
-        font-weight: 800;
-        color: #0F172A;
-        margin: 0;
-        letter-spacing: -0.02em;
+        font-size: 2.25rem !important;
+        font-weight: 800 !important;
+        color: #0F172A !important;
+        margin: 0 !important;
+        letter-spacing: -0.02em !important;
     }
 
     /* Card Containers */
     .ui-card {
-        background-color: #FFFFFF;
-        border: 1px solid #E2E8F0;
-        border-radius: 18px;
-        padding: 1.5rem;
-        box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04);
-        margin-bottom: 1.5rem;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .ui-card:hover {
-        box-shadow: 0 10px 25px -3px rgba(15, 23, 42, 0.08);
+        background-color: #FFFFFF !important;
+        border: 1px solid #E2E8F0 !important;
+        border-radius: 18px !important;
+        padding: 1.5rem !important;
+        box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04) !important;
+        margin-bottom: 1.5rem !important;
     }
 
     /* Dark Featured Savings Card (Deep Blue Theme) */
     .dark-featured-card {
-        background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 100%);
-        border-radius: 18px;
-        padding: 1.5rem;
-        color: #FFFFFF;
-        box-shadow: 0 8px 24px -4px rgba(30, 58, 138, 0.35);
-        margin-bottom: 1.5rem;
-        position: relative;
-        overflow: hidden;
-    }
-    .dark-featured-card::after {
-        content: "";
-        position: absolute;
-        top: -40px;
-        right: -40px;
-        width: 140px;
-        height: 140px;
-        background: rgba(59, 130, 246, 0.15);
-        border-radius: 50%;
+        background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 100%) !important;
+        border-radius: 18px !important;
+        padding: 1.5rem !important;
+        color: #FFFFFF !important;
+        box-shadow: 0 8px 24px -4px rgba(30, 58, 138, 0.35) !important;
+        margin-bottom: 1.5rem !important;
+        position: relative !important;
+        overflow: hidden !important;
     }
     .dark-card-label {
-        font-size: 0.85rem;
-        color: #93C5FD;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
+        font-size: 0.85rem !important;
+        color: #93C5FD !important;
+        font-weight: 600 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.05em !important;
     }
     .dark-card-value {
-        font-size: 2.25rem;
-        font-weight: 800;
-        color: #FFFFFF;
-        margin: 0.25rem 0;
-        letter-spacing: -0.02em;
+        font-size: 2.25rem !important;
+        font-weight: 800 !important;
+        color: #FFFFFF !important;
+        margin: 0.25rem 0 !important;
+        letter-spacing: -0.02em !important;
     }
     .dark-card-subtitle {
-        font-size: 0.85rem;
-        color: #BFDBFE;
-        margin-top: 0.5rem;
+        font-size: 0.85rem !important;
+        color: #BFDBFE !important;
+        margin-top: 0.5rem !important;
     }
 
     /* Pill Badges */
     .pill-badge-blue {
-        background-color: #DBEAFE;
-        color: #1E40AF;
-        padding: 0.3rem 0.75rem;
-        border-radius: 9999px;
-        font-size: 0.75rem;
-        font-weight: 700;
-        display: inline-flex;
-        align-items: center;
+        background-color: #DBEAFE !important;
+        color: #1E40AF !important;
+        padding: 0.3rem 0.75rem !important;
+        border-radius: 9999px !important;
+        font-size: 0.75rem !important;
+        font-weight: 700 !important;
+        display: inline-flex !important;
+        align-items: center !important;
     }
     .pill-badge-green {
-        background-color: #DCFCE7;
-        color: #166534;
-        padding: 0.3rem 0.75rem;
-        border-radius: 9999px;
-        font-size: 0.75rem;
-        font-weight: 700;
-        display: inline-flex;
-        align-items: center;
+        background-color: #DCFCE7 !important;
+        color: #166534 !important;
+        padding: 0.3rem 0.75rem !important;
+        border-radius: 9999px !important;
+        font-size: 0.75rem !important;
+        font-weight: 700 !important;
+        display: inline-flex !important;
+        align-items: center !important;
     }
     .pill-badge-red {
-        background-color: #FEE2E2;
-        color: #991B1B;
-        padding: 0.3rem 0.75rem;
-        border-radius: 9999px;
-        font-size: 0.75rem;
-        font-weight: 700;
-        display: inline-flex;
-        align-items: center;
+        background-color: #FEE2E2 !important;
+        color: #991B1B !important;
+        padding: 0.3rem 0.75rem !important;
+        border-radius: 9999px !important;
+        font-size: 0.75rem !important;
+        font-weight: 700 !important;
+        display: inline-flex !important;
+        align-items: center !important;
     }
 
     /* Metric Display */
     .kpi-label {
-        font-size: 0.85rem;
-        color: #64748B;
-        font-weight: 600;
-        margin-bottom: 0.25rem;
+        font-size: 0.85rem !important;
+        color: #64748B !important;
+        font-weight: 600 !important;
+        margin-bottom: 0.25rem !important;
     }
     .kpi-val {
-        font-size: 1.85rem;
-        font-weight: 800;
-        color: #0F172A;
-        letter-spacing: -0.02em;
+        font-size: 1.85rem !important;
+        font-weight: 800 !important;
+        color: #0F172A !important;
+        letter-spacing: -0.02em !important;
     }
 
-    /* Sidebar Styling */
+    /* Sidebar Fixes */
     section[data-testid="stSidebar"] {
-        background-color: #FFFFFF;
-        border-right: 1px solid #E2E8F0;
+        background-color: #FFFFFF !important;
+        border-right: 1px solid #E2E8F0 !important;
+    }
+    section[data-testid="stSidebar"] * {
+        color: #0F172A !important;
     }
     .sidebar-brand {
         display: flex;
@@ -185,20 +189,58 @@ st.markdown("""
         gap: 10px;
         font-size: 1.25rem;
         font-weight: 800;
-        color: #1E3A8A;
+        color: #1E3A8A !important;
         margin-bottom: 1.5rem;
     }
     .sidebar-section-header {
-        font-size: 0.75rem;
-        font-weight: 700;
-        color: #94A3B8;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        margin-top: 1.25rem;
-        margin-bottom: 0.5rem;
+        font-size: 0.75rem !important;
+        font-weight: 800 !important;
+        color: #64748B !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.08em !important;
+        margin-top: 1.25rem !important;
+        margin-bottom: 0.5rem !important;
     }
 
-    /* Custom Legend Table */
+    /* Radio button / Navigation list fix */
+    div[role="radiogroup"] label {
+        background-color: transparent !important;
+        color: #334155 !important;
+        font-weight: 600 !important;
+        padding: 8px 12px !important;
+        border-radius: 10px !important;
+        margin-bottom: 4px !important;
+        transition: all 0.2s ease !important;
+    }
+    div[role="radiogroup"] label:hover {
+        background-color: #F1F5F9 !important;
+    }
+    div[role="radiogroup"] label[data-checked="true"] {
+        background-color: #EFF6FF !important;
+        color: #1D4ED8 !important;
+        font-weight: 800 !important;
+    }
+
+    /* Widget Labels & Inputs Fix */
+    label[data-testid="stWidgetLabel"] p {
+        color: #475569 !important;
+        font-weight: 700 !important;
+        font-size: 0.875rem !important;
+    }
+    div[data-baseweb="select"] > div {
+        background-color: #F8FAFC !important;
+        color: #0F172A !important;
+        border: 1px solid #CBD5E1 !important;
+        border-radius: 10px !important;
+    }
+    input[type="number"] {
+        background-color: #F8FAFC !important;
+        color: #0F172A !important;
+        border: 1px solid #CBD5E1 !important;
+        border-radius: 10px !important;
+    }
+
+    /* Legend Row */
     .legend-row {
         display: flex;
         justify-content: space-between;
@@ -216,13 +258,6 @@ st.markdown("""
         width: 10px;
         height: 10px;
         border-radius: 50%;
-    }
-
-    /* Table Customization */
-    .stDataFrame {
-        border-radius: 12px;
-        overflow: hidden;
-        border: 1px solid #E2E8F0;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -285,7 +320,7 @@ with st.sidebar:
         uploaded_loads = st.file_uploader("Upload Appliance Loads CSV", type=["csv"])
 
 # ----------------------------------------------------
-# DATA INGGESTION
+# DATA INGESTION
 # ----------------------------------------------------
 try:
     historical_df = load_historical_bills(uploaded_bills)
@@ -304,12 +339,12 @@ def apply_blue_theme(fig, title=""):
     fig.update_layout(
         title=dict(text=title, font=dict(family="Plus Jakarta Sans", size=16, color="#0F172A")),
         font=dict(family="Plus Jakarta Sans", color="#475569"),
-        paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="rgba(0,0,0,0)",
+        paper_bgcolor="#FFFFFF",
+        plot_bgcolor="#FFFFFF",
         margin=dict(l=10, r=10, t=40, b=10),
-        xaxis=dict(gridcolor="#F1F5F9", showline=True, linecolor="#E2E8F0"),
-        yaxis=dict(gridcolor="#F1F5F9", showline=True, linecolor="#E2E8F0"),
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+        xaxis=dict(gridcolor="#F1F5F9", showline=True, linecolor="#E2E8F0", tickfont=dict(color="#475569")),
+        yaxis=dict(gridcolor="#F1F5F9", showline=True, linecolor="#E2E8F0", tickfont=dict(color="#475569")),
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, font=dict(color="#0F172A"))
     )
     return fig
 
@@ -319,7 +354,6 @@ def apply_blue_theme(fig, title=""):
 
 # --- 1. DASHBOARD ---
 if navigation_option == "🏠 Dashboard":
-    # Top Banner / Greeting
     st.markdown("""
     <div class="user-greeting-banner">
         <div>
@@ -341,7 +375,6 @@ if navigation_option == "🏠 Dashboard":
     scenarios_sim = simulate_conservation_scenarios(bau_base)
     opt_res = optimize_conservation_target(scenarios_sim)
     
-    # Top KPI Row (2 Light Cards + 1 Dark Featured Card in Deep Blue)
     col_kpi1, col_kpi2, col_kpi3 = st.columns([1, 1, 1.2])
     
     with col_kpi1:
@@ -423,12 +456,11 @@ if navigation_option == "🏠 Dashboard":
         </div>
         """, unsafe_allow_html=True)
 
-    # Middle Charts Section (Donut Chart Load Category + Monthly Financial Bar Chart)
     col_chart_left, col_chart_right = st.columns([1, 1.2])
     
     with col_chart_left:
         st.markdown('<div class="ui-card">', unsafe_allow_html=True)
-        st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">Appliance Load Category Breakdown</h3>', unsafe_allow_html=True)
+        st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 1rem;">Appliance Load Category Breakdown</h3>', unsafe_allow_html=True)
         
         if not apps_processed.empty:
             fig_donut = px.pie(
@@ -438,12 +470,13 @@ if navigation_option == "🏠 Dashboard":
             fig_donut.update_traces(textinfo="percent", hoverinfo="label+value+percent")
             fig_donut.update_layout(
                 showlegend=False,
+                paper_bgcolor="#FFFFFF",
+                plot_bgcolor="#FFFFFF",
                 margin=dict(l=0, r=0, t=10, b=10),
-                annotations=[dict(text="Energy Load", x=0.5, y=0.5, font_size=14, font_family="Plus Jakarta Sans", showarrow=False)]
+                annotations=[dict(text="Energy Load", x=0.5, y=0.5, font=dict(size=14, family="Plus Jakarta Sans", color="#0F172A"), showarrow=False)]
             )
             st.plotly_chart(fig_donut, use_container_width=True)
             
-            # Custom Legend Grid underneath (matching Bankio UI design)
             st.markdown('<div style="margin-top: 1rem;">', unsafe_allow_html=True)
             for idx, row in apps_processed.head(4).iterrows():
                 color_dot = BLUE_PALETTE[idx % len(BLUE_PALETTE)]
@@ -451,10 +484,10 @@ if navigation_option == "🏠 Dashboard":
                 <div class="legend-row">
                     <div class="legend-left">
                         <div class="legend-dot" style="background-color: {color_dot};"></div>
-                        <span>{row['appliance']}</span>
+                        <span style="color: #0F172A; font-weight: 600;">{row['appliance']}</span>
                     </div>
                     <div>
-                        <strong>{format_kwh(row['monthly_kwh'])}</strong> 
+                        <strong style="color: #0F172A;">{format_kwh(row['monthly_kwh'])}</strong> 
                         <span style="color: #64748B; margin-left: 6px;">({row['percentage_share']:.1f}%)</span>
                     </div>
                 </div>
@@ -465,7 +498,7 @@ if navigation_option == "🏠 Dashboard":
         
     with col_chart_right:
         st.markdown('<div class="ui-card">', unsafe_allow_html=True)
-        st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">Monthly Electricity Billing Patterns</h3>', unsafe_allow_html=True)
+        st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 1rem;">Monthly Electricity Billing Patterns</h3>', unsafe_allow_html=True)
         
         plot_df = historical_df[historical_df['bill_php'].notna()]
         if school_selection != "Both":
@@ -480,7 +513,6 @@ if navigation_option == "🏠 Dashboard":
         st.plotly_chart(fig_bar, use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
-    # Executive Recommendation Card
     st.markdown("""
     <div class="ui-card" style="border-left: 6px solid #1D4ED8;">
         <h3 style="font-size: 1.1rem; font-weight: 700; color: #1E3A8A; margin-bottom: 0.5rem;">🎯 Executive Management Recommendation</h3>
@@ -508,7 +540,6 @@ elif navigation_option == "📊 Historical Analysis":
         c4.metric("Lowest Monthly Bill", format_currency(metrics["min_bill"]))
         
         st.markdown("---")
-        
         tab1, tab2, tab3 = st.tabs(["📈 Monthly Trend Line", "📅 Yearly Totals", "🗓️ Monthly Averages"])
         
         with tab1:
@@ -575,7 +606,6 @@ elif navigation_option == "🔌 Energy Load Analysis":
         st.markdown("### 📋 Ranked Appliance Load Inventory")
         st.dataframe(apps_processed[['rank', 'appliance', 'quantity', 'power_watts', 'hours_per_day', 'operating_days', 'monthly_kwh', 'monthly_cost_php', 'percentage_share', 'priority']], use_container_width=True)
         
-        # Pareto Chart
         st.markdown("### 📊 Pareto Energy Concentration")
         apps_sorted = apps_processed.sort_values(by='monthly_kwh', ascending=False)
         apps_sorted['cum_share'] = apps_sorted['percentage_share'].cumsum()
@@ -585,10 +615,12 @@ elif navigation_option == "🔌 Energy Load Analysis":
         fig_p.add_trace(go.Scatter(x=apps_sorted['appliance'], y=apps_sorted['cum_share'], name="Cumulative Share (%)", yaxis="y2", mode="lines+markers", line=dict(color="#2563EB", width=3)))
         
         fig_p.update_layout(
-            title="Pareto Appliance Load Analysis",
-            yaxis=dict(title="Energy (kWh)"),
-            yaxis2=dict(title="Cumulative Share (%)", overlaying="y", side="right", range=[0, 105]),
-            template="plotly_white"
+            title=dict(text="Pareto Appliance Load Analysis", font=dict(color="#0F172A")),
+            yaxis=dict(title="Energy (kWh)", gridcolor="#F1F5F9", tickfont=dict(color="#475569")),
+            yaxis2=dict(title="Cumulative Share (%)", overlaying="y", side="right", range=[0, 105], tickfont=dict(color="#475569")),
+            paper_bgcolor="#FFFFFF",
+            plot_bgcolor="#FFFFFF",
+            legend=dict(font=dict(color="#0F172A"))
         )
         st.plotly_chart(fig_p, use_container_width=True)
 
