@@ -959,9 +959,8 @@ elif navigation_option == "Energy Load Analysis":
             )
             st.plotly_chart(fig_p, use_container_width=True)
 
-        with st.container(border=True):
-            st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem;">Ranked Appliance Load Inventory</h3>', unsafe_allow_html=True)
-            st.dataframe(apps_processed[['rank', 'appliance', 'quantity', 'power_watts', 'hours_per_day', 'operating_days', 'monthly_kwh', 'monthly_cost_php', 'percentage_share', 'priority']], use_container_width=True)
+        st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 1.25rem; margin-bottom: 0.75rem;">Ranked Appliance Load Inventory</h3>', unsafe_allow_html=True)
+        st.dataframe(apps_processed[['rank', 'appliance', 'quantity', 'power_watts', 'hours_per_day', 'operating_days', 'monthly_kwh', 'monthly_cost_php', 'percentage_share', 'priority']], use_container_width=True)
 
         st.markdown(f"""
         <div class="ui-card" style="border-left: 6px solid #1D4ED8; margin-top: 1.25rem; padding: 1.5rem 1.75rem;">
@@ -1060,9 +1059,8 @@ elif navigation_option == "Forecasting":
         fig_fc = apply_blue_theme(fig_fc)
         st.plotly_chart(fig_fc, use_container_width=True)
 
-    with st.container(border=True):
-        st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem;">Projected Monthly Expenditure Table</h3>', unsafe_allow_html=True)
-        st.dataframe(fc_df[['date_str', 'month', 'forecast_bill', 'lower_bound', 'upper_bound']], use_container_width=True)
+    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 1.25rem; margin-bottom: 0.75rem;">Projected Monthly Expenditure Table</h3>', unsafe_allow_html=True)
+    st.dataframe(fc_df[['date_str', 'month', 'forecast_bill', 'lower_bound', 'upper_bound']], use_container_width=True)
 
     st.markdown(f"""
     <div class="ui-card" style="border-left: 6px solid #1D4ED8; margin-top: 1.25rem; padding: 1.5rem 1.75rem;">
@@ -1160,17 +1158,16 @@ elif navigation_option == "Carbon & BAU":
         </div>
         """, unsafe_allow_html=True)
     
-    with st.container(border=True):
-        st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem;">Business-as-Usual (BAU) Benchmark Table</h3>', unsafe_allow_html=True)
-        bau_table = pd.DataFrame([
-            {"Indicator": "Monthly Electricity Consumption", "Value": format_kwh(bau["monthly_kwh"])},
-            {"Indicator": "Annual Electricity Consumption", "Value": format_kwh(bau["annual_kwh"])},
-            {"Indicator": "Monthly Electricity Cost", "Value": format_currency(bau["monthly_cost_php"])},
-            {"Indicator": "Annual Electricity Cost", "Value": format_currency(bau["annual_cost_php"])},
-            {"Indicator": "Monthly Carbon Emissions", "Value": format_co2(bau["monthly_co2_kg"])},
-            {"Indicator": "Annual Carbon Emissions", "Value": format_co2(bau["annual_co2_kg"])},
-        ])
-        st.dataframe(bau_table, use_container_width=True)
+    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 1.25rem; margin-bottom: 0.75rem;">Business-as-Usual (BAU) Benchmark Table</h3>', unsafe_allow_html=True)
+    bau_table = pd.DataFrame([
+        {"Indicator": "Monthly Electricity Consumption", "Value": format_kwh(bau["monthly_kwh"])},
+        {"Indicator": "Annual Electricity Consumption", "Value": format_kwh(bau["annual_kwh"])},
+        {"Indicator": "Monthly Electricity Cost", "Value": format_currency(bau["monthly_cost_php"])},
+        {"Indicator": "Annual Electricity Cost", "Value": format_currency(bau["annual_cost_php"])},
+        {"Indicator": "Monthly Carbon Emissions", "Value": format_co2(bau["monthly_co2_kg"])},
+        {"Indicator": "Annual Carbon Emissions", "Value": format_co2(bau["annual_co2_kg"])},
+    ])
+    st.dataframe(bau_table, use_container_width=True)
 
     st.markdown(f"""
     <div class="ui-card" style="border-left: 6px solid #1D4ED8; margin-top: 1.25rem; padding: 1.5rem 1.75rem;">
@@ -1274,9 +1271,8 @@ elif navigation_option == "Conservation Scenarios":
         </div>
         """, unsafe_allow_html=True)
     
-    with st.container(border=True):
-        st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem;">Simulated Conservation Scenarios Matrix</h3>', unsafe_allow_html=True)
-        st.dataframe(scenarios_df, use_container_width=True)
+    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 1.25rem; margin-bottom: 0.75rem;">Simulated Conservation Scenarios Matrix</h3>', unsafe_allow_html=True)
+    st.dataframe(scenarios_df, use_container_width=True)
     
     col_sc1, col_sc2 = st.columns(2)
     with col_sc1:
@@ -1394,16 +1390,15 @@ elif navigation_option == "Optimization":
         </div>
         """, unsafe_allow_html=True)
     
-    with st.container(border=True):
-        st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem;">Optimized Baseline vs Target Comparison Table</h3>', unsafe_allow_html=True)
-        opt_table = pd.DataFrame([
-            {"Indicator": "Monthly Electricity Consumption", "BAU/Current": format_kwh(opt_res["bau_monthly_kwh"]), "Optimized Target": format_kwh(opt_res["optimized_monthly_kwh"]), "Reduction": format_kwh(opt_res["monthly_kwh_savings"])},
-            {"Indicator": "Annual Electricity Consumption", "BAU/Current": format_kwh(opt_res["bau_monthly_kwh"] * 12), "Optimized Target": format_kwh(opt_res["optimized_monthly_kwh"] * 12), "Reduction": format_kwh(opt_res["annual_kwh_savings"])},
-            {"Indicator": "Monthly Electricity Cost", "BAU/Current": format_currency(opt_res["bau_monthly_kwh"] * electricity_rate), "Optimized Target": format_currency(opt_res["optimized_monthly_kwh"] * electricity_rate), "Reduction": format_currency(opt_res["monthly_cost_savings_php"])},
-            {"Indicator": "Annual Electricity Cost", "BAU/Current": format_currency(opt_res["bau_monthly_kwh"] * 12 * electricity_rate), "Optimized Target": format_currency(opt_res["optimized_monthly_kwh"] * 12 * electricity_rate), "Reduction": format_currency(opt_res["annual_cost_savings_php"])},
-            {"Indicator": "Reduction Percentage", "BAU/Current": "0%", "Optimized Target": f"{opt_res['reduction_percentage']:.0f}%", "Reduction": f"{opt_res['reduction_percentage']:.0f}%"}
-        ])
-        st.dataframe(opt_table, use_container_width=True)
+    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 1.25rem; margin-bottom: 0.75rem;">Optimized Baseline vs Target Comparison Table</h3>', unsafe_allow_html=True)
+    opt_table = pd.DataFrame([
+        {"Indicator": "Monthly Electricity Consumption", "BAU/Current": format_kwh(opt_res["bau_monthly_kwh"]), "Optimized Target": format_kwh(opt_res["optimized_monthly_kwh"]), "Reduction": format_kwh(opt_res["monthly_kwh_savings"])},
+        {"Indicator": "Annual Electricity Consumption", "BAU/Current": format_kwh(opt_res["bau_monthly_kwh"] * 12), "Optimized Target": format_kwh(opt_res["optimized_monthly_kwh"] * 12), "Reduction": format_kwh(opt_res["annual_kwh_savings"])},
+        {"Indicator": "Monthly Electricity Cost", "BAU/Current": format_currency(opt_res["bau_monthly_kwh"] * electricity_rate), "Optimized Target": format_currency(opt_res["optimized_monthly_kwh"] * electricity_rate), "Reduction": format_currency(opt_res["monthly_cost_savings_php"])},
+        {"Indicator": "Annual Electricity Cost", "BAU/Current": format_currency(opt_res["bau_monthly_kwh"] * 12 * electricity_rate), "Optimized Target": format_currency(opt_res["optimized_monthly_kwh"] * 12 * electricity_rate), "Reduction": format_currency(opt_res["annual_cost_savings_php"])},
+        {"Indicator": "Reduction Percentage", "BAU/Current": "0%", "Optimized Target": f"{opt_res['reduction_percentage']:.0f}%", "Reduction": f"{opt_res['reduction_percentage']:.0f}%"}
+    ])
+    st.dataframe(opt_table, use_container_width=True)
 
     st.markdown(f"""
     <div class="ui-card" style="border-left: 6px solid #1D4ED8; margin-top: 1.25rem; padding: 1.5rem 1.75rem;">
@@ -1505,15 +1500,14 @@ elif navigation_option == "School Comparison":
         </div>
         """, unsafe_allow_html=True)
     
-    with st.container(border=True):
-        st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem;">Comparative School Benchmark Matrix</h3>', unsafe_allow_html=True)
-        comp_df = pd.DataFrame([
-            {"Indicator": "Historical Total Bills (₱)", "An-anaao Integrated School": format_currency(m_an.get("total_bill")), "La Paz Integrated School": format_currency(m_lp.get("total_bill")), "Difference": format_currency(m_lp.get("total_bill", 0) - m_an.get("total_bill", 0))},
-            {"Indicator": "Historical Avg Monthly Bill (₱)", "An-anaao Integrated School": format_currency(m_an.get("avg_bill")), "La Paz Integrated School": format_currency(m_lp.get("avg_bill")), "Difference": format_currency(m_lp.get("avg_bill", 0) - m_an.get("avg_bill", 0))},
-            {"Indicator": "Highest Historical Bill (₱)", "An-anaao Integrated School": format_currency(m_an.get("max_bill")), "La Paz Integrated School": format_currency(m_lp.get("max_bill")), "Difference": format_currency(m_lp.get("max_bill", 0) - m_an.get("max_bill", 0))},
-            {"Indicator": "Average Forecasted Bill (₱)", "An-anaao Integrated School": format_currency(fc_an_mean), "La Paz Integrated School": format_currency(fc_lp_mean), "Difference": format_currency(fc_lp_mean - fc_an_mean)},
-        ])
-        st.dataframe(comp_df, use_container_width=True)
+    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 1.25rem; margin-bottom: 0.75rem;">Comparative School Benchmark Matrix</h3>', unsafe_allow_html=True)
+    comp_df = pd.DataFrame([
+        {"Indicator": "Historical Total Bills (₱)", "An-anaao Integrated School": format_currency(m_an.get("total_bill")), "La Paz Integrated School": format_currency(m_lp.get("total_bill")), "Difference": format_currency(m_lp.get("total_bill", 0) - m_an.get("total_bill", 0))},
+        {"Indicator": "Historical Avg Monthly Bill (₱)", "An-anaao Integrated School": format_currency(m_an.get("avg_bill")), "La Paz Integrated School": format_currency(m_lp.get("avg_bill")), "Difference": format_currency(m_lp.get("avg_bill", 0) - m_an.get("avg_bill", 0))},
+        {"Indicator": "Highest Historical Bill (₱)", "An-anaao Integrated School": format_currency(m_an.get("max_bill")), "La Paz Integrated School": format_currency(m_lp.get("max_bill")), "Difference": format_currency(m_lp.get("max_bill", 0) - m_an.get("max_bill", 0))},
+        {"Indicator": "Average Forecasted Bill (₱)", "An-anaao Integrated School": format_currency(fc_an_mean), "La Paz Integrated School": format_currency(fc_lp_mean), "Difference": format_currency(fc_lp_mean - fc_an_mean)},
+    ])
+    st.dataframe(comp_df, use_container_width=True)
 
     with st.container(border=True):
         st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem;">Visual Expenditure Comparison</h3>', unsafe_allow_html=True)
