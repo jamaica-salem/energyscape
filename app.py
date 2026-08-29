@@ -978,8 +978,17 @@ elif navigation_option == "Energy Load Analysis":
 
 # --- 5. FORECASTING ---
 elif navigation_option == "Forecasting":
-    st.title("Exponential Smoothing (ETS) Forecasting")
-    st.write("Point forecasts and confidence intervals computed via ExponentialSmoothing.")
+    st.markdown(f"""
+    <div class="user-greeting-banner">
+        <div>
+            <p class="greeting-title">Predictive Time-Series Analytics</p>
+            <h1 class="greeting-name">Exponential Smoothing (ETS) Forecasting</h1>
+        </div>
+        <div>
+            <span class="pill-badge-blue">{forecast_horizon}-Month Forecast Horizon</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
     
     target_school = "An-anaao Integrated School" if school_selection == "Both" else school_selection
     fc_res = fit_ets_forecast(historical_df, target_school, forecast_horizon=forecast_horizon)
@@ -991,20 +1000,81 @@ elif navigation_option == "Forecasting":
     val_rmse = calculate_rmse(fc_res["val_actuals"], fc_res["val_predictions"])
     
     f1, f2, f3 = st.columns(3)
-    f1.metric("Calculated MAPE", format_pct(val_mape))
-    f2.metric("Calculated RMSE", format_currency(val_rmse))
-    f3.metric("Forecast Quality", interpret_mape(val_mape))
     
-    fig_fc = go.Figure()
-    fig_fc.add_trace(go.Scatter(x=hist_df['date_dt'], y=hist_df['bill_php'], mode='lines+markers', name='Historical Bill (₱)', line=dict(color='#1D4ED8', width=2)))
-    fig_fc.add_trace(go.Scatter(x=fc_df['date_dt'], y=fc_df['forecast_bill'], mode='lines+markers', name='ETS Forecast (₱)', line=dict(color='#2563EB', width=3, dash='dash')))
-    fig_fc.add_trace(go.Scatter(x=fc_df['date_dt'], y=fc_df['upper_bound'], mode='lines', name='Upper Bound', line=dict(width=0), showlegend=False))
-    fig_fc.add_trace(go.Scatter(x=fc_df['date_dt'], y=fc_df['lower_bound'], mode='lines', name='95% Interval', fill='tonexty', fillcolor='rgba(37, 99, 235, 0.15)', line=dict(width=0)))
+    with f1:
+        st.markdown(f"""
+        <div class="ui-card">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                <div>
+                    <div class="kpi-label">Calculated MAPE</div>
+                    <div class="kpi-val">{format_pct(val_mape)}</div>
+                </div>
+                <span class="pill-badge-blue">Model Accuracy</span>
+            </div>
+            <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
+                Mean Absolute Percentage Error
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+    with f2:
+        st.markdown(f"""
+        <div class="ui-card">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                <div>
+                    <div class="kpi-label">Calculated RMSE</div>
+                    <div class="kpi-val">{format_currency(val_rmse)}</div>
+                </div>
+                <span class="pill-badge-blue">Error Margin</span>
+            </div>
+            <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
+                Root Mean Squared Error
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+    with f3:
+        st.markdown(f"""
+        <div class="ui-card">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                <div>
+                    <div class="kpi-label">Forecast Quality</div>
+                    <div class="kpi-val">{interpret_mape(val_mape)}</div>
+                </div>
+                <span class="pill-badge-green">Validated</span>
+            </div>
+            <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
+                High confidence predictive fit
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
     
-    fig_fc = apply_blue_theme(fig_fc, f"Electricity Bill Forecast for {target_school}")
-    st.plotly_chart(fig_fc, use_container_width=True)
-    
-    st.dataframe(fc_df[['date_str', 'month', 'forecast_bill', 'lower_bound', 'upper_bound']], use_container_width=True)
+    with st.container(border=True):
+        st.markdown(f'<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem;">Electricity Expenditure Projection for {target_school}</h3>', unsafe_allow_html=True)
+        fig_fc = go.Figure()
+        fig_fc.add_trace(go.Scatter(x=hist_df['date_dt'], y=hist_df['bill_php'], mode='lines+markers', name='Historical Bill (₱)', line=dict(color='#1D4ED8', width=2.5)))
+        fig_fc.add_trace(go.Scatter(x=fc_df['date_dt'], y=fc_df['forecast_bill'], mode='lines+markers', name='ETS Forecast (₱)', line=dict(color='#2563EB', width=3, dash='dash')))
+        fig_fc.add_trace(go.Scatter(x=fc_df['date_dt'], y=fc_df['upper_bound'], mode='lines', name='Upper Bound', line=dict(width=0), showlegend=False))
+        fig_fc.add_trace(go.Scatter(x=fc_df['date_dt'], y=fc_df['lower_bound'], mode='lines', name='95% Confidence Interval', fill='tonexty', fillcolor='rgba(37, 99, 235, 0.12)', line=dict(width=0)))
+        
+        fig_fc = apply_blue_theme(fig_fc)
+        st.plotly_chart(fig_fc, use_container_width=True)
+
+    with st.container(border=True):
+        st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem;">Projected Monthly Expenditure Table</h3>', unsafe_allow_html=True)
+        st.dataframe(fc_df[['date_str', 'month', 'forecast_bill', 'lower_bound', 'upper_bound']], use_container_width=True)
+
+    st.markdown(f"""
+    <div class="ui-card" style="border-left: 6px solid #1D4ED8; margin-top: 1.25rem; padding: 1.5rem 1.75rem;">
+        <h3 style="font-size: 1.05rem; font-weight: 700; color: #1E3A8A; margin-bottom: 0.5rem;">Predictive Analytics Insights</h3>
+        <p style="font-size: 0.90rem; color: #334155; line-height: 1.55; margin: 0;">
+            The Exponential Smoothing (ETS) forecast model evaluates historical trend and seasonality parameters, yielding a validation 
+            <strong>MAPE of {format_pct(val_mape)}</strong> and <strong>RMSE of {format_currency(val_rmse)}</strong>. 
+            Projected monthly bills for the next {forecast_horizon} months average 
+            <strong>{format_currency(fc_df['forecast_bill'].mean())}</strong>, serving as an empirical baseline for budgeting.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
 
 # --- 6. CARBON & BAU ---
 elif navigation_option == "Carbon & BAU":
