@@ -1,0 +1,8 @@
+school,appliance,quantity,power_watts,hours_per_day,operating_days
+Sample Integrated School,Air Conditioner,6,1500,6,22
+Sample Integrated School,Computers,40,150,7,22
+Sample Integrated School,Lighting Fixtures,60,40,8,22
+Sample Integrated School,Electric Fans,30,75,8,22
+Sample Integrated School,Refrigerators,3,500,10,22
+Sample Integrated School,Projectors,8,300,5,22
+Sample Integrated School,Printers,8,100,3,22

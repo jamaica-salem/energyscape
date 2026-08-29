@@ -318,6 +318,17 @@ with st.sidebar:
     if not use_project_dataset:
         uploaded_bills = st.file_uploader("Upload Historical Bills CSV", type=["csv"])
         uploaded_loads = st.file_uploader("Upload Appliance Loads CSV", type=["csv"])
+        
+        st.markdown('<div style="font-size: 0.8rem; color: #64748B; margin-top: 0.5rem; font-weight: 600;">Download Sample CSV Templates:</div>', unsafe_allow_html=True)
+        sample_bills_path = Path(__file__).parent / "data" / "sample_uploads" / "sample_historical_bills.csv"
+        sample_loads_path = Path(__file__).parent / "data" / "sample_uploads" / "sample_appliance_loads.csv"
+        
+        if sample_bills_path.exists():
+            with open(sample_bills_path, "rb") as f:
+                st.download_button("Sample Historical Bills CSV", f.read(), file_name="sample_historical_bills.csv", mime="text/csv")
+        if sample_loads_path.exists():
+            with open(sample_loads_path, "rb") as f:
+                st.download_button("Sample Appliance Loads CSV", f.read(), file_name="sample_appliance_loads.csv", mime="text/csv")
 
 # ----------------------------------------------------
 # DATA INGESTION
