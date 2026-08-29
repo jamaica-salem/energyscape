@@ -1543,26 +1543,115 @@ elif navigation_option == "School Comparison":
 
 # --- 10. TARGET MONITOR ---
 elif navigation_option == "Target Monitor":
-    st.title("Electricity Target Monitor")
-    st.write("Interactive decision-support comparator for actual vs target monthly consumption.")
+    st.markdown("""
+    <div class="user-greeting-banner">
+        <div>
+            <p class="greeting-title">Real-Time Goal Compliance</p>
+            <h1 class="greeting-name">Electricity Target Monitor</h1>
+        </div>
+        <div>
+            <span class="pill-badge-blue">Interactive Decision Support</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
     
-    col_t1, col_t2 = st.columns(2)
-    with col_t1:
-        actual_input = st.number_input("Actual Monthly Electricity Consumption (kWh)", min_value=0.0, max_value=10000.0, value=1800.0, step=25.0)
-    with col_t2:
-        target_input = st.number_input("Target Consumption Benchmark (kWh)", min_value=0.0, max_value=10000.0, value=1945.74, step=25.0)
+    with st.container(border=True):
+        st.markdown('<h4 style="font-size: 0.95rem; font-weight: 700; color: #1E3A8A; margin-bottom: 0.25rem;">Consumption Input Parameters</h4>', unsafe_allow_html=True)
+        st.markdown('<p style="font-size: 0.82rem; color: #64748B; margin-bottom: 0.75rem;">Adjust actual monthly consumption and target benchmarks to evaluate operational compliance.</p>', unsafe_allow_html=True)
         
+        col_t1, col_t2 = st.columns(2)
+        with col_t1:
+            actual_input = st.number_input("Actual Monthly Electricity Consumption (kWh)", min_value=0.0, max_value=10000.0, value=1800.0, step=25.0)
+        with col_t2:
+            target_input = st.number_input("Target Consumption Benchmark (kWh)", min_value=0.0, max_value=10000.0, value=1945.74, step=25.0)
+            
     mon_res = monitor_target_consumption(actual_input, target_input)
     
     tm1, tm2, tm3 = st.columns(3)
-    tm1.metric("Actual Consumption", format_kwh(mon_res["actual_kwh"]))
-    tm2.metric("Target Benchmark", format_kwh(mon_res["target_kwh"]))
-    tm3.metric("Variance", format_kwh(mon_res["difference_kwh"]), delta=f"{mon_res['percentage_difference']:.2f}%", delta_color="inverse")
     
-    if mon_res["is_on_target"]:
-        st.markdown('<span class="pill-badge-green" style="font-size: 1rem; padding: 0.5rem 1.25rem;">STATUS: AT OR BELOW TARGET (COMPLIANT)</span>', unsafe_allow_html=True)
-    else:
-        st.markdown('<span class="pill-badge-red" style="font-size: 1rem; padding: 0.5rem 1.25rem;">STATUS: EXCEEDS TARGET (ACTION REQUIRED)</span>', unsafe_allow_html=True)
+    with tm1:
+        st.markdown(f"""
+        <div class="ui-card">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                <div>
+                    <div class="kpi-label">Actual Consumption</div>
+                    <div class="kpi-val">{format_kwh(mon_res["actual_kwh"])}</div>
+                </div>
+                <span class="pill-badge-blue">Recorded</span>
+            </div>
+            <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
+                Current monthly usage
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+    with tm2:
+        st.markdown(f"""
+        <div class="ui-card">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                <div>
+                    <div class="kpi-label">Target Benchmark</div>
+                    <div class="kpi-val">{format_kwh(mon_res["target_kwh"])}</div>
+                </div>
+                <span class="pill-badge-blue">15% Goal</span>
+            </div>
+            <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
+                Optimization threshold
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+    var_badge_class = "pill-badge-green" if mon_res["is_on_target"] else "pill-badge-red"
+    var_sign = "-" if mon_res["difference_kwh"] <= 0 else "+"
+    
+    with tm3:
+        st.markdown(f"""
+        <div class="ui-card">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                <div>
+                    <div class="kpi-label">Target Variance</div>
+                    <div class="kpi-val">{format_kwh(abs(mon_res["difference_kwh"]))}</div>
+                </div>
+                <span class="{var_badge_class}">{var_sign}{mon_res['percentage_difference']:.1f}%</span>
+            </div>
+            <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
+                {"Below target ceiling" if mon_res["is_on_target"] else "Exceeds target ceiling"}
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+    with st.container(border=True):
+        st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem;">Compliance Evaluation Status</h3>', unsafe_allow_html=True)
+        if mon_res["is_on_target"]:
+            st.markdown(f"""
+            <div style="background-color: #ECFDF5; border: 1.5px solid #10B981; border-radius: 12px; padding: 1.25rem 1.5rem; display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                    <h4 style="color: #065F46; font-size: 1.05rem; font-weight: 700; margin: 0;">STATUS: COMPLIANT WITH ENERGY TARGET</h4>
+                    <p style="color: #047857; font-size: 0.88rem; margin: 0.25rem 0 0 0;">Actual consumption ({format_kwh(mon_res['actual_kwh'])}) is below the target benchmark ceiling ({format_kwh(mon_res['target_kwh'])}).</p>
+                </div>
+                <span class="pill-badge-green" style="font-size: 0.95rem; padding: 0.4rem 1rem;">COMPLIANT</span>
+            </div>
+            """, unsafe_allow_html=True)
+        else:
+            st.markdown(f"""
+            <div style="background-color: #FEF2F2; border: 1.5px solid #EF4444; border-radius: 12px; padding: 1.25rem 1.5rem; display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                    <h4 style="color: #991B1B; font-size: 1.05rem; font-weight: 700; margin: 0;">STATUS: EXCEEDS ENERGY TARGET (ACTION REQUIRED)</h4>
+                    <p style="color: #B91C1C; font-size: 0.88rem; margin: 0.25rem 0 0 0;">Actual consumption ({format_kwh(mon_res['actual_kwh'])}) exceeds target benchmark ceiling by {format_kwh(mon_res['difference_kwh'])}.</p>
+                </div>
+                <span class="pill-badge-red" style="font-size: 0.95rem; padding: 0.4rem 1rem;">ACTION REQUIRED</span>
+            </div>
+            """, unsafe_allow_html=True)
+
+    st.markdown(f"""
+    <div class="ui-card" style="border-left: 6px solid #1D4ED8; margin-top: 1.25rem; padding: 1.5rem 1.75rem;">
+        <h3 style="font-size: 1.05rem; font-weight: 700; color: #1E3A8A; margin-bottom: 0.5rem;">Target Monitoring Insights</h3>
+        <p style="font-size: 0.90rem; color: #334155; line-height: 1.55; margin: 0;">
+            The target monitor acts as an operational decision-support tool. Comparing recorded monthly usage against the optimized 
+            <strong>{format_kwh(mon_res['target_kwh'])}</strong> ceiling provides immediate compliance feedback for school administrators.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
 
 # --- 11. VALIDATION & SENSITIVITY ---
 elif navigation_option == "Validation & Sensitivity":
