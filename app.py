@@ -1,6 +1,6 @@
 """
 ENERGYSCAPE: Multi-Seasonal Mathematical-Computational Framework for Predictive Energy Management and Carbon Reduction
-Main Streamlit Application — Custom Light Blue Design System (Theme Fixes)
+Main Streamlit Application — Custom Light Blue Design System (Clean Typography without Emojis)
 """
 
 import streamlit as st
@@ -263,27 +263,27 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ----------------------------------------------------
-# SIDEBAR NAVIGATION & CONTROLS
+# SIDEBAR NAVIGATION & CONTROLS (NO EMOJIS)
 # ----------------------------------------------------
 with st.sidebar:
-    st.markdown('<div class="sidebar-brand">⚡ <span>ENERGYSCAPE</span></div>', unsafe_allow_html=True)
+    st.markdown('<div class="sidebar-brand">ENERGYSCAPE</div>', unsafe_allow_html=True)
     
     st.markdown('<div class="sidebar-section-header">MAIN MENU</div>', unsafe_allow_html=True)
     navigation_option = st.radio(
         "Navigation",
         [
-            "🏠 Dashboard",
-            "📊 Historical Analysis",
-            "🌦️ Seasonal Analysis",
-            "🔌 Energy Load Analysis",
-            "🔮 Forecasting",
-            "🌱 Carbon & BAU",
-            "🧪 Conservation Scenarios",
-            "⚙️ Optimization",
-            "🏫 School Comparison",
-            "🎯 Target Monitor",
-            "🧮 Validation & Sensitivity",
-            "ℹ️ Methodology"
+            "Dashboard",
+            "Historical Analysis",
+            "Seasonal Analysis",
+            "Energy Load Analysis",
+            "Forecasting",
+            "Carbon & BAU",
+            "Conservation Scenarios",
+            "Optimization",
+            "School Comparison",
+            "Target Monitor",
+            "Validation & Sensitivity",
+            "Methodology"
         ],
         label_visibility="collapsed"
     )
@@ -353,7 +353,7 @@ def apply_blue_theme(fig, title=""):
 # ----------------------------------------------------
 
 # --- 1. DASHBOARD ---
-if navigation_option == "🏠 Dashboard":
+if navigation_option == "Dashboard":
     st.markdown("""
     <div class="user-greeting-banner">
         <div>
@@ -361,7 +361,7 @@ if navigation_option == "🏠 Dashboard":
             <h1 class="greeting-name">Energy Insights Dashboard</h1>
         </div>
         <div>
-            <span class="pill-badge-blue">📍 Abra, Philippines</span>
+            <span class="pill-badge-blue">Abra, Philippines</span>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -444,14 +444,14 @@ if navigation_option == "🏠 Dashboard":
         <div class="dark-featured-card">
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <span class="dark-card-label">Optimized Target Savings</span>
-                <span class="pill-badge-green">⚡ 15% Reduction</span>
+                <span class="pill-badge-green">15% Reduction</span>
             </div>
             <div class="dark-card-value">{format_kwh(opt_res["optimized_monthly_kwh"])}</div>
             <div style="font-weight: 700; font-size: 1.1rem; color: #60A5FA;">
                 Annual Cost Savings: {format_currency(opt_res["annual_cost_savings_php"])}
             </div>
             <div class="dark-card-subtitle">
-                🌱 Avoided Carbon: <strong>{format_co2(opt_res["annual_avoided_co2_kg"])}</strong>/year
+                Avoided Carbon: <strong>{format_co2(opt_res["annual_avoided_co2_kg"])}</strong>/year
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -515,7 +515,7 @@ if navigation_option == "🏠 Dashboard":
 
     st.markdown("""
     <div class="ui-card" style="border-left: 6px solid #1D4ED8;">
-        <h3 style="font-size: 1.1rem; font-weight: 700; color: #1E3A8A; margin-bottom: 0.5rem;">🎯 Executive Management Recommendation</h3>
+        <h3 style="font-size: 1.1rem; font-weight: 700; color: #1E3A8A; margin-bottom: 0.5rem;">Executive Management Recommendation</h3>
     """, unsafe_allow_html=True)
     exec_rec = generate_executive_summary_recommendation(
         load_summary.get("top_appliance", "Air Conditioner"),
@@ -526,8 +526,8 @@ if navigation_option == "🏠 Dashboard":
     st.markdown('</div>', unsafe_allow_html=True)
 
 # --- 2. HISTORICAL ANALYSIS ---
-elif navigation_option == "📊 Historical Analysis":
-    st.title("📊 Historical Electricity Bill Analysis")
+elif navigation_option == "Historical Analysis":
+    st.title("Historical Electricity Bill Analysis")
     st.write("Multi-year monthly electricity billing records in Philippine Pesos (₱).")
     
     metrics = calculate_historical_metrics(historical_df, school_selection)
@@ -540,7 +540,7 @@ elif navigation_option == "📊 Historical Analysis":
         c4.metric("Lowest Monthly Bill", format_currency(metrics["min_bill"]))
         
         st.markdown("---")
-        tab1, tab2, tab3 = st.tabs(["📈 Monthly Trend Line", "📅 Yearly Totals", "🗓️ Monthly Averages"])
+        tab1, tab2, tab3 = st.tabs(["Monthly Trend Line", "Yearly Totals", "Monthly Averages"])
         
         with tab1:
             plot_df = historical_df[historical_df['bill_php'].notna()]
@@ -557,8 +557,8 @@ elif navigation_option == "📊 Historical Analysis":
             st.dataframe(metrics["monthly_summary"], use_container_width=True)
 
 # --- 3. SEASONAL ANALYSIS ---
-elif navigation_option == "🌦️ Seasonal Analysis":
-    st.title("🌦️ Seasonal Consumption Analysis")
+elif navigation_option == "Seasonal Analysis":
+    st.title("Seasonal Consumption Analysis")
     st.write("Dry (Dec–May) vs Wet (Jun–Nov) seasonal consumption patterns.")
     
     dry_config = st.multiselect("Dry Season Months Configuration", options=[
@@ -589,8 +589,8 @@ elif navigation_option == "🌦️ Seasonal Analysis":
             st.plotly_chart(fig_idx, use_container_width=True)
 
 # --- 4. ENERGY LOAD ANALYSIS ---
-elif navigation_option == "🔌 Energy Load Analysis":
-    st.title("🔌 Electrical Load Quantification")
+elif navigation_option == "Energy Load Analysis":
+    st.title("Electrical Load Quantification")
     st.write("Appliance energy consumption, monthly financial cost, and priority ranking.")
     
     apps_processed = calculate_appliance_loads(appliance_df, electricity_rate, school_selection)
@@ -603,10 +603,10 @@ elif navigation_option == "🔌 Energy Load Analysis":
         lc3.metric("Top Appliance", load_sum["top_appliance"])
         lc4.metric("Top 2 Share", format_pct(load_sum["top2_combined_share"]))
         
-        st.markdown("### 📋 Ranked Appliance Load Inventory")
+        st.markdown("### Ranked Appliance Load Inventory")
         st.dataframe(apps_processed[['rank', 'appliance', 'quantity', 'power_watts', 'hours_per_day', 'operating_days', 'monthly_kwh', 'monthly_cost_php', 'percentage_share', 'priority']], use_container_width=True)
         
-        st.markdown("### 📊 Pareto Energy Concentration")
+        st.markdown("### Pareto Energy Concentration")
         apps_sorted = apps_processed.sort_values(by='monthly_kwh', ascending=False)
         apps_sorted['cum_share'] = apps_sorted['percentage_share'].cumsum()
         
@@ -625,8 +625,8 @@ elif navigation_option == "🔌 Energy Load Analysis":
         st.plotly_chart(fig_p, use_container_width=True)
 
 # --- 5. FORECASTING ---
-elif navigation_option == "🔮 Forecasting":
-    st.title("🔮 Exponential Smoothing (ETS) Forecasting")
+elif navigation_option == "Forecasting":
+    st.title("Exponential Smoothing (ETS) Forecasting")
     st.write("Point forecasts and confidence intervals computed via ExponentialSmoothing.")
     
     target_school = "An-anaao Integrated School" if school_selection == "Both" else school_selection
@@ -655,8 +655,8 @@ elif navigation_option == "🔮 Forecasting":
     st.dataframe(fc_df[['date_str', 'month', 'forecast_bill', 'lower_bound', 'upper_bound']], use_container_width=True)
 
 # --- 6. CARBON & BAU ---
-elif navigation_option == "🌱 Carbon & BAU":
-    st.title("🌱 Carbon Footprint & BAU Baseline")
+elif navigation_option == "Carbon & BAU":
+    st.title("Carbon Footprint & BAU Baseline")
     st.write("Baseline Business-as-Usual metrics and greenhouse gas emissions.")
     
     apps_processed = calculate_appliance_loads(appliance_df, electricity_rate, school_selection)
@@ -680,8 +680,8 @@ elif navigation_option == "🌱 Carbon & BAU":
     st.dataframe(bau_table, use_container_width=True)
 
 # --- 7. CONSERVATION SCENARIOS ---
-elif navigation_option == "🧪 Conservation Scenarios":
-    st.title("🧪 Conservation Scenarios (5%, 10%, 15%)")
+elif navigation_option == "Conservation Scenarios":
+    st.title("Conservation Scenarios (5%, 10%, 15%)")
     st.write("Simulated scenario comparison against Business-as-Usual.")
     
     apps_processed = calculate_appliance_loads(appliance_df, electricity_rate, school_selection)
@@ -703,8 +703,8 @@ elif navigation_option == "🧪 Conservation Scenarios":
         st.plotly_chart(fig_sc_co2, use_container_width=True)
 
 # --- 8. OPTIMIZATION ---
-elif navigation_option == "⚙️ Optimization":
-    st.title("⚙️ Mathematical Optimization Target")
+elif navigation_option == "Optimization":
+    st.title("Mathematical Optimization Target")
     st.write("Feasible energy reduction target under operational constraints.")
     
     apps_processed = calculate_appliance_loads(appliance_df, electricity_rate, school_selection)
@@ -729,8 +729,8 @@ elif navigation_option == "⚙️ Optimization":
     st.dataframe(opt_table, use_container_width=True)
 
 # --- 9. SCHOOL COMPARISON ---
-elif navigation_option == "🏫 School Comparison":
-    st.title("🏫 Comparative School Analysis")
+elif navigation_option == "School Comparison":
+    st.title("Comparative School Analysis")
     st.write("Direct computational comparison between An-anaao and La Paz Integrated Schools.")
     
     m_an = calculate_historical_metrics(historical_df, "An-anaao Integrated School")
@@ -747,8 +747,8 @@ elif navigation_option == "🏫 School Comparison":
     st.dataframe(comp_df, use_container_width=True)
 
 # --- 10. TARGET MONITOR ---
-elif navigation_option == "🎯 Target Monitor":
-    st.title("🎯 Electricity Target Monitor")
+elif navigation_option == "Target Monitor":
+    st.title("Electricity Target Monitor")
     st.write("Interactive decision-support comparator for actual vs target monthly consumption.")
     
     col_t1, col_t2 = st.columns(2)
@@ -765,28 +765,28 @@ elif navigation_option == "🎯 Target Monitor":
     tm3.metric("Variance", format_kwh(mon_res["difference_kwh"]), delta=f"{mon_res['percentage_difference']:.2f}%", delta_color="inverse")
     
     if mon_res["is_on_target"]:
-        st.markdown('<span class="pill-badge-green" style="font-size: 1rem; padding: 0.5rem 1.25rem;">✅ STATUS: AT OR BELOW TARGET (COMPLIANT)</span>', unsafe_allow_html=True)
+        st.markdown('<span class="pill-badge-green" style="font-size: 1rem; padding: 0.5rem 1.25rem;">STATUS: AT OR BELOW TARGET (COMPLIANT)</span>', unsafe_allow_html=True)
     else:
-        st.markdown('<span class="pill-badge-red" style="font-size: 1rem; padding: 0.5rem 1.25rem;">⚠️ STATUS: EXCEEDS TARGET (ACTION REQUIRED)</span>', unsafe_allow_html=True)
+        st.markdown('<span class="pill-badge-red" style="font-size: 1rem; padding: 0.5rem 1.25rem;">STATUS: EXCEEDS TARGET (ACTION REQUIRED)</span>', unsafe_allow_html=True)
 
 # --- 11. VALIDATION & SENSITIVITY ---
-elif navigation_option == "🧮 Validation & Sensitivity":
-    st.title("🧮 Computational Validation & Sensitivity")
+elif navigation_option == "Validation & Sensitivity":
+    st.title("Computational Validation & Sensitivity")
     st.write("Verifies internal mathematical consistency and tests sensitivity ratios.")
     
-    st.markdown("### 🧪 Sensitivity Analysis")
+    st.markdown("### Sensitivity Analysis")
     sens_df = calculate_sensitivity_analysis()
     st.dataframe(sens_df, use_container_width=True)
     
-    st.markdown("### 🧮 Computational Validation Table")
+    st.markdown("### Computational Validation Table")
     val_table = verify_computational_consistency()
     st.dataframe(val_table, use_container_width=True)
 
 # --- 12. METHODOLOGY ---
-elif navigation_option == "ℹ️ Methodology":
-    st.title("ℹ️ ENERGYSCAPE Mathematical Methodology & Handbook")
+elif navigation_option == "Methodology":
+    st.title("ENERGYSCAPE Mathematical Methodology & Handbook")
     st.markdown("""
-    ### 📐 Mathematical Formulation Handbook
+    ### Mathematical Formulation Handbook
     
     #### 1. Appliance Electrical Load Quantification
     $$\\text{Monthly Energy Consumption (kWh)} = \\frac{P \\times Q \\times H \\times D}{1000}$$
