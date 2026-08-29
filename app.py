@@ -1419,21 +1419,127 @@ elif navigation_option == "Optimization":
 
 # --- 9. SCHOOL COMPARISON ---
 elif navigation_option == "School Comparison":
-    st.title("Comparative School Analysis")
-    st.write("Direct computational comparison between An-anaao and La Paz Integrated Schools.")
+    st.markdown("""
+    <div class="user-greeting-banner">
+        <div>
+            <p class="greeting-title">Institutional Benchmark</p>
+            <h1 class="greeting-name">Comparative School Analysis</h1>
+        </div>
+        <div>
+            <span class="pill-badge-blue">An-anaao vs. La Paz Integrated Schools</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
     
     m_an = calculate_historical_metrics(historical_df, "An-anaao Integrated School")
     m_lp = calculate_historical_metrics(historical_df, "La Paz Integrated School")
     fc_an = fit_ets_forecast(historical_df, "An-anaao Integrated School")
     fc_lp = fit_ets_forecast(historical_df, "La Paz Integrated School")
     
-    comp_df = pd.DataFrame([
-        {"Indicator": "Historical Total Bills (₱)", "An-anaao Integrated School": format_currency(m_an.get("total_bill")), "La Paz Integrated School": format_currency(m_lp.get("total_bill")), "Difference": format_currency(m_lp.get("total_bill", 0) - m_an.get("total_bill", 0))},
-        {"Indicator": "Historical Avg Monthly Bill (₱)", "An-anaao Integrated School": format_currency(m_an.get("avg_bill")), "La Paz Integrated School": format_currency(m_lp.get("avg_bill")), "Difference": format_currency(m_lp.get("avg_bill", 0) - m_an.get("avg_bill", 0))},
-        {"Indicator": "Highest Historical Bill (₱)", "An-anaao Integrated School": format_currency(m_an.get("max_bill")), "La Paz Integrated School": format_currency(m_lp.get("max_bill")), "Difference": format_currency(m_lp.get("max_bill", 0) - m_an.get("max_bill", 0))},
-        {"Indicator": "Average Forecasted Bill (₱)", "An-anaao Integrated School": format_currency(fc_an["forecast_df"]["forecast_bill"].mean()), "La Paz Integrated School": format_currency(fc_lp["forecast_df"]["forecast_bill"].mean()), "Difference": format_currency(fc_lp["forecast_df"]["forecast_bill"].mean() - fc_an["forecast_df"]["forecast_bill"].mean())},
-    ])
-    st.dataframe(comp_df, use_container_width=True)
+    fc_an_mean = fc_an["forecast_df"]["forecast_bill"].mean()
+    fc_lp_mean = fc_lp["forecast_df"]["forecast_bill"].mean()
+    
+    cp1, cp2, cp3, cp4 = st.columns(4)
+    
+    with cp1:
+        st.markdown(f"""
+        <div class="ui-card">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                <div>
+                    <div class="kpi-label">An-anaao Total Bill</div>
+                    <div class="kpi-val">{format_currency(m_an.get("total_bill"))}</div>
+                </div>
+                <span class="pill-badge-blue">An-anaao</span>
+            </div>
+            <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
+                Avg: {format_currency(m_an.get("avg_bill"))}/mo
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+    with cp2:
+        st.markdown(f"""
+        <div class="ui-card">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                <div>
+                    <div class="kpi-label">La Paz Total Bill</div>
+                    <div class="kpi-val">{format_currency(m_lp.get("total_bill"))}</div>
+                </div>
+                <span class="pill-badge-blue">La Paz</span>
+            </div>
+            <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
+                Avg: {format_currency(m_lp.get("avg_bill"))}/mo
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+    with cp3:
+        st.markdown(f"""
+        <div class="ui-card">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                <div>
+                    <div class="kpi-label">Historical Total Delta</div>
+                    <div class="kpi-val">{format_currency(m_lp.get("total_bill", 0) - m_an.get("total_bill", 0))}</div>
+                </div>
+                <span class="pill-badge-red">Difference</span>
+            </div>
+            <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
+                Cumulative spending variance
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+    with cp4:
+        st.markdown(f"""
+        <div class="ui-card">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                <div>
+                    <div class="kpi-label">Forecast Avg Delta</div>
+                    <div class="kpi-val">{format_currency(fc_lp_mean - fc_an_mean)}</div>
+                </div>
+                <span class="pill-badge-blue">Projected</span>
+            </div>
+            <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
+                Monthly forecast variance
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with st.container(border=True):
+        st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem;">Comparative School Benchmark Matrix</h3>', unsafe_allow_html=True)
+        comp_df = pd.DataFrame([
+            {"Indicator": "Historical Total Bills (₱)", "An-anaao Integrated School": format_currency(m_an.get("total_bill")), "La Paz Integrated School": format_currency(m_lp.get("total_bill")), "Difference": format_currency(m_lp.get("total_bill", 0) - m_an.get("total_bill", 0))},
+            {"Indicator": "Historical Avg Monthly Bill (₱)", "An-anaao Integrated School": format_currency(m_an.get("avg_bill")), "La Paz Integrated School": format_currency(m_lp.get("avg_bill")), "Difference": format_currency(m_lp.get("avg_bill", 0) - m_an.get("avg_bill", 0))},
+            {"Indicator": "Highest Historical Bill (₱)", "An-anaao Integrated School": format_currency(m_an.get("max_bill")), "La Paz Integrated School": format_currency(m_lp.get("max_bill")), "Difference": format_currency(m_lp.get("max_bill", 0) - m_an.get("max_bill", 0))},
+            {"Indicator": "Average Forecasted Bill (₱)", "An-anaao Integrated School": format_currency(fc_an_mean), "La Paz Integrated School": format_currency(fc_lp_mean), "Difference": format_currency(fc_lp_mean - fc_an_mean)},
+        ])
+        st.dataframe(comp_df, use_container_width=True)
+
+    with st.container(border=True):
+        st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem;">Visual Expenditure Comparison</h3>', unsafe_allow_html=True)
+        chart_comp_data = pd.DataFrame([
+            {"Metric": "Avg Monthly Bill (₱)", "An-anaao": m_an.get("avg_bill", 0), "La Paz": m_lp.get("avg_bill", 0)},
+            {"Metric": "Highest Bill (₱)", "An-anaao": m_an.get("max_bill", 0), "La Paz": m_lp.get("max_bill", 0)},
+            {"Metric": "Avg Forecasted Bill (₱)", "An-anaao": fc_an_mean, "La Paz": fc_lp_mean},
+        ])
+        fig_comp = go.Figure()
+        fig_comp.add_trace(go.Bar(x=chart_comp_data["Metric"], y=chart_comp_data["An-anaao"], name="An-anaao Integrated School", marker=dict(color="#1D4ED8", cornerradius=6)))
+        fig_comp.add_trace(go.Bar(x=chart_comp_data["Metric"], y=chart_comp_data["La Paz"], name="La Paz Integrated School", marker=dict(color="#60A5FA", cornerradius=6)))
+        fig_comp = apply_blue_theme(fig_comp)
+        fig_comp.update_layout(bmode="group")
+        st.plotly_chart(fig_comp, use_container_width=True)
+
+    st.markdown(f"""
+    <div class="ui-card" style="border-left: 6px solid #1D4ED8; margin-top: 1.25rem; padding: 1.5rem 1.75rem;">
+        <h3 style="font-size: 1.05rem; font-weight: 700; color: #1E3A8A; margin-bottom: 0.5rem;">Institutional Comparison Insights</h3>
+        <p style="font-size: 0.90rem; color: #334155; line-height: 1.55; margin: 0;">
+            Comparative auditing reveals that <strong>La Paz Integrated School</strong> maintains higher historical monthly expenditure 
+            (averaging <strong>{format_currency(m_lp.get('avg_bill'))}</strong>) than <strong>An-anaao Integrated School</strong> 
+            (averaging <strong>{format_currency(m_an.get('avg_bill'))}</strong>). This variance stems from differences in facility size, 
+            enrolled student density, and connected appliance load capacity.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
 
 # --- 10. TARGET MONITOR ---
 elif navigation_option == "Target Monitor":
