@@ -266,7 +266,7 @@ st.markdown("""
 # SIDEBAR NAVIGATION & CONTROLS (NO EMOJIS)
 # ----------------------------------------------------
 with st.sidebar:
-    st.markdown('<div class="sidebar-brand">ENERGYSCAPE</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sidebar-brand">⚡ <span>ENERGYSCAPE</span></div>', unsafe_allow_html=True)
     
     st.markdown('<div class="sidebar-section-header">MAIN MENU</div>', unsafe_allow_html=True)
     navigation_option = st.radio(
