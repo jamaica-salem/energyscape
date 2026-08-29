@@ -1756,19 +1756,110 @@ elif navigation_option == "Validation & Sensitivity":
 
 # --- 12. METHODOLOGY ---
 elif navigation_option == "Methodology":
-    st.title("ENERGYSCAPE Mathematical Methodology & Handbook")
     st.markdown("""
-    ### Mathematical Formulation Handbook
+    <div class="user-greeting-banner">
+        <div>
+            <p class="greeting-title">Analytical Framework & Equations</p>
+            <h1 class="greeting-name">ENERGYSCAPE Mathematical Methodology</h1>
+        </div>
+        <div>
+            <span class="pill-badge-blue">Theoretical & Empirical Handbook</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
     
-    #### 1. Appliance Electrical Load Quantification
-    $$\\text{Monthly Energy Consumption (kWh)} = \\frac{P \\times Q \\times H \\times D}{1000}$$
+    m1, m2, m3, m4 = st.columns(4)
     
-    #### 2. Carbon Footprint Model
-    $$\\text{CO}_2\\text{e (kg)} = \\text{Electricity Consumption (kWh)} \\times \\text{Emission Factor (0.70 kg CO}_2\\text{e/kWh)}$$
+    with m1:
+        st.markdown("""
+        <div class="ui-card">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                <div>
+                    <div class="kpi-label">Load Quantification</div>
+                    <div class="kpi-val" style="font-size: 1.1rem; font-weight: 700;">(P × Q × H × D)/1000</div>
+                </div>
+                <span class="pill-badge-blue">Equation 1</span>
+            </div>
+            <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
+                Appliance monthly load
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+    with m2:
+        st.markdown("""
+        <div class="ui-card">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                <div>
+                    <div class="kpi-label">Carbon Footprint</div>
+                    <div class="kpi-val" style="font-size: 1.1rem; font-weight: 700;">kWh × 0.70 EF</div>
+                </div>
+                <span class="pill-badge-blue">Equation 2</span>
+            </div>
+            <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
+                CO₂e emissions model
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+    with m3:
+        st.markdown("""
+        <div class="ui-card">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                <div>
+                    <div class="kpi-label">Forecast Evaluation</div>
+                    <div class="kpi-val" style="font-size: 1.1rem; font-weight: 700;">MAPE & RMSE</div>
+                </div>
+                <span class="pill-badge-blue">Equation 3</span>
+            </div>
+            <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
+                Error metric validation
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+    with m4:
+        st.markdown("""
+        <div class="ui-card">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                <div>
+                    <div class="kpi-label">Optimization Model</div>
+                    <div class="kpi-val" style="font-size: 1.1rem; font-weight: 700;">BAU × (1 - r)</div>
+                </div>
+                <span class="pill-badge-green">Equation 4</span>
+            </div>
+            <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
+                Goal programming target
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
     
-    #### 3. Forecast Error Metrics
-    $$\\text{MAPE} = \\frac{100}{n} \\sum_{i=1}^n \\left| \\frac{A_i - F_i}{A_i} \\right|, \\quad \\text{RMSE} = \\sqrt{\\frac{1}{n} \\sum_{i=1}^n (A_i - F_i)^2}$$
-    
-    #### 4. Conservation Scenario & Optimization Model
-    $$\\text{Scenario Consumption} = \\text{BAU} \\times (1 - r)$$
-    """)
+    with st.container(border=True):
+        st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem;">1. Appliance Electrical Load Quantification</h3>', unsafe_allow_html=True)
+        st.latex(r"\text{Monthly Energy Consumption (kWh)} = \frac{P \times Q \times H \times D}{1000}")
+        st.markdown('<p style="font-size: 0.85rem; color: #475569; margin-top: 0.5rem;">Where <strong>P</strong> = rated power in Watts, <strong>Q</strong> = quantity of units, <strong>H</strong> = daily operating hours, and <strong>D</strong> = operating days per month.</p>', unsafe_allow_html=True)
+
+    with st.container(border=True):
+        st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem;">2. Carbon Footprint Model</h3>', unsafe_allow_html=True)
+        st.latex(r"\text{CO}_2\text{e (kg)} = \text{Electricity Consumption (kWh)} \times \text{Emission Factor (0.70 kg CO}_2\text{e/kWh)}")
+        st.markdown('<p style="font-size: 0.85rem; color: #475569; margin-top: 0.5rem;">Converts electrical consumption to greenhouse gas equivalents using the grid emission factor.</p>', unsafe_allow_html=True)
+
+    with st.container(border=True):
+        st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem;">3. Forecast Error Metrics</h3>', unsafe_allow_html=True)
+        st.latex(r"\text{MAPE} = \frac{100}{n} \sum_{i=1}^n \left| \frac{A_i - F_i}{A_i} \right|, \quad \text{RMSE} = \sqrt{\frac{1}{n} \sum_{i=1}^n (A_i - F_i)^2}")
+        st.markdown('<p style="font-size: 0.85rem; color: #475569; margin-top: 0.5rem;">Measures out-of-sample prediction accuracy and variance for ETS exponential smoothing models.</p>', unsafe_allow_html=True)
+
+    with st.container(border=True):
+        st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem;">4. Conservation Scenario & Optimization Model</h3>', unsafe_allow_html=True)
+        st.latex(r"\text{Scenario Consumption} = \text{BAU} \times (1 - r)")
+        st.markdown('<p style="font-size: 0.85rem; color: #475569; margin-top: 0.5rem;">Where <strong>r</strong> represents the reduction target rate (0.05, 0.10, 0.15).</p>', unsafe_allow_html=True)
+
+    st.markdown(f"""
+    <div class="ui-card" style="border-left: 6px solid #1D4ED8; margin-top: 1.25rem; padding: 1.5rem 1.75rem;">
+        <h3 style="font-size: 1.05rem; font-weight: 700; color: #1E3A8A; margin-bottom: 0.5rem;">Methodology Handbook Summary</h3>
+        <p style="font-size: 0.90rem; color: #334155; line-height: 1.55; margin: 0;">
+            ENERGYSCAPE strictly adheres to empirical decision-support modeling principles. All mathematical formulations are deterministic, 
+            auditable, and non-intrusive—providing educational administrators with transparent quantitative insights.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
