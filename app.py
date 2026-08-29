@@ -678,8 +678,9 @@ elif navigation_option == "Historical Analysis":
             with st.container(border=True):
                 st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem;">Yearly Expenditure Breakdown</h3>', unsafe_allow_html=True)
                 col_y1, col_y2 = st.columns([1.2, 1])
+                yr_df = metrics["yearly_summary"].reset_index()
                 with col_y1:
-                    fig_yr = px.bar(metrics["yearly_summary"], x="year", y="total_bill", color_discrete_sequence=["#1D4ED8"], height=300)
+                    fig_yr = px.bar(yr_df, x="school_year", y="total_bill", color_discrete_sequence=["#1D4ED8"], height=300)
                     fig_yr = apply_blue_theme(fig_yr, "Total Bill by Year (₱)")
                     fig_yr.update_traces(marker=dict(cornerradius=6))
                     st.plotly_chart(fig_yr, use_container_width=True)
@@ -690,8 +691,9 @@ elif navigation_option == "Historical Analysis":
             with st.container(border=True):
                 st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem;">Monthly Average Expenditure Pattern</h3>', unsafe_allow_html=True)
                 col_m1, col_m2 = st.columns([1.2, 1])
+                mo_df = metrics["monthly_summary"].reset_index()
                 with col_m1:
-                    fig_mo = px.bar(metrics["monthly_summary"], x="month", y="mean_bill", color_discrete_sequence=["#2563EB"], height=300)
+                    fig_mo = px.bar(mo_df, x="month_cat", y="average_bill", color_discrete_sequence=["#2563EB"], height=300)
                     fig_mo = apply_blue_theme(fig_mo, "Average Bill by Month (₱)")
                     fig_mo.update_traces(marker=dict(cornerradius=6))
                     st.plotly_chart(fig_mo, use_container_width=True)
