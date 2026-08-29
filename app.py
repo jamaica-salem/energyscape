@@ -99,8 +99,14 @@ st.markdown("""
 
     div[data-testid="stVerticalBlockBorderWrapper"] > div {
         border: none !important;
-        background-color: transparent !important;
+        background-color: #FFFFFF !important;
         padding: 1.25rem !important;
+        border-radius: 18px !important;
+    }
+
+    /* Solid White Chart Backgrounds */
+    div[data-testid="stPlotlyChart"], .js-plotly-plot .plotly, .plotly {
+        background-color: #FFFFFF !important;
     }
 
     /* Dark Featured Savings Card (Deep Blue Theme) */
@@ -344,8 +350,8 @@ def apply_blue_theme(fig, title=""):
     fig.update_layout(
         title=dict(text=title, font=dict(family="Plus Jakarta Sans", size=15, color="#0F172A")),
         font=dict(family="Plus Jakarta Sans", color="#475569"),
-        paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="rgba(0,0,0,0)",
+        paper_bgcolor="#FFFFFF",
+        plot_bgcolor="#FFFFFF",
         margin=dict(l=10, r=10, t=30, b=10),
         xaxis=dict(
             title="",
@@ -496,8 +502,8 @@ if navigation_option == "Dashboard":
                 fig_donut.update_traces(textinfo="percent", hoverinfo="label+value+percent")
                 fig_donut.update_layout(
                     showlegend=False,
-                    paper_bgcolor="rgba(0,0,0,0)",
-                    plot_bgcolor="rgba(0,0,0,0)",
+                    paper_bgcolor="#FFFFFF",
+                    plot_bgcolor="#FFFFFF",
                     margin=dict(l=0, r=0, t=10, b=10),
                     annotations=[dict(text="Energy Load", x=0.5, y=0.5, font=dict(size=14, family="Plus Jakarta Sans", color="#0F172A"), showarrow=False)]
                 )
@@ -642,8 +648,8 @@ elif navigation_option == "Energy Load Analysis":
             title=dict(text="Pareto Appliance Load Analysis", font=dict(color="#0F172A")),
             yaxis=dict(title="Energy (kWh)", gridcolor="#F1F5F9", tickfont=dict(color="#475569")),
             yaxis2=dict(title="Cumulative Share (%)", overlaying="y", side="right", range=[0, 105], tickfont=dict(color="#475569")),
-            paper_bgcolor="rgba(0,0,0,0)",
-            plot_bgcolor="rgba(0,0,0,0)",
+            paper_bgcolor="#FFFFFF",
+            plot_bgcolor="#FFFFFF",
             legend=dict(font=dict(color="#0F172A"))
         )
         st.plotly_chart(fig_p, use_container_width=True)
