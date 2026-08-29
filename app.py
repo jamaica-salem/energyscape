@@ -1,6 +1,6 @@
 """
 ENERGYSCAPE: Multi-Seasonal Mathematical-Computational Framework for Predictive Energy Management and Carbon Reduction
-Main Streamlit Application — Custom Light Blue Design System (Clean Typography without Emojis)
+Main Streamlit Application — Custom Light Blue Design System (Clean Typography & Spacing Fixes)
 """
 
 import streamlit as st
@@ -72,16 +72,16 @@ st.markdown("""
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 1.5rem;
-        padding-bottom: 0.5rem;
+        margin-bottom: 1.25rem;
+        padding-bottom: 0.25rem;
     }
     .greeting-title {
-        font-size: 0.95rem !important;
+        font-size: 0.9rem !important;
         color: #64748B !important;
         margin: 0 !important;
     }
     .greeting-name {
-        font-size: 2.25rem !important;
+        font-size: 2.1rem !important;
         font-weight: 800 !important;
         color: #0F172A !important;
         margin: 0 !important;
@@ -89,19 +89,32 @@ st.markdown("""
     }
 
     /* Card Containers & Streamlit Border Containers */
-    .ui-card, div[data-testid="stVerticalBlockBorderWrapper"] {
+    .ui-card {
+        background-color: #FFFFFF !important;
+        border: 1px solid #E2E8F0 !important;
+        border-radius: 18px !important;
+        padding: 1.25rem 1.5rem !important;
+        margin-bottom: 1.25rem !important;
+        box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04) !important;
+        box-sizing: border-box !important;
+        overflow: visible !important;
+    }
+
+    div[data-testid="stVerticalBlockBorderWrapper"] {
         background-color: #FFFFFF !important;
         border: 1px solid #E2E8F0 !important;
         border-radius: 18px !important;
         box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04) !important;
-        margin-bottom: 1.5rem !important;
+        margin-bottom: 1.25rem !important;
+        box-sizing: border-box !important;
     }
 
     div[data-testid="stVerticalBlockBorderWrapper"] > div {
         border: none !important;
         background-color: #FFFFFF !important;
-        padding: 1.25rem !important;
+        padding: 1.25rem 1.5rem !important;
         border-radius: 18px !important;
+        box-sizing: border-box !important;
     }
 
     /* Solid White Chart Backgrounds */
@@ -113,77 +126,83 @@ st.markdown("""
     .dark-featured-card {
         background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 100%) !important;
         border-radius: 18px !important;
-        padding: 1.5rem !important;
+        padding: 1.35rem 1.5rem !important;
         color: #FFFFFF !important;
         box-shadow: 0 8px 24px -4px rgba(30, 58, 138, 0.35) !important;
-        margin-bottom: 1.5rem !important;
+        margin-bottom: 1.25rem !important;
         position: relative !important;
         overflow: hidden !important;
+        box-sizing: border-box !important;
     }
     .dark-card-label {
-        font-size: 0.85rem !important;
+        font-size: 0.8rem !important;
         color: #93C5FD !important;
         font-weight: 600 !important;
         text-transform: uppercase !important;
         letter-spacing: 0.05em !important;
     }
     .dark-card-value {
-        font-size: 2.25rem !important;
+        font-size: 2.1rem !important;
         font-weight: 800 !important;
         color: #FFFFFF !important;
-        margin: 0.25rem 0 !important;
+        margin: 0.2rem 0 !important;
         letter-spacing: -0.02em !important;
     }
     .dark-card-subtitle {
-        font-size: 0.85rem !important;
+        font-size: 0.8rem !important;
         color: #BFDBFE !important;
-        margin-top: 0.5rem !important;
+        margin-top: 0.4rem !important;
     }
 
     /* Pill Badges */
     .pill-badge-blue {
         background-color: #DBEAFE !important;
         color: #1E40AF !important;
-        padding: 0.3rem 0.75rem !important;
+        padding: 0.25rem 0.65rem !important;
         border-radius: 9999px !important;
-        font-size: 0.75rem !important;
+        font-size: 0.72rem !important;
         font-weight: 700 !important;
         display: inline-flex !important;
         align-items: center !important;
+        white-space: nowrap !important;
     }
     .pill-badge-green {
         background-color: #DCFCE7 !important;
         color: #166534 !important;
-        padding: 0.3rem 0.75rem !important;
+        padding: 0.25rem 0.65rem !important;
         border-radius: 9999px !important;
-        font-size: 0.75rem !important;
+        font-size: 0.72rem !important;
         font-weight: 700 !important;
         display: inline-flex !important;
         align-items: center !important;
+        white-space: nowrap !important;
     }
     .pill-badge-red {
         background-color: #FEE2E2 !important;
         color: #991B1B !important;
-        padding: 0.3rem 0.75rem !important;
+        padding: 0.25rem 0.65rem !important;
         border-radius: 9999px !important;
-        font-size: 0.75rem !important;
+        font-size: 0.72rem !important;
         font-weight: 700 !important;
         display: inline-flex !important;
         align-items: center !important;
+        white-space: nowrap !important;
     }
 
     /* Metric Display */
     .kpi-label {
-        font-size: 0.85rem !important;
+        font-size: 0.8rem !important;
         color: #64748B !important;
         font-weight: 600 !important;
-        margin-bottom: 0.25rem !important;
+        margin-bottom: 0.15rem !important;
     }
     .kpi-val {
-        font-size: 1.85rem !important;
+        font-size: 1.55rem !important;
         font-weight: 800 !important;
         color: #0F172A !important;
         letter-spacing: -0.02em !important;
+        margin: 0.15rem 0 !important;
+        line-height: 1.2 !important;
     }
 
     /* Sidebar Fixes */
@@ -256,9 +275,9 @@ st.markdown("""
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 0.5rem 0;
+        padding: 0.4rem 0;
         border-bottom: 1px solid #F1F5F9;
-        font-size: 0.875rem;
+        font-size: 0.85rem;
     }
     .legend-left {
         display: flex;
@@ -411,14 +430,14 @@ if navigation_option == "Dashboard":
     with col_kpi1:
         st.markdown(f"""
         <div class="ui-card">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
                 <div>
                     <div class="kpi-label">Historical Average Bill</div>
                     <div class="kpi-val">{format_currency(hist_metrics.get("avg_bill", 0))}</div>
                 </div>
                 <span class="pill-badge-blue">Last 4 SY</span>
             </div>
-            <div style="margin-top: 1rem; font-size: 0.8rem; color: #64748B;">
+            <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
                 Range: {format_currency(hist_metrics.get("min_bill", 0))} – {format_currency(hist_metrics.get("max_bill", 0))}
             </div>
         </div>
@@ -426,14 +445,14 @@ if navigation_option == "Dashboard":
         
         st.markdown(f"""
         <div class="ui-card">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
                 <div>
                     <div class="kpi-label">BAU Monthly Cost</div>
                     <div class="kpi-val">{format_currency(bau_base["monthly_cost_php"])}</div>
                 </div>
                 <span class="pill-badge-red">Baseline</span>
             </div>
-            <div style="margin-top: 1rem; font-size: 0.8rem; color: #64748B;">
+            <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
                 Estimated Load: {format_kwh(load_summary.get("total_kwh", 0))}
             </div>
         </div>
@@ -442,14 +461,14 @@ if navigation_option == "Dashboard":
     with col_kpi2:
         st.markdown(f"""
         <div class="ui-card">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
                 <div>
                     <div class="kpi-label">Primary Load Share</div>
                     <div class="kpi-val">{load_summary.get("top_share", 0):.1f}%</div>
                 </div>
                 <span class="pill-badge-blue">{load_summary.get("top_appliance", "Air Conditioner")}</span>
             </div>
-            <div style="margin-top: 1rem; font-size: 0.8rem; color: #64748B;">
+            <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
                 Top 2 Combined: {load_summary.get("top2_combined_share", 0):.1f}% of total load
             </div>
         </div>
@@ -457,14 +476,14 @@ if navigation_option == "Dashboard":
         
         st.markdown(f"""
         <div class="ui-card">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
                 <div>
                     <div class="kpi-label">BAU Carbon Footprint</div>
                     <div class="kpi-val">{format_co2(bau_base["monthly_co2_kg"])}</div>
                 </div>
                 <span class="pill-badge-blue">Monthly</span>
             </div>
-            <div style="margin-top: 1rem; font-size: 0.8rem; color: #64748B;">
+            <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
                 Annual: {format_co2(bau_base["annual_co2_kg"])}
             </div>
         </div>
@@ -473,12 +492,12 @@ if navigation_option == "Dashboard":
     with col_kpi3:
         st.markdown(f"""
         <div class="dark-featured-card">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
                 <span class="dark-card-label">Optimized Target Savings</span>
                 <span class="pill-badge-green">15% Reduction</span>
             </div>
             <div class="dark-card-value">{format_kwh(opt_res["optimized_monthly_kwh"])}</div>
-            <div style="font-weight: 700; font-size: 1.1rem; color: #60A5FA;">
+            <div style="font-weight: 700; font-size: 1.05rem; color: #60A5FA;">
                 Annual Cost Savings: {format_currency(opt_res["annual_cost_savings_php"])}
             </div>
             <div class="dark-card-subtitle">
@@ -549,9 +568,9 @@ if navigation_option == "Dashboard":
         opt_res["optimized_monthly_kwh"]
     )
     st.markdown(f"""
-    <div class="ui-card" style="border-left: 6px solid #1D4ED8; margin-top: 1.5rem;">
-        <h3 style="font-size: 1.1rem; font-weight: 700; color: #1E3A8A; margin-bottom: 0.5rem;">Executive Management Recommendation</h3>
-        <p style="font-size: 0.95rem; color: #334155; line-height: 1.6; margin: 0;">{exec_rec}</p>
+    <div class="ui-card" style="border-left: 6px solid #1D4ED8; margin-top: 1.25rem; padding: 1.5rem 1.75rem;">
+        <h3 style="font-size: 1.05rem; font-weight: 700; color: #1E3A8A; margin-bottom: 0.5rem;">Executive Management Recommendation</h3>
+        <p style="font-size: 0.90rem; color: #334155; line-height: 1.55; margin: 0;">{exec_rec}</p>
     </div>
     """, unsafe_allow_html=True)
 
