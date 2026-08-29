@@ -858,39 +858,123 @@ elif navigation_option == "Seasonal Analysis":
 
 # --- 4. ENERGY LOAD ANALYSIS ---
 elif navigation_option == "Energy Load Analysis":
-    st.title("Electrical Load Quantification")
-    st.write("Appliance energy consumption, monthly financial cost, and priority ranking.")
+    st.markdown("""
+    <div class="user-greeting-banner">
+        <div>
+            <p class="greeting-title">Wattage & Inventory Audit</p>
+            <h1 class="greeting-name">Electrical Load Quantification</h1>
+        </div>
+        <div>
+            <span class="pill-badge-blue">Appliance Energy Breakdown</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
     
     apps_processed = calculate_appliance_loads(appliance_df, electricity_rate, school_selection)
     load_sum = get_load_summary(apps_processed, electricity_rate)
     
     if not apps_processed.empty:
         lc1, lc2, lc3, lc4 = st.columns(4)
-        lc1.metric("Total Monthly Load", format_kwh(load_sum["total_kwh"]))
-        lc2.metric("Total Monthly Cost", format_currency(load_sum["total_cost_php"]))
-        lc3.metric("Top Appliance", load_sum["top_appliance"])
-        lc4.metric("Top 2 Share", format_pct(load_sum["top2_combined_share"]))
         
-        st.markdown("### Ranked Appliance Load Inventory")
-        st.dataframe(apps_processed[['rank', 'appliance', 'quantity', 'power_watts', 'hours_per_day', 'operating_days', 'monthly_kwh', 'monthly_cost_php', 'percentage_share', 'priority']], use_container_width=True)
+        with lc1:
+            st.markdown(f"""
+            <div class="ui-card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                    <div>
+                        <div class="kpi-label">Total Monthly Load</div>
+                        <div class="kpi-val">{format_kwh(load_sum["total_kwh"])}</div>
+                    </div>
+                    <span class="pill-badge-blue">Baseline Load</span>
+                </div>
+                <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
+                    Calculated appliance load
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+            
+        with lc2:
+            st.markdown(f"""
+            <div class="ui-card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                    <div>
+                        <div class="kpi-label">Total Monthly Cost</div>
+                        <div class="kpi-val">{format_currency(load_sum["total_cost_php"])}</div>
+                    </div>
+                    <span class="pill-badge-blue">₱11.00/kWh</span>
+                </div>
+                <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
+                    Estimated monthly expense
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+            
+        with lc3:
+            st.markdown(f"""
+            <div class="ui-card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                    <div>
+                        <div class="kpi-label">Primary Consumer</div>
+                        <div class="kpi-val">{load_sum["top_appliance"]}</div>
+                    </div>
+                    <span class="pill-badge-red">Top Load</span>
+                </div>
+                <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
+                    {load_sum.get("top_share", 0):.1f}% of total load
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+            
+        with lc4:
+            st.markdown(f"""
+            <div class="ui-card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                    <div>
+                        <div class="kpi-label">Top 2 Concentration</div>
+                        <div class="kpi-val">{format_pct(load_sum["top2_combined_share"])}</div>
+                    </div>
+                    <span class="pill-badge-green">Pareto</span>
+                </div>
+                <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
+                    Aircon + Computers
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
         
-        st.markdown("### Pareto Energy Concentration")
-        apps_sorted = apps_processed.sort_values(by='monthly_kwh', ascending=False)
-        apps_sorted['cum_share'] = apps_sorted['percentage_share'].cumsum()
-        
-        fig_p = go.Figure()
-        fig_p.add_trace(go.Bar(x=apps_sorted['appliance'], y=apps_sorted['monthly_kwh'], name="Monthly kWh", marker=dict(color="#1D4ED8", cornerradius=6)))
-        fig_p.add_trace(go.Scatter(x=apps_sorted['appliance'], y=apps_sorted['cum_share'], name="Cumulative Share (%)", yaxis="y2", mode="lines+markers", line=dict(color="#2563EB", width=3)))
-        
-        fig_p.update_layout(
-            title=dict(text="Pareto Appliance Load Analysis", font=dict(color="#0F172A")),
-            yaxis=dict(title="Energy (kWh)", gridcolor="#F1F5F9", tickfont=dict(color="#475569")),
-            yaxis2=dict(title="Cumulative Share (%)", overlaying="y", side="right", range=[0, 105], tickfont=dict(color="#475569")),
-            paper_bgcolor="rgba(0,0,0,0)",
-            plot_bgcolor="rgba(0,0,0,0)",
-            legend=dict(font=dict(color="#0F172A"))
-        )
-        st.plotly_chart(fig_p, use_container_width=True)
+        with st.container(border=True):
+            st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem;">Pareto Energy Concentration Analysis</h3>', unsafe_allow_html=True)
+            apps_sorted = apps_processed.sort_values(by='monthly_kwh', ascending=False)
+            apps_sorted['cum_share'] = apps_sorted['percentage_share'].cumsum()
+            
+            fig_p = go.Figure()
+            fig_p.add_trace(go.Bar(x=apps_sorted['appliance'], y=apps_sorted['monthly_kwh'], name="Monthly kWh", marker=dict(color="#1D4ED8", cornerradius=6)))
+            fig_p.add_trace(go.Scatter(x=apps_sorted['appliance'], y=apps_sorted['cum_share'], name="Cumulative Share (%)", yaxis="y2", mode="lines+markers", line=dict(color="#2563EB", width=3)))
+            
+            fig_p.update_layout(
+                title=dict(text="", font=dict(color="#0F172A")),
+                yaxis=dict(title="Energy (kWh)", gridcolor="#F1F5F9", tickfont=dict(color="#475569")),
+                yaxis2=dict(title="Cumulative Share (%)", overlaying="y", side="right", range=[0, 105], tickfont=dict(color="#475569")),
+                paper_bgcolor="rgba(0,0,0,0)",
+                plot_bgcolor="rgba(0,0,0,0)",
+                legend=dict(font=dict(color="#0F172A"), orientation="h", y=1.1)
+            )
+            st.plotly_chart(fig_p, use_container_width=True)
+
+        with st.container(border=True):
+            st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem;">Ranked Appliance Load Inventory</h3>', unsafe_allow_html=True)
+            st.dataframe(apps_processed[['rank', 'appliance', 'quantity', 'power_watts', 'hours_per_day', 'operating_days', 'monthly_kwh', 'monthly_cost_php', 'percentage_share', 'priority']], use_container_width=True)
+
+        st.markdown(f"""
+        <div class="ui-card" style="border-left: 6px solid #1D4ED8; margin-top: 1.25rem; padding: 1.5rem 1.75rem;">
+            <h3 style="font-size: 1.05rem; font-weight: 700; color: #1E3A8A; margin-bottom: 0.5rem;">Load Quantification Insights</h3>
+            <p style="font-size: 0.90rem; color: #334155; line-height: 1.55; margin: 0;">
+                The electrical inventory quantifies total monthly consumption at <strong>{format_kwh(load_sum['total_kwh'])}</strong> 
+                (costing <strong>{format_currency(load_sum['total_cost_php'])}</strong>). 
+                Energy concentration is heavily skewed towards high-wattage thermal and computing loads, with 
+                <strong>{load_sum['top_appliance']}</strong> accounting for <strong>{load_sum.get('top_share', 0):.1f}%</strong> 
+                of total campus electricity usage.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
 
 # --- 5. FORECASTING ---
 elif navigation_option == "Forecasting":
