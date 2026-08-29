@@ -1,0 +1,15 @@
+school,appliance,quantity,power_watts,hours_per_day,operating_days
+An-anaao Integrated School,Air Conditioner,4,1500,6,22
+An-anaao Integrated School,Computers,25,150,7,22
+An-anaao Integrated School,Lighting Fixtures,40,40,8,22
+An-anaao Integrated School,Electric Fans,20,75,8,22
+An-anaao Integrated School,Refrigerators,2,500,10,22
+An-anaao Integrated School,Projectors,5,300,4,22
+An-anaao Integrated School,Printers,5,100,2,22
+La Paz Integrated School,Air Conditioner,5,1500,6,22
+La Paz Integrated School,Computers,30,150,7,22
+La Paz Integrated School,Lighting Fixtures,50,40,8,22
+La Paz Integrated School,Electric Fans,25,75,8,22
+La Paz Integrated School,Refrigerators,2,500,10,22
+La Paz Integrated School,Projectors,6,300,4,22
+La Paz Integrated School,Printers,6,100,2,22
