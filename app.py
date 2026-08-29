@@ -1078,28 +1078,111 @@ elif navigation_option == "Forecasting":
 
 # --- 6. CARBON & BAU ---
 elif navigation_option == "Carbon & BAU":
-    st.title("Carbon Footprint & BAU Baseline")
-    st.write("Baseline Business-as-Usual metrics and greenhouse gas emissions.")
+    st.markdown(f"""
+    <div class="user-greeting-banner">
+        <div>
+            <p class="greeting-title">Greenhouse Gas & Baseline Audit</p>
+            <h1 class="greeting-name">Carbon Footprint & BAU Baseline</h1>
+        </div>
+        <div>
+            <span class="pill-badge-blue">{emission_factor:.2f} kg CO₂e/kWh Emission Factor</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
     
     apps_processed = calculate_appliance_loads(appliance_df, electricity_rate, school_selection)
     load_sum = get_load_summary(apps_processed, electricity_rate)
     bau = calculate_bau_baseline(load_sum.get("total_kwh", 2289.10), electricity_rate, emission_factor)
     
     b1, b2, b3, b4 = st.columns(4)
-    b1.metric("BAU Monthly kWh", format_kwh(bau["monthly_kwh"]))
-    b2.metric("BAU Monthly Cost", format_currency(bau["monthly_cost_php"]))
-    b3.metric("BAU Monthly CO₂e", format_co2(bau["monthly_co2_kg"]))
-    b4.metric("BAU Annual CO₂e", format_co2(bau["annual_co2_kg"]))
     
-    bau_table = pd.DataFrame([
-        {"Indicator": "Monthly Electricity Consumption", "Value": format_kwh(bau["monthly_kwh"])},
-        {"Indicator": "Annual Electricity Consumption", "Value": format_kwh(bau["annual_kwh"])},
-        {"Indicator": "Monthly Electricity Cost", "Value": format_currency(bau["monthly_cost_php"])},
-        {"Indicator": "Annual Electricity Cost", "Value": format_currency(bau["annual_cost_php"])},
-        {"Indicator": "Monthly Carbon Emissions", "Value": format_co2(bau["monthly_co2_kg"])},
-        {"Indicator": "Annual Carbon Emissions", "Value": format_co2(bau["annual_co2_kg"])},
-    ])
-    st.dataframe(bau_table, use_container_width=True)
+    with b1:
+        st.markdown(f"""
+        <div class="ui-card">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                <div>
+                    <div class="kpi-label">BAU Monthly Load</div>
+                    <div class="kpi-val">{format_kwh(bau["monthly_kwh"])}</div>
+                </div>
+                <span class="pill-badge-blue">Monthly</span>
+            </div>
+            <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
+                Annual: {format_kwh(bau["annual_kwh"])}
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+    with b2:
+        st.markdown(f"""
+        <div class="ui-card">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                <div>
+                    <div class="kpi-label">BAU Monthly Cost</div>
+                    <div class="kpi-val">{format_currency(bau["monthly_cost_php"])}</div>
+                </div>
+                <span class="pill-badge-red">Baseline</span>
+            </div>
+            <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
+                Annual: {format_currency(bau["annual_cost_php"])}
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+    with b3:
+        st.markdown(f"""
+        <div class="ui-card">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                <div>
+                    <div class="kpi-label">BAU Monthly CO₂e</div>
+                    <div class="kpi-val">{format_co2(bau["monthly_co2_kg"])}</div>
+                </div>
+                <span class="pill-badge-blue">Emissions</span>
+            </div>
+            <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
+                Monthly carbon footprint
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+    with b4:
+        st.markdown(f"""
+        <div class="ui-card">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                <div>
+                    <div class="kpi-label">BAU Annual CO₂e</div>
+                    <div class="kpi-val">{format_co2(bau["annual_co2_kg"])}</div>
+                </div>
+                <span class="pill-badge-red">Annual Sum</span>
+            </div>
+            <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
+                Annual greenhouse footprint
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with st.container(border=True):
+        st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem;">Business-as-Usual (BAU) Benchmark Table</h3>', unsafe_allow_html=True)
+        bau_table = pd.DataFrame([
+            {"Indicator": "Monthly Electricity Consumption", "Value": format_kwh(bau["monthly_kwh"])},
+            {"Indicator": "Annual Electricity Consumption", "Value": format_kwh(bau["annual_kwh"])},
+            {"Indicator": "Monthly Electricity Cost", "Value": format_currency(bau["monthly_cost_php"])},
+            {"Indicator": "Annual Electricity Cost", "Value": format_currency(bau["annual_cost_php"])},
+            {"Indicator": "Monthly Carbon Emissions", "Value": format_co2(bau["monthly_co2_kg"])},
+            {"Indicator": "Annual Carbon Emissions", "Value": format_co2(bau["annual_co2_kg"])},
+        ])
+        st.dataframe(bau_table, use_container_width=True)
+
+    st.markdown(f"""
+    <div class="ui-card" style="border-left: 6px solid #1D4ED8; margin-top: 1.25rem; padding: 1.5rem 1.75rem;">
+        <h3 style="font-size: 1.05rem; font-weight: 700; color: #1E3A8A; margin-bottom: 0.5rem;">Carbon Footprint Audit Insights</h3>
+        <p style="font-size: 0.90rem; color: #334155; line-height: 1.55; margin: 0;">
+            Under Business-as-Usual (BAU) operations, campus electricity usage generates an estimated 
+            <strong>{format_co2(bau['monthly_co2_kg'])}</strong> of greenhouse gas emissions monthly, accumulating to 
+            <strong>{format_co2(bau['annual_co2_kg'])}</strong> per year based on an emission factor of 
+            <strong>{emission_factor:.2f} kg CO₂e/kWh</strong>. This serves as the benchmark against which energy conservation targets are evaluated.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
 
 # --- 7. CONSERVATION SCENARIOS ---
 elif navigation_option == "Conservation Scenarios":
