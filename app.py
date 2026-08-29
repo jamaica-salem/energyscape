@@ -88,14 +88,19 @@ st.markdown("""
         letter-spacing: -0.02em !important;
     }
 
-    /* Card Containers */
-    .ui-card {
+    /* Card Containers & Streamlit Border Containers */
+    .ui-card, div[data-testid="stVerticalBlockBorderWrapper"] {
         background-color: #FFFFFF !important;
         border: 1px solid #E2E8F0 !important;
         border-radius: 18px !important;
-        padding: 1.5rem !important;
         box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04) !important;
         margin-bottom: 1.5rem !important;
+    }
+
+    div[data-testid="stVerticalBlockBorderWrapper"] > div {
+        border: none !important;
+        background-color: transparent !important;
+        padding: 1.25rem !important;
     }
 
     /* Dark Featured Savings Card (Deep Blue Theme) */
@@ -479,56 +484,58 @@ if navigation_option == "Dashboard":
     col_chart_left, col_chart_right = st.columns([1, 1.2])
     
     with col_chart_left:
-        st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem;">Appliance Load Category Breakdown</h3>', unsafe_allow_html=True)
-        
-        if not apps_processed.empty:
-            fig_donut = px.pie(
-                apps_processed, names="appliance", values="monthly_kwh",
-                hole=0.6, color_discrete_sequence=BLUE_PALETTE,
-                height=280
-            )
-            fig_donut.update_traces(textinfo="percent", hoverinfo="label+value+percent")
-            fig_donut.update_layout(
-                showlegend=False,
-                paper_bgcolor="rgba(0,0,0,0)",
-                plot_bgcolor="rgba(0,0,0,0)",
-                margin=dict(l=0, r=0, t=10, b=10),
-                annotations=[dict(text="Energy Load", x=0.5, y=0.5, font=dict(size=14, family="Plus Jakarta Sans", color="#0F172A"), showarrow=False)]
-            )
-            st.plotly_chart(fig_donut, use_container_width=True)
+        with st.container(border=True):
+            st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem;">Appliance Load Category Breakdown</h3>', unsafe_allow_html=True)
             
-            st.markdown('<div style="margin-top: 0.5rem;">', unsafe_allow_html=True)
-            for idx, row in apps_processed.head(4).iterrows():
-                color_dot = BLUE_PALETTE[idx % len(BLUE_PALETTE)]
-                st.markdown(f"""
-                <div class="legend-row">
-                    <div class="legend-left">
-                        <div class="legend-dot" style="background-color: {color_dot};"></div>
-                        <span style="color: #0F172A; font-weight: 600;">{row['appliance']}</span>
+            if not apps_processed.empty:
+                fig_donut = px.pie(
+                    apps_processed, names="appliance", values="monthly_kwh",
+                    hole=0.6, color_discrete_sequence=BLUE_PALETTE,
+                    height=280
+                )
+                fig_donut.update_traces(textinfo="percent", hoverinfo="label+value+percent")
+                fig_donut.update_layout(
+                    showlegend=False,
+                    paper_bgcolor="rgba(0,0,0,0)",
+                    plot_bgcolor="rgba(0,0,0,0)",
+                    margin=dict(l=0, r=0, t=10, b=10),
+                    annotations=[dict(text="Energy Load", x=0.5, y=0.5, font=dict(size=14, family="Plus Jakarta Sans", color="#0F172A"), showarrow=False)]
+                )
+                st.plotly_chart(fig_donut, use_container_width=True)
+                
+                st.markdown('<div style="margin-top: 0.5rem;">', unsafe_allow_html=True)
+                for idx, row in apps_processed.head(4).iterrows():
+                    color_dot = BLUE_PALETTE[idx % len(BLUE_PALETTE)]
+                    st.markdown(f"""
+                    <div class="legend-row">
+                        <div class="legend-left">
+                            <div class="legend-dot" style="background-color: {color_dot};"></div>
+                            <span style="color: #0F172A; font-weight: 600;">{row['appliance']}</span>
+                        </div>
+                        <div>
+                            <strong style="color: #0F172A;">{format_kwh(row['monthly_kwh'])}</strong> 
+                            <span style="color: #64748B; margin-left: 6px;">({row['percentage_share']:.1f}%)</span>
+                        </div>
                     </div>
-                    <div>
-                        <strong style="color: #0F172A;">{format_kwh(row['monthly_kwh'])}</strong> 
-                        <span style="color: #64748B; margin-left: 6px;">({row['percentage_share']:.1f}%)</span>
-                    </div>
-                </div>
-                """, unsafe_allow_html=True)
-            st.markdown('</div>', unsafe_allow_html=True)
+                    """, unsafe_allow_html=True)
+                st.markdown('</div>', unsafe_allow_html=True)
             
     with col_chart_right:
-        st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem;">Monthly Electricity Billing Patterns</h3>', unsafe_allow_html=True)
-        
-        plot_df = historical_df[historical_df['bill_php'].notna()]
-        if school_selection != "Both":
-            plot_df = plot_df[plot_df['school'] == school_selection]
+        with st.container(border=True):
+            st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem;">Monthly Electricity Billing Patterns</h3>', unsafe_allow_html=True)
             
-        fig_bar = px.bar(
-            plot_df.tail(12), x="month", y="bill_php", color="school",
-            color_discrete_sequence=["#1D4ED8", "#60A5FA"],
-            height=380
-        )
-        fig_bar = apply_blue_theme(fig_bar)
-        fig_bar.update_traces(marker_line_width=0, opacity=0.9)
-        st.plotly_chart(fig_bar, use_container_width=True)
+            plot_df = historical_df[historical_df['bill_php'].notna()]
+            if school_selection != "Both":
+                plot_df = plot_df[plot_df['school'] == school_selection]
+                
+            fig_bar = px.bar(
+                plot_df.tail(12), x="month", y="bill_php", color="school",
+                color_discrete_sequence=["#1D4ED8", "#60A5FA"],
+                height=380
+            )
+            fig_bar = apply_blue_theme(fig_bar)
+            fig_bar.update_traces(marker_line_width=0, opacity=0.9)
+            st.plotly_chart(fig_bar, use_container_width=True)
 
     exec_rec = generate_executive_summary_recommendation(
         load_summary.get("top_appliance", "Air Conditioner"),
