@@ -89,7 +89,7 @@ st.markdown("""
     }
 
     /* Card Containers */
-    .ui-card, div[data-testid="stVerticalBlockBorderWrapper"] > div {
+    .ui-card {
         background-color: #FFFFFF !important;
         border: 1px solid #E2E8F0 !important;
         border-radius: 18px !important;
@@ -337,14 +337,34 @@ BLUE_PALETTE = ["#0F4C81", "#1D4ED8", "#2563EB", "#3B82F6", "#60A5FA", "#93C5FD"
 
 def apply_blue_theme(fig, title=""):
     fig.update_layout(
-        title=dict(text=title, font=dict(family="Plus Jakarta Sans", size=16, color="#0F172A")),
+        title=dict(text=title, font=dict(family="Plus Jakarta Sans", size=15, color="#0F172A")),
         font=dict(family="Plus Jakarta Sans", color="#475569"),
-        paper_bgcolor="#FFFFFF",
-        plot_bgcolor="#FFFFFF",
-        margin=dict(l=10, r=10, t=40, b=10),
-        xaxis=dict(gridcolor="#F1F5F9", showline=True, linecolor="#E2E8F0", tickfont=dict(color="#475569")),
-        yaxis=dict(gridcolor="#F1F5F9", showline=True, linecolor="#E2E8F0", tickfont=dict(color="#475569")),
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, font=dict(color="#0F172A"))
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        margin=dict(l=10, r=10, t=30, b=10),
+        xaxis=dict(
+            title="",
+            gridcolor="#F1F5F9", 
+            showline=True, 
+            linecolor="#E2E8F0", 
+            tickfont=dict(color="#475569")
+        ),
+        yaxis=dict(
+            title="",
+            gridcolor="#F1F5F9", 
+            showline=True, 
+            linecolor="#E2E8F0", 
+            tickfont=dict(color="#475569")
+        ),
+        legend=dict(
+            title="",
+            orientation="h", 
+            yanchor="bottom", 
+            y=1.02, 
+            xanchor="right", 
+            x=1, 
+            font=dict(color="#0F172A")
+        )
     )
     return fig
 
@@ -459,56 +479,56 @@ if navigation_option == "Dashboard":
     col_chart_left, col_chart_right = st.columns([1, 1.2])
     
     with col_chart_left:
-        with st.container(border=True):
-            st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 1rem;">Appliance Load Category Breakdown</h3>', unsafe_allow_html=True)
+        st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem;">Appliance Load Category Breakdown</h3>', unsafe_allow_html=True)
+        
+        if not apps_processed.empty:
+            fig_donut = px.pie(
+                apps_processed, names="appliance", values="monthly_kwh",
+                hole=0.6, color_discrete_sequence=BLUE_PALETTE,
+                height=280
+            )
+            fig_donut.update_traces(textinfo="percent", hoverinfo="label+value+percent")
+            fig_donut.update_layout(
+                showlegend=False,
+                paper_bgcolor="rgba(0,0,0,0)",
+                plot_bgcolor="rgba(0,0,0,0)",
+                margin=dict(l=0, r=0, t=10, b=10),
+                annotations=[dict(text="Energy Load", x=0.5, y=0.5, font=dict(size=14, family="Plus Jakarta Sans", color="#0F172A"), showarrow=False)]
+            )
+            st.plotly_chart(fig_donut, use_container_width=True)
             
-            if not apps_processed.empty:
-                fig_donut = px.pie(
-                    apps_processed, names="appliance", values="monthly_kwh",
-                    hole=0.6, color_discrete_sequence=BLUE_PALETTE
-                )
-                fig_donut.update_traces(textinfo="percent", hoverinfo="label+value+percent")
-                fig_donut.update_layout(
-                    showlegend=False,
-                    paper_bgcolor="#FFFFFF",
-                    plot_bgcolor="#FFFFFF",
-                    margin=dict(l=0, r=0, t=10, b=10),
-                    annotations=[dict(text="Energy Load", x=0.5, y=0.5, font=dict(size=14, family="Plus Jakarta Sans", color="#0F172A"), showarrow=False)]
-                )
-                st.plotly_chart(fig_donut, use_container_width=True)
-                
-                st.markdown('<div style="margin-top: 1rem;">', unsafe_allow_html=True)
-                for idx, row in apps_processed.head(4).iterrows():
-                    color_dot = BLUE_PALETTE[idx % len(BLUE_PALETTE)]
-                    st.markdown(f"""
-                    <div class="legend-row">
-                        <div class="legend-left">
-                            <div class="legend-dot" style="background-color: {color_dot};"></div>
-                            <span style="color: #0F172A; font-weight: 600;">{row['appliance']}</span>
-                        </div>
-                        <div>
-                            <strong style="color: #0F172A;">{format_kwh(row['monthly_kwh'])}</strong> 
-                            <span style="color: #64748B; margin-left: 6px;">({row['percentage_share']:.1f}%)</span>
-                        </div>
+            st.markdown('<div style="margin-top: 0.5rem;">', unsafe_allow_html=True)
+            for idx, row in apps_processed.head(4).iterrows():
+                color_dot = BLUE_PALETTE[idx % len(BLUE_PALETTE)]
+                st.markdown(f"""
+                <div class="legend-row">
+                    <div class="legend-left">
+                        <div class="legend-dot" style="background-color: {color_dot};"></div>
+                        <span style="color: #0F172A; font-weight: 600;">{row['appliance']}</span>
                     </div>
-                    """, unsafe_allow_html=True)
-                st.markdown('</div>', unsafe_allow_html=True)
+                    <div>
+                        <strong style="color: #0F172A;">{format_kwh(row['monthly_kwh'])}</strong> 
+                        <span style="color: #64748B; margin-left: 6px;">({row['percentage_share']:.1f}%)</span>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+            st.markdown('</div>', unsafe_allow_html=True)
             
     with col_chart_right:
-        with st.container(border=True):
-            st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 1rem;">Monthly Electricity Billing Patterns</h3>', unsafe_allow_html=True)
+        st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem;">Monthly Electricity Billing Patterns</h3>', unsafe_allow_html=True)
+        
+        plot_df = historical_df[historical_df['bill_php'].notna()]
+        if school_selection != "Both":
+            plot_df = plot_df[plot_df['school'] == school_selection]
             
-            plot_df = historical_df[historical_df['bill_php'].notna()]
-            if school_selection != "Both":
-                plot_df = plot_df[plot_df['school'] == school_selection]
-                
-            fig_bar = px.bar(
-                plot_df.tail(12), x="month", y="bill_php", color="school",
-                color_discrete_sequence=["#1D4ED8", "#60A5FA"]
-            )
-            fig_bar = apply_blue_theme(fig_bar)
-            fig_bar.update_traces(marker_line_width=0, opacity=0.9)
-            st.plotly_chart(fig_bar, use_container_width=True)
+        fig_bar = px.bar(
+            plot_df.tail(12), x="month", y="bill_php", color="school",
+            color_discrete_sequence=["#1D4ED8", "#60A5FA"],
+            height=380
+        )
+        fig_bar = apply_blue_theme(fig_bar)
+        fig_bar.update_traces(marker_line_width=0, opacity=0.9)
+        st.plotly_chart(fig_bar, use_container_width=True)
 
     exec_rec = generate_executive_summary_recommendation(
         load_summary.get("top_appliance", "Air Conditioner"),
@@ -516,7 +536,7 @@ if navigation_option == "Dashboard":
         opt_res["optimized_monthly_kwh"]
     )
     st.markdown(f"""
-    <div class="ui-card" style="border-left: 6px solid #1D4ED8;">
+    <div class="ui-card" style="border-left: 6px solid #1D4ED8; margin-top: 1.5rem;">
         <h3 style="font-size: 1.1rem; font-weight: 700; color: #1E3A8A; margin-bottom: 0.5rem;">Executive Management Recommendation</h3>
         <p style="font-size: 0.95rem; color: #334155; line-height: 1.6; margin: 0;">{exec_rec}</p>
     </div>
@@ -615,8 +635,8 @@ elif navigation_option == "Energy Load Analysis":
             title=dict(text="Pareto Appliance Load Analysis", font=dict(color="#0F172A")),
             yaxis=dict(title="Energy (kWh)", gridcolor="#F1F5F9", tickfont=dict(color="#475569")),
             yaxis2=dict(title="Cumulative Share (%)", overlaying="y", side="right", range=[0, 105], tickfont=dict(color="#475569")),
-            paper_bgcolor="#FFFFFF",
-            plot_bgcolor="#FFFFFF",
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(0,0,0,0)",
             legend=dict(font=dict(color="#0F172A"))
         )
         st.plotly_chart(fig_p, use_container_width=True)
