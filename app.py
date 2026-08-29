@@ -1,6 +1,6 @@
 """
 ENERGYSCAPE: Multi-Seasonal Mathematical-Computational Framework for Predictive Energy Management and Carbon Reduction
-Main Streamlit Application — Custom Light Blue Design System (Aesthetic Rounded Chart Edges & Smooth Bar Corners)
+Main Streamlit Application — Custom Light Blue Design System (Enhanced Seasonal Analysis UI)
 """
 
 import streamlit as st
@@ -611,36 +611,147 @@ elif navigation_option == "Historical Analysis":
 
 # --- 3. SEASONAL ANALYSIS ---
 elif navigation_option == "Seasonal Analysis":
-    st.title("Seasonal Consumption Analysis")
-    st.write("Dry (Dec–May) vs Wet (Jun–Nov) seasonal consumption patterns.")
+    st.markdown("""
+    <div class="user-greeting-banner">
+        <div>
+            <p class="greeting-title">Multi-Seasonal Baseline Comparison</p>
+            <h1 class="greeting-name">Seasonal Consumption Analysis</h1>
+        </div>
+        <div>
+            <span class="pill-badge-blue">Dry vs. Wet Season Dynamics</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
     
-    dry_config = st.multiselect("Dry Season Months Configuration", options=[
-        "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
-    ], default=DEFAULT_DRY_MONTHS)
+    with st.container(border=True):
+        st.markdown('<h4 style="font-size: 0.95rem; font-weight: 700; color: #1E3A8A; margin-bottom: 0.25rem;">Season Classification Parameters</h4>', unsafe_allow_html=True)
+        st.markdown('<p style="font-size: 0.82rem; color: #64748B; margin-bottom: 0.75rem;">Select months assigned to the Dry Season. Unselected months automatically populate the Wet Season baseline.</p>', unsafe_allow_html=True)
+        
+        dry_config = st.multiselect(
+            "Dry Season Months Configuration",
+            options=[
+                "January", "February", "March", "April", "May", "June", 
+                "July", "August", "September", "October", "November", "December"
+            ], 
+            default=DEFAULT_DRY_MONTHS,
+            label_visibility="collapsed"
+        )
     
     wet_config = [m for m in ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"] if m not in dry_config]
     s_metrics = calculate_seasonal_metrics(seasonal_df, dry_config, wet_config, school_selection)
     
     if s_metrics:
         sc1, sc2, sc3, sc4 = st.columns(4)
-        sc1.metric("Dry Season Avg", format_kwh(s_metrics["dry_avg"]))
-        sc2.metric("Wet Season Avg", format_kwh(s_metrics["wet_avg"]))
-        sc3.metric("Seasonal Difference", format_kwh(s_metrics["seasonal_difference"]))
-        sc4.metric("Percentage Difference", format_pct(s_metrics["percentage_difference"]))
         
-        col_s1, col_s2 = st.columns(2)
+        with sc1:
+            st.markdown(f"""
+            <div class="ui-card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                    <div>
+                        <div class="kpi-label">Dry Season Avg</div>
+                        <div class="kpi-val">{format_kwh(s_metrics["dry_avg"])}</div>
+                    </div>
+                    <span class="pill-badge-blue">Dry Season</span>
+                </div>
+                <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
+                    Dec – May Baseline
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+            
+        with sc2:
+            st.markdown(f"""
+            <div class="ui-card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                    <div>
+                        <div class="kpi-label">Wet Season Avg</div>
+                        <div class="kpi-val">{format_kwh(s_metrics["wet_avg"])}</div>
+                    </div>
+                    <span class="pill-badge-blue">Wet Season</span>
+                </div>
+                <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
+                    Jun – Nov Baseline
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+            
+        with sc3:
+            st.markdown(f"""
+            <div class="ui-card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                    <div>
+                        <div class="kpi-label">Seasonal Difference</div>
+                        <div class="kpi-val">{format_kwh(s_metrics["seasonal_difference"])}</div>
+                    </div>
+                    <span class="pill-badge-red">Peak Delta</span>
+                </div>
+                <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
+                    Dry Season excess load
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+            
+        with sc4:
+            st.markdown(f"""
+            <div class="ui-card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                    <div>
+                        <div class="kpi-label">Percentage Difference</div>
+                        <div class="kpi-val">{format_pct(s_metrics["percentage_difference"])}</div>
+                    </div>
+                    <span class="pill-badge-green">Variance</span>
+                </div>
+                <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
+                    Relative increase in Dry Season
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        col_s1, col_s2 = st.columns([1.1, 1])
+        
         with col_s1:
-            fig_s = px.bar(seasonal_df, x="month", y="consumption_kwh", color="season", color_discrete_map={"Dry": "#1D4ED8", "Wet": "#93C5FD"})
-            fig_s = apply_blue_theme(fig_s, "Monthly Seasonal Energy Consumption (kWh)")
-            fig_s.update_traces(marker=dict(cornerradius=6))
-            st.plotly_chart(fig_s, use_container_width=True)
+            with st.container(border=True):
+                st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem;">Monthly Energy Consumption by Season</h3>', unsafe_allow_html=True)
+                
+                fig_s = px.bar(
+                    seasonal_df, x="month", y="consumption_kwh", color="season",
+                    color_discrete_map={"Dry": "#1D4ED8", "Wet": "#60A5FA"},
+                    height=360
+                )
+                fig_s = apply_blue_theme(fig_s)
+                fig_s.update_traces(marker=dict(cornerradius=6), opacity=0.9)
+                st.plotly_chart(fig_s, use_container_width=True)
             
         with col_s2:
+            month_order = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
             s_idx_df = pd.DataFrame(list(s_metrics["seasonal_indices"].items()), columns=["Month", "Seasonal Index"])
-            fig_idx = px.line(s_idx_df, x="Month", y="Seasonal Index", markers=True, color_discrete_sequence=["#1D4ED8"])
-            fig_idx.add_hline(y=1.0, line_dash="dash", line_color="#94A3B8")
-            fig_idx = apply_blue_theme(fig_idx, "Monthly Seasonal Index")
-            st.plotly_chart(fig_idx, use_container_width=True)
+            s_idx_df['Month'] = pd.Categorical(s_idx_df['Month'], categories=month_order, ordered=True)
+            s_idx_df = s_idx_df.sort_values('Month')
+
+            with st.container(border=True):
+                st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem;">Monthly Seasonal Index (Baseline = 1.0)</h3>', unsafe_allow_html=True)
+                
+                fig_idx = px.line(
+                    s_idx_df, x="Month", y="Seasonal Index", markers=True,
+                    color_discrete_sequence=["#1D4ED8"], height=360
+                )
+                fig_idx.add_hline(y=1.0, line_dash="dash", line_color="#94A3B8", annotation_text="Baseline (1.0)", annotation_position="top right")
+                fig_idx = apply_blue_theme(fig_idx)
+                fig_idx.update_traces(fill='tozeroy', fillcolor='rgba(29, 78, 216, 0.08)', line=dict(width=3))
+                st.plotly_chart(fig_idx, use_container_width=True)
+
+        st.markdown(f"""
+        <div class="ui-card" style="border-left: 6px solid #1D4ED8; margin-top: 1.25rem; padding: 1.5rem 1.75rem;">
+            <h3 style="font-size: 1.05rem; font-weight: 700; color: #1E3A8A; margin-bottom: 0.5rem;">Seasonal Dynamic Insights</h3>
+            <p style="font-size: 0.90rem; color: #334155; line-height: 1.55; margin: 0;">
+                Empirical data confirms that <strong>Dry Season</strong> electricity consumption averages 
+                <strong>{format_kwh(s_metrics['dry_avg'])}</strong> per month compared to 
+                <strong>{format_kwh(s_metrics['wet_avg'])}</strong> during the <strong>Wet Season</strong>—representing a 
+                <strong>{format_pct(s_metrics['percentage_difference'])}</strong> surge ({format_kwh(s_metrics['seasonal_difference'])} net difference). 
+                Peak demand occurs during warmer operating months due to intensive cooling appliance load.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
 
 # --- 4. ENERGY LOAD ANALYSIS ---
 elif navigation_option == "Energy Load Analysis":
