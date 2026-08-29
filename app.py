@@ -1,6 +1,6 @@
 """
 ENERGYSCAPE: Multi-Seasonal Mathematical-Computational Framework for Predictive Energy Management and Carbon Reduction
-Main Streamlit Application — Custom Light Blue Design System (Enhanced Seasonal Analysis UI)
+Main Streamlit Application — Custom Light Blue Design System (Enhanced Historical Analysis UI)
 """
 
 import streamlit as st
@@ -580,34 +580,135 @@ if navigation_option == "Dashboard":
 
 # --- 2. HISTORICAL ANALYSIS ---
 elif navigation_option == "Historical Analysis":
-    st.title("Historical Electricity Bill Analysis")
-    st.write("Multi-year monthly electricity billing records in Philippine Pesos (₱).")
+    st.markdown("""
+    <div class="user-greeting-banner">
+        <div>
+            <p class="greeting-title">Multi-Year Financial & Billing Audit</p>
+            <h1 class="greeting-name">Historical Electricity Bill Analysis</h1>
+        </div>
+        <div>
+            <span class="pill-badge-blue">4 School Years (2021–2025)</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
     
     metrics = calculate_historical_metrics(historical_df, school_selection)
     
     if metrics:
         c1, c2, c3, c4 = st.columns(4)
-        c1.metric("Total Historical Expenditure", format_currency(metrics["total_bill"]))
-        c2.metric("Average Monthly Bill", format_currency(metrics["avg_bill"]))
-        c3.metric("Highest Monthly Bill", format_currency(metrics["max_bill"]))
-        c4.metric("Lowest Monthly Bill", format_currency(metrics["min_bill"]))
         
-        st.markdown("---")
+        with c1:
+            st.markdown(f"""
+            <div class="ui-card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                    <div>
+                        <div class="kpi-label">Total Expenditure</div>
+                        <div class="kpi-val">{format_currency(metrics["total_bill"])}</div>
+                    </div>
+                    <span class="pill-badge-blue">Cumulative</span>
+                </div>
+                <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
+                    Total 4-year billing sum
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+            
+        with c2:
+            st.markdown(f"""
+            <div class="ui-card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                    <div>
+                        <div class="kpi-label">Average Monthly Bill</div>
+                        <div class="kpi-val">{format_currency(metrics["avg_bill"])}</div>
+                    </div>
+                    <span class="pill-badge-blue">Mean Bill</span>
+                </div>
+                <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
+                    Historical monthly average
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+            
+        with c3:
+            st.markdown(f"""
+            <div class="ui-card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                    <div>
+                        <div class="kpi-label">Highest Monthly Bill</div>
+                        <div class="kpi-val">{format_currency(metrics["max_bill"])}</div>
+                    </div>
+                    <span class="pill-badge-red">Peak Bill</span>
+                </div>
+                <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
+                    Maximum recorded bill
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+            
+        with c4:
+            st.markdown(f"""
+            <div class="ui-card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                    <div>
+                        <div class="kpi-label">Lowest Monthly Bill</div>
+                        <div class="kpi-val">{format_currency(metrics["min_bill"])}</div>
+                    </div>
+                    <span class="pill-badge-green">Min Bill</span>
+                </div>
+                <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
+                    Minimum recorded bill
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+        
         tab1, tab2, tab3 = st.tabs(["Monthly Trend Line", "Yearly Totals", "Monthly Averages"])
         
         with tab1:
-            plot_df = historical_df[historical_df['bill_php'].notna()]
-            if school_selection != "Both":
-                plot_df = plot_df[plot_df['school'] == school_selection]
-            fig = px.line(plot_df, x="date", y="bill_php", color="school", markers=True, color_discrete_sequence=["#1D4ED8", "#3B82F6"])
-            fig = apply_blue_theme(fig, "Monthly Bill Trend")
-            st.plotly_chart(fig, use_container_width=True)
+            with st.container(border=True):
+                st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem;">Multi-Year Electricity Expenditure Trend</h3>', unsafe_allow_html=True)
+                plot_df = historical_df[historical_df['bill_php'].notna()]
+                if school_selection != "Both":
+                    plot_df = plot_df[plot_df['school'] == school_selection]
+                fig = px.line(plot_df, x="date", y="bill_php", color="school", markers=True, color_discrete_sequence=["#1D4ED8", "#60A5FA"], height=380)
+                fig = apply_blue_theme(fig)
+                fig.update_traces(line=dict(width=3), marker=dict(size=6))
+                st.plotly_chart(fig, use_container_width=True)
             
         with tab2:
-            st.dataframe(metrics["yearly_summary"], use_container_width=True)
+            with st.container(border=True):
+                st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem;">Yearly Expenditure Breakdown</h3>', unsafe_allow_html=True)
+                col_y1, col_y2 = st.columns([1.2, 1])
+                with col_y1:
+                    fig_yr = px.bar(metrics["yearly_summary"], x="year", y="total_bill", color_discrete_sequence=["#1D4ED8"], height=300)
+                    fig_yr = apply_blue_theme(fig_yr, "Total Bill by Year (₱)")
+                    fig_yr.update_traces(marker=dict(cornerradius=6))
+                    st.plotly_chart(fig_yr, use_container_width=True)
+                with col_y2:
+                    st.dataframe(metrics["yearly_summary"], use_container_width=True)
             
         with tab3:
-            st.dataframe(metrics["monthly_summary"], use_container_width=True)
+            with st.container(border=True):
+                st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem;">Monthly Average Expenditure Pattern</h3>', unsafe_allow_html=True)
+                col_m1, col_m2 = st.columns([1.2, 1])
+                with col_m1:
+                    fig_mo = px.bar(metrics["monthly_summary"], x="month", y="mean_bill", color_discrete_sequence=["#2563EB"], height=300)
+                    fig_mo = apply_blue_theme(fig_mo, "Average Bill by Month (₱)")
+                    fig_mo.update_traces(marker=dict(cornerradius=6))
+                    st.plotly_chart(fig_mo, use_container_width=True)
+                with col_m2:
+                    st.dataframe(metrics["monthly_summary"], use_container_width=True)
+
+        st.markdown(f"""
+        <div class="ui-card" style="border-left: 6px solid #1D4ED8; margin-top: 1.25rem; padding: 1.5rem 1.75rem;">
+            <h3 style="font-size: 1.05rem; font-weight: 700; color: #1E3A8A; margin-bottom: 0.5rem;">Historical Financial Audit Insights</h3>
+            <p style="font-size: 0.90rem; color: #334155; line-height: 1.55; margin: 0;">
+                Historical billing analysis reveals total cumulative expenditure of <strong>{format_currency(metrics['total_bill'])}</strong> 
+                across evaluated school years. Monthly billing ranges from a low of <strong>{format_currency(metrics['min_bill'])}</strong> 
+                to a peak of <strong>{format_currency(metrics['max_bill'])}</strong>, with a baseline monthly mean of 
+                <strong>{format_currency(metrics['avg_bill'])}</strong>.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
 
 # --- 3. SEASONAL ANALYSIS ---
 elif navigation_option == "Seasonal Analysis":
