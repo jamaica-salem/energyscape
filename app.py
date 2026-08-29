@@ -1310,8 +1310,17 @@ elif navigation_option == "Conservation Scenarios":
 
 # --- 8. OPTIMIZATION ---
 elif navigation_option == "Optimization":
-    st.title("Mathematical Optimization Target")
-    st.write("Feasible energy reduction target under operational constraints.")
+    st.markdown("""
+    <div class="user-greeting-banner">
+        <div>
+            <p class="greeting-title">Constrained Feasibility Modeling</p>
+            <h1 class="greeting-name">Mathematical Optimization Target</h1>
+        </div>
+        <div>
+            <span class="pill-badge-blue">Linear Goal Programming</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
     
     apps_processed = calculate_appliance_loads(appliance_df, electricity_rate, school_selection)
     load_sum = get_load_summary(apps_processed, electricity_rate)
@@ -1320,19 +1329,93 @@ elif navigation_option == "Optimization":
     opt_res = optimize_conservation_target(scenarios_df)
     
     op1, op2, op3, op4 = st.columns(4)
-    op1.metric("Optimal Strategy", opt_res["selected_scenario"])
-    op2.metric("Optimized Target", format_kwh(opt_res["optimized_monthly_kwh"]))
-    op3.metric("Annual Cost Savings", format_currency(opt_res["annual_cost_savings_php"]))
-    op4.metric("Annual Avoided CO₂", format_co2(opt_res["annual_avoided_co2_kg"]))
     
-    opt_table = pd.DataFrame([
-        {"Indicator": "Monthly Electricity Consumption", "BAU/Current": format_kwh(opt_res["bau_monthly_kwh"]), "Optimized Target": format_kwh(opt_res["optimized_monthly_kwh"]), "Reduction": format_kwh(opt_res["monthly_kwh_savings"])},
-        {"Indicator": "Annual Electricity Consumption", "BAU/Current": format_kwh(opt_res["bau_monthly_kwh"] * 12), "Optimized Target": format_kwh(opt_res["optimized_monthly_kwh"] * 12), "Reduction": format_kwh(opt_res["annual_kwh_savings"])},
-        {"Indicator": "Monthly Electricity Cost", "BAU/Current": format_currency(opt_res["bau_monthly_kwh"] * electricity_rate), "Optimized Target": format_currency(opt_res["optimized_monthly_kwh"] * electricity_rate), "Reduction": format_currency(opt_res["monthly_cost_savings_php"])},
-        {"Indicator": "Annual Electricity Cost", "BAU/Current": format_currency(opt_res["bau_monthly_kwh"] * 12 * electricity_rate), "Optimized Target": format_currency(opt_res["optimized_monthly_kwh"] * 12 * electricity_rate), "Reduction": format_currency(opt_res["annual_cost_savings_php"])},
-        {"Indicator": "Reduction Percentage", "BAU/Current": "0%", "Optimized Target": f"{opt_res['reduction_percentage']:.0f}%", "Reduction": f"{opt_res['reduction_percentage']:.0f}%"}
-    ])
-    st.dataframe(opt_table, use_container_width=True)
+    with op1:
+        st.markdown(f"""
+        <div class="ui-card">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                <div>
+                    <div class="kpi-label">Optimal Strategy</div>
+                    <div class="kpi-val">{opt_res["selected_scenario"]}</div>
+                </div>
+                <span class="pill-badge-green">Feasible</span>
+            </div>
+            <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
+                Selected objective target
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+    with op2:
+        st.markdown(f"""
+        <div class="ui-card">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                <div>
+                    <div class="kpi-label">Optimized Target</div>
+                    <div class="kpi-val">{format_kwh(opt_res["optimized_monthly_kwh"])}</div>
+                </div>
+                <span class="pill-badge-blue">Monthly</span>
+            </div>
+            <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
+                Save {format_kwh(opt_res["monthly_kwh_savings"])}/mo
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+    with op3:
+        st.markdown(f"""
+        <div class="ui-card">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                <div>
+                    <div class="kpi-label">Annual Cost Savings</div>
+                    <div class="kpi-val">{format_currency(opt_res["annual_cost_savings_php"])}</div>
+                </div>
+                <span class="pill-badge-green">Financial</span>
+            </div>
+            <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
+                Save {format_currency(opt_res["monthly_cost_savings_php"])}/mo
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+    with op4:
+        st.markdown(f"""
+        <div class="ui-card">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                <div>
+                    <div class="kpi-label">Annual Avoided CO₂</div>
+                    <div class="kpi-val">{format_co2(opt_res["annual_avoided_co2_kg"])}</div>
+                </div>
+                <span class="pill-badge-green">Carbon Reduction</span>
+            </div>
+            <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
+                Greenhouse gas reduction
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with st.container(border=True):
+        st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem;">Optimized Baseline vs Target Comparison Table</h3>', unsafe_allow_html=True)
+        opt_table = pd.DataFrame([
+            {"Indicator": "Monthly Electricity Consumption", "BAU/Current": format_kwh(opt_res["bau_monthly_kwh"]), "Optimized Target": format_kwh(opt_res["optimized_monthly_kwh"]), "Reduction": format_kwh(opt_res["monthly_kwh_savings"])},
+            {"Indicator": "Annual Electricity Consumption", "BAU/Current": format_kwh(opt_res["bau_monthly_kwh"] * 12), "Optimized Target": format_kwh(opt_res["optimized_monthly_kwh"] * 12), "Reduction": format_kwh(opt_res["annual_kwh_savings"])},
+            {"Indicator": "Monthly Electricity Cost", "BAU/Current": format_currency(opt_res["bau_monthly_kwh"] * electricity_rate), "Optimized Target": format_currency(opt_res["optimized_monthly_kwh"] * electricity_rate), "Reduction": format_currency(opt_res["monthly_cost_savings_php"])},
+            {"Indicator": "Annual Electricity Cost", "BAU/Current": format_currency(opt_res["bau_monthly_kwh"] * 12 * electricity_rate), "Optimized Target": format_currency(opt_res["optimized_monthly_kwh"] * 12 * electricity_rate), "Reduction": format_currency(opt_res["annual_cost_savings_php"])},
+            {"Indicator": "Reduction Percentage", "BAU/Current": "0%", "Optimized Target": f"{opt_res['reduction_percentage']:.0f}%", "Reduction": f"{opt_res['reduction_percentage']:.0f}%"}
+        ])
+        st.dataframe(opt_table, use_container_width=True)
+
+    st.markdown(f"""
+    <div class="ui-card" style="border-left: 6px solid #1D4ED8; margin-top: 1.25rem; padding: 1.5rem 1.75rem;">
+        <h3 style="font-size: 1.05rem; font-weight: 700; color: #1E3A8A; margin-bottom: 0.5rem;">Mathematical Optimization Insights</h3>
+        <p style="font-size: 0.90rem; color: #334155; line-height: 1.55; margin: 0;">
+            The optimization model identifies the <strong>{opt_res['selected_scenario']}</strong> as the optimal operational target, 
+            balancing aggressive energy conservation with non-negotiable instructional requirements. Capping monthly consumption at 
+            <strong>{format_kwh(opt_res['optimized_monthly_kwh'])}</strong> yields 
+            <strong>{format_currency(opt_res['annual_cost_savings_php'])}</strong> in annual budget relief.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
 
 # --- 9. SCHOOL COMPARISON ---
 elif navigation_option == "School Comparison":
