@@ -233,9 +233,9 @@ st.markdown("""
         letter-spacing: -0.01em;
     }
     .sidebar-section-header {
-        font-size: 0.82rem !important;
+        font-size: 0.85rem !important;
         font-weight: 800 !important;
-        color: #86EFAC !important;
+        color: #FFFFFF !important;
         text-transform: uppercase !important;
         letter-spacing: 0.1em !important;
         margin-top: 1.2rem !important;
