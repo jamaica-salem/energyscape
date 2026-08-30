@@ -189,6 +189,28 @@ st.markdown("""
         border-right: none !important;
         box-shadow: none !important;
     }
+
+    /* Sidebar Collapse/Close Button Color Fix (#FFFFFF) */
+    [data-testid="stSidebarCollapseButton"],
+    [data-testid="stSidebarCollapseButton"] button,
+    [data-testid="stSidebarCollapseButton"] svg,
+    [data-testid="stSidebarCollapseButton"] path,
+    button[aria-label="Close sidebar"],
+    button[aria-label="Collapse sidebar"],
+    button[aria-label="Close sidebar"] svg,
+    button[aria-label="Collapse sidebar"] svg,
+    button[aria-label="Close sidebar"] path,
+    button[aria-label="Collapse sidebar"] path,
+    section[data-testid="stSidebar"] button[kind="header"],
+    section[data-testid="stSidebar"] button[kind="header"] svg,
+    section[data-testid="stSidebar"] button[kind="header"] path,
+    section[data-testid="stSidebar"] button[data-testid="stBaseButton-headerNoPadding"],
+    section[data-testid="stSidebar"] button[data-testid="stBaseButton-headerNoPadding"] svg,
+    section[data-testid="stSidebar"] button[data-testid="stBaseButton-headerNoPadding"] path {
+        color: #FFFFFF !important;
+        fill: #FFFFFF !important;
+        stroke: #FFFFFF !important;
+    }
     
     /* Strictly Scoped Nav Content Typography */
     .sidebar-brand,
