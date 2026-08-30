@@ -350,7 +350,7 @@ st.markdown("""
         box-shadow: 0 8px 24px rgba(16, 185, 129, 0.18) !important;
         transform: translateY(-2px) !important;
     }
-    div[data-testid="stFileUploader"] label[data-testid="stWidgetLabel"],
+    div[data-testid="stFileUploader"] [data-testid="stWidgetLabel"],
     div[data-testid="stFileUploader"] label {
         display: flex !important;
         justify-content: center !important;
@@ -359,15 +359,17 @@ st.markdown("""
         width: 100% !important;
         margin: 0 auto 0.75rem auto !important;
     }
-    div[data-testid="stFileUploader"] label[data-testid="stWidgetLabel"] p,
-    div[data-testid="stFileUploader"] label p {
+    div[data-testid="stFileUploader"] [data-testid="stWidgetLabel"] *,
+    div[data-testid="stFileUploader"] label * {
         text-align: center !important;
+        justify-content: center !important;
+        align-items: center !important;
+        display: flex !important;
         width: 100% !important;
+        margin: 0 auto !important;
         font-size: 1.1rem !important;
         font-weight: 800 !important;
         color: #0F766E !important;
-        margin: 0 auto !important;
-        display: block !important;
     }
     div[data-testid="stFileUploader"] section {
         background-color: transparent !important;
@@ -689,12 +691,10 @@ elif navigation_option == "Data Input":
     """, unsafe_allow_html=True)
     
     # Interactive File Drop Uploader Section matching Wireframe 2
-    st.markdown('<div style="text-align: center; font-size: 1.15rem; font-weight: 800; color: #0F766E; margin-top: 0.5rem; margin-bottom: 0.6rem; width: 100%;">DROP FILE HERE OR CLICK TO UPLOAD</div>', unsafe_allow_html=True)
     uploaded_file = st.file_uploader(
         "DROP FILE HERE OR CLICK TO UPLOAD",
         type=["csv"],
         key="data_input_uploader",
-        label_visibility="collapsed",
         help="Drag and drop or click to upload CSV electrical billing records or appliance load inventories."
     )
     if uploaded_file is not None:
