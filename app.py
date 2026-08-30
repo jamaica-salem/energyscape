@@ -176,10 +176,10 @@ st.markdown("""
         white-space: nowrap !important;
     }
 
-    /* Sidebar Navigation (Bankio Pure White Sidebar Theme) */
+    /* Sidebar Navigation (Deep Emerald Green Theme #0B4F46) */
     section[data-testid="stSidebar"] {
-        background-color: #FFFFFF !important;
-        border-right: 1px solid #EAECF0 !important;
+        background-color: #0B4F46 !important;
+        border-right: 1px solid #063B34 !important;
     }
     
     /* Strictly Scoped Nav Content Typography */
@@ -194,17 +194,17 @@ st.markdown("""
         gap: 12px;
         font-size: 1.4rem;
         font-weight: 800;
-        color: #111827 !important;
+        color: #FFFFFF !important;
         font-family: 'Inter', sans-serif !important;
         margin-bottom: 1.5rem;
         padding-bottom: 0.85rem;
-        border-bottom: 1px solid #EAECF0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.15);
         letter-spacing: -0.02em;
     }
     .sidebar-section-header {
         font-size: 0.75rem !important;
         font-weight: 700 !important;
-        color: #9CA3AF !important;
+        color: #A7F3D0 !important;
         text-transform: uppercase !important;
         letter-spacing: 0.08em !important;
         margin-top: 1.2rem !important;
@@ -226,13 +226,13 @@ st.markdown("""
         opacity: 0 !important;
     }
 
-    /* Navigation Radio Items (Bankio Selected Deep Teal Pill #0B4F46) */
+    /* Navigation Radio Items (Deep Emerald Background with White Text) */
     div[role="radiogroup"] label,
     div[role="radiogroup"] label p,
     div[role="radiogroup"] label span,
     div[role="radiogroup"] label div,
     div[role="radiogroup"] label * {
-        color: #374151 !important;
+        color: #E6F4EA !important;
         font-family: 'Inter', sans-serif !important;
         font-size: 0.98rem !important;
         font-weight: 500 !important;
@@ -248,24 +248,32 @@ st.markdown("""
         align-items: center !important;
     }
     div[role="radiogroup"] label:hover {
-        background-color: #F3F4F6 !important;
+        background-color: rgba(255, 255, 255, 0.15) !important;
         transform: translateX(3px) !important;
     }
     div[role="radiogroup"] label:hover * {
-        color: #111827 !important;
+        color: #FFFFFF !important;
     }
     div[role="radiogroup"] label[data-checked="true"] {
-        background-color: #0B4F46 !important;
-        box-shadow: 0 4px 12px rgba(11, 79, 70, 0.25) !important;
+        background-color: #FFFFFF !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
     }
     div[role="radiogroup"] label[data-checked="true"],
     div[role="radiogroup"] label[data-checked="true"] p,
     div[role="radiogroup"] label[data-checked="true"] span,
     div[role="radiogroup"] label[data-checked="true"] div,
     div[role="radiogroup"] label[data-checked="true"] * {
-        color: #FFFFFF !important;
-        font-weight: 700 !important;
+        color: #0B4F46 !important;
+        font-weight: 800 !important;
         font-size: 1.02rem !important;
+    }
+
+    /* Sidebar Widgets & Labels White Styling */
+    section[data-testid="stSidebar"] label,
+    section[data-testid="stSidebar"] label p,
+    section[data-testid="stSidebar"] label span,
+    section[data-testid="stSidebar"] [data-testid="stWidgetLabel"] p {
+        color: #FFFFFF !important;
     }
 
     /* Widget Labels & Inputs (Bankio Pure White Rounded Inputs) */
