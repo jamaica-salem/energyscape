@@ -38,11 +38,11 @@ st.set_page_config(
 # ----------------------------------------------------
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
     /* Global Body & Background */
     html, body, [class*="css"] {
-        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        font-family: 'Poppins', sans-serif !important;
         background-color: #F8FAFC !important;
         color: #0F172A !important;
     }
@@ -63,7 +63,7 @@ st.markdown("""
     /* Headings Typography */
     h1, h2, h3, h4, h5, h6 {
         color: #0F172A !important;
-        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        font-family: 'Poppins', sans-serif !important;
         font-weight: 800 !important;
     }
 
@@ -217,7 +217,7 @@ st.markdown("""
     .sidebar-brand,
     .sidebar-section-header,
     div[role="radiogroup"] label {
-        font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif !important;
+        font-family: 'Poppins', sans-serif !important;
     }
     .sidebar-brand {
         display: flex;
@@ -226,7 +226,7 @@ st.markdown("""
         font-size: 1.5rem;
         font-weight: 800;
         color: #FFFFFF !important;
-        font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif !important;
+        font-family: 'Poppins', sans-serif !important;
         margin-bottom: 1.5rem;
         padding-bottom: 0.85rem;
         border-bottom: 2px solid rgba(255, 255, 255, 0.35);
@@ -240,7 +240,7 @@ st.markdown("""
         letter-spacing: 0.1em !important;
         margin-top: 1.2rem !important;
         margin-bottom: 0.6rem !important;
-        font-family: 'Outfit', sans-serif !important;
+        font-family: 'Poppins', sans-serif !important;
     }
 
     /* Navigation Radio Items matching reference wireframe */
@@ -250,7 +250,7 @@ st.markdown("""
     div[role="radiogroup"] label div,
     div[role="radiogroup"] label * {
         color: #FFFFFF !important;
-        font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif !important;
+        font-family: 'Poppins', sans-serif !important;
         font-size: 1.08rem !important;
         font-weight: 700 !important;
         letter-spacing: 0.02em !important;
@@ -498,8 +498,8 @@ BLUE_GREEN_PALETTE = ["#3B709E", "#529E72", "#5B86E5", "#468B64", "#2D5880", "#8
 
 def apply_blue_theme(fig, title=""):
     fig.update_layout(
-        title=dict(text=title, font=dict(family="Plus Jakarta Sans", size=15, color="#0F172A", weight="bold")),
-        font=dict(family="Plus Jakarta Sans", color="#475569"),
+        title=dict(text=title, font=dict(family="Poppins", size=15, color="#0F172A", weight="bold")),
+        font=dict(family="Poppins", color="#475569"),
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
         margin=dict(l=10, r=10, t=35, b=10),
