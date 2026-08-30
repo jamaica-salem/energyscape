@@ -55,7 +55,8 @@ st.markdown("""
     header[data-testid="stHeader"],
     div[data-testid="stHeader"] {
         background-color: #0B4F46 !important;
-        border-bottom: 1px solid #063B34 !important;
+        border: none !important;
+        border-bottom: none !important;
     }
     header[data-testid="stHeader"] *,
     div[data-testid="stHeader"] * {
@@ -182,10 +183,12 @@ st.markdown("""
         white-space: nowrap !important;
     }
 
-    /* Sidebar Navigation (Deep Emerald Green Theme #0B4F46) */
+    /* Sidebar Navigation (Deep Emerald Green Theme #0B4F46 - Seamless Borderless) */
     section[data-testid="stSidebar"] {
         background-color: #0B4F46 !important;
-        border-right: 1px solid #063B34 !important;
+        border: none !important;
+        border-right: none !important;
+        box-shadow: none !important;
     }
     
     /* Strictly Scoped Nav Content Typography */
@@ -204,7 +207,7 @@ st.markdown("""
         font-family: 'Inter', sans-serif !important;
         margin-bottom: 1.5rem;
         padding-bottom: 0.85rem;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        border-bottom: none !important;
         letter-spacing: -0.02em;
     }
     .sidebar-section-header {
