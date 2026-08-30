@@ -1481,6 +1481,8 @@ elif navigation_option == "Optimization":
     with col_r2:
         run_opt = st.button("RUN OPTIMIZATION", key="btn_run_opt", use_container_width=True)
         
+    st.markdown('<div style="margin-bottom: 2rem;"></div>', unsafe_allow_html=True)
+        
     op1, op2, op3, op4 = st.columns(4)
     with op1:
         st.markdown(f"""
