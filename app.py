@@ -600,7 +600,7 @@ def navigate_to_page(target_page: str):
     st.session_state["nav_selection"] = target_page
 
 with st.sidebar:
-    st.markdown('<div class="sidebar-brand">⚡ <span>ENERGYSCAPE</span></div>', unsafe_allow_html=True)
+    st.markdown('<div class="sidebar-brand"><span>ENERGYSCAPE</span></div>', unsafe_allow_html=True)
     
     st.markdown('<div class="sidebar-section-header">NAVIGATION VIEWS</div>', unsafe_allow_html=True)
     navigation_option = st.radio(
@@ -829,7 +829,7 @@ if navigation_option == "Dashboard":
     # PROCEED BUTTON TO DATA INPUT
     col_proc1, col_proc2, col_proc3 = st.columns([1, 1.5, 1])
     with col_proc2:
-        st.button("PROCEED ➔", key="btn_proceed_dashboard", on_click=navigate_to_page, args=("Data Input",), use_container_width=True)
+        st.button("PROCEED", key="btn_proceed_dashboard", on_click=navigate_to_page, args=("Data Input",), use_container_width=True)
 
 # --- 2. DATA INPUT ---
 elif navigation_option == "Data Input":
@@ -905,7 +905,7 @@ elif navigation_option == "Data Input":
     # PROCEED BUTTON
     col_proc1, col_proc2, col_proc3 = st.columns([1, 1.5, 1])
     with col_proc2:
-        st.button("PROCEED ➔", key="btn_proceed_data_input", on_click=navigate_to_page, args=("Season",), use_container_width=True)
+        st.button("PROCEED", key="btn_proceed_data_input", on_click=navigate_to_page, args=("Season",), use_container_width=True)
 
 # --- 3. SEASON ---
 elif navigation_option == "Season":
@@ -994,7 +994,7 @@ elif navigation_option == "Season":
     # PROCEED BUTTON
     col_proc1, col_proc2, col_proc3 = st.columns([1, 1.5, 1])
     with col_proc2:
-        st.button("PROCEED ➔", key="btn_proceed_season", on_click=navigate_to_page, args=("Energy L.",), use_container_width=True)
+        st.button("PROCEED", key="btn_proceed_season", on_click=navigate_to_page, args=("Energy L.",), use_container_width=True)
 
 # --- 4. ENERGY L. ---
 elif navigation_option == "Energy L.":
@@ -1049,7 +1049,7 @@ elif navigation_option == "Energy L.":
     # PROCEED BUTTON
     col_proc1, col_proc2, col_proc3 = st.columns([1, 1.5, 1])
     with col_proc2:
-        st.button("PROCEED ➔", key="btn_proceed_energy_l", on_click=navigate_to_page, args=("Forecast",), use_container_width=True)
+        st.button("PROCEED", key="btn_proceed_energy_l", on_click=navigate_to_page, args=("Forecast",), use_container_width=True)
 
 # --- 5. FORECAST ---
 elif navigation_option == "Forecast":
@@ -1123,7 +1123,7 @@ elif navigation_option == "Forecast":
     # PROCEED BUTTON
     col_proc1, col_proc2, col_proc3 = st.columns([1, 1.5, 1])
     with col_proc2:
-        st.button("PROCEED ➔", key="btn_proceed_forecast", on_click=navigate_to_page, args=("Carbon",), use_container_width=True)
+        st.button("PROCEED", key="btn_proceed_forecast", on_click=navigate_to_page, args=("Carbon",), use_container_width=True)
 
 # --- 6. CARBON ---
 elif navigation_option == "Carbon":
@@ -1184,7 +1184,7 @@ elif navigation_option == "Carbon":
     # PROCEED BUTTON
     col_proc1, col_proc2, col_proc3 = st.columns([1, 1.5, 1])
     with col_proc2:
-        st.button("PROCEED ➔", key="btn_proceed_carbon", on_click=navigate_to_page, args=("Scenario",), use_container_width=True)
+        st.button("PROCEED", key="btn_proceed_carbon", on_click=navigate_to_page, args=("Scenario",), use_container_width=True)
 
 # --- 7. SCENARIO ---
 elif navigation_option == "Scenario":
@@ -1204,7 +1204,7 @@ elif navigation_option == "Scenario":
     
     col_sim1, col_sim2, col_sim3 = st.columns([1, 1.5, 1])
     with col_sim2:
-        run_sim = st.button("⚡ SIMULATE SCENARIO", key="btn_run_sim", use_container_width=True)
+        run_sim = st.button("SIMULATE SCENARIO", key="btn_run_sim", use_container_width=True)
         
     base_kwh = load_summary.get("total_kwh", 2289.10)
     sim_kwh = base_kwh * (1.0 - (avg_red_pct / 100.0))
@@ -1261,7 +1261,7 @@ elif navigation_option == "Scenario":
     # PROCEED BUTTON
     col_proc1, col_proc2, col_proc3 = st.columns([1, 1.5, 1])
     with col_proc2:
-        st.button("PROCEED ➔", key="btn_proceed_scenario", on_click=navigate_to_page, args=("Optimization",), use_container_width=True)
+        st.button("PROCEED", key="btn_proceed_scenario", on_click=navigate_to_page, args=("Optimization",), use_container_width=True)
 
 # --- 8. OPTIMIZATION ---
 elif navigation_option == "Optimization":
@@ -1305,7 +1305,7 @@ elif navigation_option == "Optimization":
         
     col_r1, col_r2, col_r3 = st.columns([1, 1.5, 1])
     with col_r2:
-        run_opt = st.button("⚡ RUN OPTIMIZATION", key="btn_run_opt", use_container_width=True)
+        run_opt = st.button("RUN OPTIMIZATION", key="btn_run_opt", use_container_width=True)
         
     op1, op2, op3, op4 = st.columns(4)
     with op1:
@@ -1383,7 +1383,7 @@ elif navigation_option == "Optimization":
     # PROCEED BUTTON
     col_proc1, col_proc2, col_proc3 = st.columns([1, 1.5, 1])
     with col_proc2:
-        st.button("PROCEED ➔", key="btn_proceed_opt", on_click=navigate_to_page, args=("Impact",), use_container_width=True)
+        st.button("PROCEED", key="btn_proceed_opt", on_click=navigate_to_page, args=("Impact",), use_container_width=True)
 
 # --- 9. IMPACT ---
 elif navigation_option == "Impact":
@@ -1457,7 +1457,7 @@ elif navigation_option == "Impact":
     # PROCEED BUTTON
     col_proc1, col_proc2, col_proc3 = st.columns([1, 1.5, 1])
     with col_proc2:
-        st.button("PROCEED ➔", key="btn_proceed_impact", on_click=navigate_to_page, args=("Reports",), use_container_width=True)
+        st.button("PROCEED", key="btn_proceed_impact", on_click=navigate_to_page, args=("Reports",), use_container_width=True)
 
 # --- 10. REPORTS ---
 elif navigation_option == "Reports":
@@ -1489,7 +1489,7 @@ elif navigation_option == "Reports":
     
     col_r1, col_r2, col_r3 = st.columns([1, 1.5, 1])
     with col_r2:
-        run_comp = st.button("⚡ RUN COMPARATIVE ANALYSIS", key="btn_run_comp", use_container_width=True)
+        run_comp = st.button("RUN COMPARATIVE ANALYSIS", key="btn_run_comp", use_container_width=True)
         
     st.markdown("<hr style='margin: 2rem 0; border: 0; border-top: 1px solid #EAECF0;'>", unsafe_allow_html=True)
     
@@ -1547,7 +1547,7 @@ CO₂ avoided: <strong>2,884.31 kg CO₂e / year</strong>
     
     col_gen1, col_gen2, col_gen3 = st.columns([1, 1.5, 1])
     with col_gen2:
-        gen_rep = st.button("📄 GENERATE REPORT", key="btn_gen_rep", use_container_width=True)
+        gen_rep = st.button("GENERATE REPORT", key="btn_gen_rep", use_container_width=True)
         
     if gen_rep:
         st.success(f"🎉 Executive Energy Audit Report for '{report_school}' successfully generated and ready for export!")
