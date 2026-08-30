@@ -331,13 +331,13 @@ st.markdown("""
         margin: 2px !important;
     }
 
-    /* Action Buttons (PROCEED) matching wireframe steel blue (#3B709E) with white border */
+    /* Action Buttons (PROCEED) matching wireframe steel blue (#3B709E) */
     div.stButton > button,
     button[data-testid="stBaseButton-secondary"],
     button[data-testid="stBaseButton-primary"] {
         background-color: #3B709E !important;
         color: #FFFFFF !important;
-        border: 3px solid #FFFFFF !important;
+        border: none !important;
         border-radius: 9999px !important;
         padding: 0.65rem 2rem !important;
         font-weight: 800 !important;
