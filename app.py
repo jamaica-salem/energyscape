@@ -851,16 +851,8 @@ elif navigation_option == "Energy L.":
     # Horizontal Bar Chart for Appliance Load Characterization
     apps_chart_df = apps_processed.sort_values(by='monthly_kwh', ascending=True)
     
-    # Strict Blue-Green color mapping for appliances
-    color_map = {
-        "Air Conditioner": "#0B4F46",
-        "Computers": "#047857",
-        "Refrigerator": "#10B981",
-        "Lighting": "#059669",
-        "Electric Fan": "#34D399",
-        "Water Pump": "#063B34",
-        "Printer / Scanner": "#A7F3D0"
-    }
+    # 100% Pure Green color sequence for all appliance bars
+    green_bar_palette = ["#063B34", "#0B4F46", "#047857", "#059669", "#10B981", "#166534", "#34D399", "#A7F3D0"]
     
     fig_hbar = px.bar(
         apps_chart_df,
@@ -869,7 +861,7 @@ elif navigation_option == "Energy L.":
         orientation='h',
         color='appliance',
         text='monthly_kwh',
-        color_discrete_map=color_map,
+        color_discrete_sequence=green_bar_palette,
         height=380
     )
     fig_hbar = apply_blue_theme(fig_hbar, "Appliance Monthly Energy Load Characterization (kWh/month)")
@@ -1106,11 +1098,11 @@ elif navigation_option == "Scenario":
     
     col_sc1, col_sc2 = st.columns(2)
     with col_sc1:
-        fig_sc_kwh = px.bar(scenarios_df, x="Scenario", y="Projected Monthly kWh", color="Scenario", color_discrete_sequence=BLUE_PALETTE, height=320)
+        fig_sc_kwh = px.bar(scenarios_df, x="Scenario", y="Projected Monthly kWh", color="Scenario", color_discrete_sequence=GREEN_PALETTE, height=320)
         fig_sc_kwh = apply_blue_theme(fig_sc_kwh)
         st.plotly_chart(fig_sc_kwh, use_container_width=True)
     with col_sc2:
-        fig_sc_co2 = px.bar(scenarios_df, x="Scenario", y="Annual Avoided CO₂e (kg)", color="Scenario", color_discrete_sequence=BLUE_PALETTE, height=320)
+        fig_sc_co2 = px.bar(scenarios_df, x="Scenario", y="Annual Avoided CO₂e (kg)", color="Scenario", color_discrete_sequence=GREEN_PALETTE, height=320)
         fig_sc_co2 = apply_blue_theme(fig_sc_co2)
         st.plotly_chart(fig_sc_co2, use_container_width=True)
 
