@@ -373,30 +373,30 @@ st.markdown("""
         outline-width: 0 !important;
     }
 
-    /* Multiselect Tag Pills (100% Emerald Green #0B4F46) */
+    /* Multiselect Tag Pills (100% Emerald Green #0B4F46 - Transparent Close Icon) */
     [data-baseweb="tag"],
     span[data-baseweb="tag"],
-    div[data-baseweb="tag"],
-    div[data-testid="stMultiSelect"] [data-baseweb="tag"],
-    div[data-testid="stMultiSelect"] span,
-    span[data-baseweb="tag"] *,
-    div[data-baseweb="tag"] * {
+    div[data-baseweb="tag"] {
         background-color: #0B4F46 !important;
         color: #FFFFFF !important;
-        fill: #FFFFFF !important;
         border-color: #0B4F46 !important;
-    }
-    [data-baseweb="tag"] span {
-        color: #FFFFFF !important;
-    }
-    [data-baseweb="tag"] svg path {
-        fill: #FFFFFF !important;
-    }
-    span[data-baseweb="tag"],
-    div[data-baseweb="tag"] {
         border-radius: 8px !important;
         padding: 3px 10px !important;
         margin: 2px !important;
+    }
+    
+    [data-baseweb="tag"] *,
+    [data-baseweb="tag"] div,
+    [data-baseweb="tag"] span,
+    [data-baseweb="tag"] button,
+    [data-baseweb="tag"] [role="button"],
+    [data-baseweb="tag"] svg,
+    [data-baseweb="tag"] path {
+        background-color: transparent !important;
+        background: transparent !important;
+        color: #FFFFFF !important;
+        fill: #FFFFFF !important;
+        stroke: #FFFFFF !important;
     }
 
     /* Action Buttons (Bankio Deep Teal Pill Button #0B4F46) */
