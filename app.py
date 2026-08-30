@@ -4,6 +4,7 @@ Main Streamlit Application — Restructured to Student Mock Design Architecture
 """
 
 import streamlit as st
+import streamlit.components.v1 as components
 import pandas as pd
 import numpy as np
 import plotly.express as px
@@ -72,6 +73,10 @@ st.markdown("""
         font-family: 'Inter', sans-serif !important;
         font-weight: 700 !important;
         letter-spacing: -0.02em !important;
+    }
+
+    .page-title {
+        color: #0B4F46 !important;
     }
 
     /* Top Greeting & Header Bar */
@@ -738,15 +743,33 @@ def render_bankio_table(df: pd.DataFrame, first_col_green: bool = False, search_
 # ----------------------------------------------------
 if "entered_app" not in st.session_state:
     st.session_state["entered_app"] = False
+if "close_requested" not in st.session_state:
+    st.session_state["close_requested"] = False
 
 def enter_application():
     st.session_state["entered_app"] = True
     st.session_state["nav_selection"] = "Dashboard"
 
-def exit_to_welcome():
-    st.session_state["entered_app"] = False
+def close_application():
+    st.session_state["close_requested"] = True
 
-# FULL SCREEN WELCOME LANDING PAGE (FIRST THING USER SEES)
+if st.session_state["close_requested"]:
+    components.html(
+        """
+        <script>
+            [window.top, window.parent, window].forEach(function (target) {
+                try {
+                    target.close();
+                } catch (error) {}
+            });
+            document.body.innerHTML = '<p style="font-family: sans-serif; text-align: center; margin-top: 2rem;">You can close this tab.</p>';
+        </script>
+        """,
+        height=100,
+    )
+    st.stop()
+
+# FULL SCREEN WELCOME LANDING PAGE (EXACT MATCH TO REFERENCE IMAGE)
 if not st.session_state["entered_app"]:
     import base64
     welcome_bg_path = Path(__file__).parent / "assets" / "welcome_bg.png"
@@ -755,45 +778,157 @@ if not st.session_state["entered_app"]:
         with open(welcome_bg_path, "rb") as f:
             bg_b64 = base64.b64encode(f.read()).decode()
 
-    # Hide Sidebar and Header for full-screen welcome view
-    st.markdown("""
-    <style>
-        section[data-testid="stSidebar"] {
-            display: none !important;
-        }
-        header[data-testid="stHeader"] {
-            display: none !important;
-        }
-        .main .block-container {
-            padding: 0 !important;
-            max-width: 100% !important;
-        }
-    </style>
-    """, unsafe_allow_html=True)
-
     st.markdown(f"""
-    <div style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 999999; background-image: linear-gradient(180deg, rgba(11, 79, 70, 0.15) 0%, rgba(11, 79, 70, 0.65) 100%), url('data:image/png;base64,{bg_b64}'); background-size: cover; background-position: center; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem;">
-        <div style="text-align: center; max-width: 960px; width: 90%;">
-            <div style="display: inline-block; padding: 0.4rem 1.4rem; background: rgba(11, 79, 70, 0.75); backdrop-filter: blur(12px); border-radius: 9999px; color: #FFFFFF !important; font-size: 0.9rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.5rem; border: 1px solid rgba(255, 255, 255, 0.35); box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
-                <span style="color: #FFFFFF !important;">School Science and Technology Fair 2026</span>
-            </div>
-            <div style="font-family: 'Outfit', 'Inter', sans-serif; font-size: 5.2rem; font-weight: 900; letter-spacing: 0.05em; margin: 0 0 0.85rem 0; line-height: 1.05;">
-                <span style="color: #FFFFFF !important; text-shadow: 0 10px 30px rgba(0, 0, 0, 0.9), -4px -4px 0 #0B4F46, 4px -4px 0 #0B4F46, -4px 4px 0 #0B4F46, 4px 4px 0 #0B4F46 !important;">ENERGYSCAPE</span>
-            </div>
-            <div style="font-family: 'Inter', sans-serif; font-size: 1.45rem; font-weight: 800; letter-spacing: 0.08em; margin-bottom: 2rem; text-transform: uppercase;">
-                <span style="color: #FFFFFF !important; text-shadow: 0 4px 16px rgba(0, 0, 0, 0.9), -1.5px -1.5px 0 #0B4F46, 1.5px -1.5px 0 #0B4F46, -1.5px 1.5px 0 #0B4F46, 1.5px 1.5px 0 #0B4F46 !important;">A MATHEMATICAL-COMPUTATIONAL DECISION SUPPORT SYSTEM</span>
-            </div>
-            <div style="display: inline-block; padding: 0.4rem 1.25rem; background: rgba(11, 79, 70, 0.75); border-radius: 10px; font-size: 0.95rem; font-weight: 600; margin-bottom: 2rem; border: 1px solid rgba(255, 255, 255, 0.2);">
-                <span style="color: #FFFFFF !important; text-shadow: 0 2px 6px rgba(0,0,0,0.6);">Target Institutions: An-anaao Integrated School & La Paz Integrated School</span>
-            </div>
-        </div>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@700;900&family=Inter:wght@800;900&display=swap');
+
+        .stApp {{
+            background-image: url('data:image/png;base64,{bg_b64}') !important;
+            background-size: cover !important;
+            background-position: center !important;
+            background-repeat: no-repeat !important;
+            background-attachment: fixed !important;
+        }}
+        section[data-testid="stSidebar"] {{
+            display: none !important;
+        }}
+        header[data-testid="stHeader"] {{
+            display: none !important;
+        }}
+        div[data-testid="stAppViewContainer"] {{
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: center !important;
+            align-items: center !important;
+            height: 100vh !important;
+            min-height: 100vh !important;
+            overflow: hidden !important;
+        }}
+        section[data-testid="stMain"] {{
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: center !important;
+            align-items: center !important;
+            height: 100vh !important;
+            min-height: 100vh !important;
+            width: 100% !important;
+            overflow: hidden !important;
+            padding: 0 !important;
+        }}
+        .main {{
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: center !important;
+            align-items: center !important;
+            min-height: 100vh !important;
+            height: 100vh !important;
+            width: 100% !important;
+        }}
+        .main .block-container {{
+            padding: 0 1.5rem !important;
+            max-width: 960px !important;
+            width: 100% !important;
+            margin: auto !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }}
+
+        /* Bubbly Title with Thick White Outline matching reference image */
+        .welcome-ref-title {{
+            font-family: 'Fredoka', 'Outfit', sans-serif !important;
+            font-size: 5.8rem !important;
+            font-weight: 900 !important;
+            color: #0B4F46 !important;
+            -webkit-text-fill-color: #0B4F46 !important;
+            text-shadow: 
+                -4px -4px 0 #FFFFFF, 
+                 4px -4px 0 #FFFFFF, 
+                -4px  4px 0 #FFFFFF, 
+                 4px  4px 0 #FFFFFF,
+                -6px  0px 0 #FFFFFF,
+                 6px  0px 0 #FFFFFF,
+                 0px -6px 0 #FFFFFF,
+                 0px  6px 0 #FFFFFF,
+                 0 12px 30px rgba(0, 0, 0, 0.45) !important;
+            letter-spacing: 0.05em !important;
+            margin: 0 0 0.5rem 0 !important;
+            line-height: 1.05 !important;
+            text-align: center !important;
+        }}
+
+        /* Bubbly Subtitle with Thick White Outline matching reference image */
+        .welcome-ref-subtitle {{
+            font-family: 'Fredoka', 'Inter', sans-serif !important;
+            font-size: 1.7rem !important;
+            font-weight: 800 !important;
+            color: #0B4F46 !important;
+            -webkit-text-fill-color: #0B4F46 !important;
+            text-shadow: 
+                -2.5px -2.5px 0 #FFFFFF, 
+                 2.5px -2.5px 0 #FFFFFF, 
+                -2.5px  2.5px 0 #FFFFFF, 
+                 2.5px  2.5px 0 #FFFFFF,
+                -3.5px  0px 0 #FFFFFF,
+                 3.5px  0px 0 #FFFFFF,
+                 0px -3.5px 0 #FFFFFF,
+                 0px  3.5px 0 #FFFFFF,
+                 0 6px 18px rgba(0, 0, 0, 0.35) !important;
+            letter-spacing: 0.06em !important;
+            margin-bottom: 2.5rem !important;
+            text-transform: uppercase !important;
+            text-align: center !important;
+            max-width: 850px !important;
+            margin-left: auto !important;
+            margin-right: auto !important;
+            line-height: 1.25 !important;
+        }}
+
+        /* Capsule Buttons matching reference image proportions */
+        div[data-testid="stButton"] {{
+            display: flex !important;
+            justify-content: center !important;
+            width: 100% !important;
+        }}
+        div[data-testid="stButton"] button {{
+            background: linear-gradient(180deg, #0B4F46 0%, #194D40 100%) !important;
+            color: #FFFFFF !important;
+            font-family: 'Fredoka', 'Outfit', sans-serif !important;
+            font-size: 1.75rem !important;
+            font-weight: 900 !important;
+            letter-spacing: 0.08em !important;
+            padding: 0.75rem 2rem !important;
+            border-radius: 9999px !important;
+            border: 4px solid #FFFFFF !important;
+            box-shadow: 0 10px 24px rgba(11, 79, 70, 0.5), 0 4px 10px rgba(0,0,0,0.3) !important;
+            transition: all 0.25s ease !important;
+            width: 320px !important;
+            max-width: 320px !important;
+            margin: 0 auto !important;
+            display: block !important;
+            text-shadow: -2px -2px 0 #0B4F46, 2px -2px 0 #0B4F46, -2px 2px 0 #0B4F46, 2px 2px 0 #0B4F46 !important;
+        }}
+        div[data-testid="stButton"] button:hover {{
+            transform: scale(1.06) !important;
+            background: linear-gradient(180deg, #194D40 0%, #0B4F46 100%) !important;
+            box-shadow: 0 14px 32px rgba(11, 79, 70, 0.7), 0 6px 16px rgba(0,0,0,0.4) !important;
+            border-color: #FFFFFF !important;
+        }}
+    </style>
+
+    <div style="text-align: center; margin-bottom: 2.5rem;">
+        <div class="welcome-ref-title">ENERGYSCAPE</div>
+        <div class="welcome-ref-subtitle">A MATHEMATICAL-COMPUTATIONAL DECISION SUPPORT SYSTEM</div>
     </div>
     """, unsafe_allow_html=True)
 
-    # ENTER button container overlaid in fixed position
-    st.markdown('<div style="position: fixed; top: 72vh; left: 50%; transform: translateX(-50%); z-index: 1000000; width: 280px;">', unsafe_allow_html=True)
-    st.button("ENTER →", key="btn_welcome_enter_fullscreen", on_click=enter_application, use_container_width=True)
-    st.markdown('</div>', unsafe_allow_html=True)
+    # STACKED CAPSULE BUTTONS (ENTER & EXIT) MATCHING REFERENCE IMAGE EXACTLY
+    col_w1, col_w2, col_w3 = st.columns([1, 1.3, 1])
+    with col_w2:
+        st.button("ENTER", key="btn_welcome_enter_main", on_click=enter_application, use_container_width=True)
+        st.markdown("<div style='margin-bottom: 0.75rem;'></div>", unsafe_allow_html=True)
+        st.button("EXIT", key="btn_welcome_exit_main", on_click=close_application, use_container_width=True)
 
     st.stop()
 
@@ -821,7 +956,6 @@ def navigate_to_page(target_page: str):
 
 with st.sidebar:
     st.markdown('<div class="sidebar-brand">⚡ <span>ENERGYSCAPE</span></div>', unsafe_allow_html=True)
-    st.button("🏠 WELCOME LANDING", key="btn_exit_to_welcome", on_click=exit_to_welcome, use_container_width=True)
     
     st.markdown('<div class="sidebar-section-header">NAVIGATION VIEWS</div>', unsafe_allow_html=True)
     navigation_option = st.radio(
@@ -915,7 +1049,7 @@ top_c1, top_c2 = st.columns([2.2, 1])
 with top_c1:
     greeting_sub = '<p style="font-size: 0.88rem; color: #6B7280; margin: 0.2rem 0 0.5rem 0;">Welcome, Administrator! Real-time energy insights & carbon analytics</p>' if navigation_option == "Dashboard" else ''
     badge_html = '<span class="pill-badge-green">Decision Support System</span>' if navigation_option == "Dashboard" else ''
-    st.markdown(f'<div style="margin-bottom: 0.5rem;"><div style="display: flex; align-items: center; gap: 12px;"><h1 style="font-size: 1.75rem; font-weight: 700; color: #111827; margin: 0; letter-spacing: -0.02em;">{current_page_title}</h1>{badge_html}</div>{greeting_sub}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div style="margin-bottom: 0.5rem;"><div style="display: flex; align-items: center; gap: 12px;"><h1 class="page-title" style="font-size: 1.75rem; font-weight: 700; color: #111827; margin: 0; letter-spacing: -0.02em;">{current_page_title}</h1>{badge_html}</div>{greeting_sub}</div>', unsafe_allow_html=True)
 with top_c2:
     search_term = st.text_input("Search", placeholder="🔍 Search dashboard metrics...", label_visibility="collapsed", key="global_search_input")
     st.session_state["global_search_term"] = search_term
@@ -1159,29 +1293,65 @@ elif navigation_option == "Data Input":
     
     hist_val = validate_dataset(historical_df, "historical")
     app_val = validate_dataset(appliance_df, "appliance")
+
+    total_missing = int(historical_df.isna().sum().sum() + appliance_df.isna().sum().sum())
+    negative_values = int(
+        (historical_df.select_dtypes(include="number") < 0).sum().sum()
+        + (appliance_df.select_dtypes(include="number") < 0).sum().sum()
+    )
+    invalid_ranges = int(
+        (appliance_df["quantity"] <= 0).sum()
+        + (appliance_df["power_watts"] <= 0).sum()
+        + ((appliance_df["hours_per_day"] <= 0) | (appliance_df["hours_per_day"] > 24)).sum()
+        + ((appliance_df["operating_days"] <= 0) | (appliance_df["operating_days"] > 31)).sum()
+    )
+
+    expected_dates = 0
+    observed_dates = 0
+    for _, school_data in historical_df.groupby("school"):
+        valid_dates = school_data["date_dt"].dropna().drop_duplicates()
+        if not valid_dates.empty:
+            expected_dates += len(pd.date_range(valid_dates.min(), valid_dates.max(), freq="MS"))
+            observed_dates += len(valid_dates)
+    sequence_pct = round((observed_dates / expected_dates) * 100) if expected_dates else 0
+
+    bill_values = historical_df["bill_php"].dropna()
+    if len(bill_values) >= 4:
+        first_quartile = bill_values.quantile(0.25)
+        third_quartile = bill_values.quantile(0.75)
+        upper_fence = third_quartile + 1.5 * (third_quartile - first_quartile)
+        outlier_count = int((bill_values > upper_fence).sum())
+    else:
+        outlier_count = 0
+
+    missing_status = "PASS" if total_missing == 0 else "REVIEW"
+    nonnegative_status = "PASS" if negative_values == 0 else "REVIEW"
+    range_status = "PASS" if invalid_ranges == 0 else "REVIEW"
+    sequence_status = "PASS" if sequence_pct == 100 else "REVIEW"
+    outlier_status = "PASS" if outlier_count == 0 else "REVIEW"
     
     st.markdown(f"""
     <div class="ui-card" style="padding: 1.25rem 1.5rem !important;">
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; font-size: 0.9rem; color: #374151;">
             <div style="display: flex; align-items: center; justify-content: space-between;">
                 <span><span style="color: #047857; margin-right: 8px;">✓</span> NO MISSING VALUES</span>
-                <span class="pill-badge-green">PASS ({hist_val['missing_records']} Missing)</span>
+                <span class="pill-badge-green">{missing_status} ({total_missing} Missing)</span>
             </div>
             <div style="display: flex; align-items: center; justify-content: space-between;">
                 <span><span style="color: #047857; margin-right: 8px;">✓</span> NON-NEGATIVE VALUES</span>
-                <span class="pill-badge-green">PASS</span>
+                <span class="pill-badge-green">{nonnegative_status} ({negative_values} Invalid)</span>
             </div>
             <div style="display: flex; align-items: center; justify-content: space-between;">
                 <span><span style="color: #047857; margin-right: 8px;">✓</span> VALID RANGES (Hours 1-24, Days 1-31)</span>
-                <span class="pill-badge-green">PASS</span>
+                <span class="pill-badge-green">{range_status} ({invalid_ranges} Invalid)</span>
             </div>
             <div style="display: flex; align-items: center; justify-content: space-between;">
                 <span><span style="color: #047857; margin-right: 8px;">✓</span> COMPLETE DATE TIMESTAMPS</span>
-                <span style="color: #047857; font-weight: 800;">100% Sequence</span>
+                <span style="color: #047857; font-weight: 800;">{sequence_status} ({sequence_pct}% Sequence)</span>
             </div>
             <div style="display: flex; align-items: center; justify-content: space-between; grid-column: span 2; padding-top: 4px;">
                 <span><span style="color: #0B4F46; margin-right: 8px;">✓</span> POTENTIAL OUTLIERS</span>
-                <span class="pill-badge-green">3 Outlier Peaks Handled</span>
+                <span class="pill-badge-green">{outlier_status} ({outlier_count} Potential Peaks)</span>
             </div>
         </div>
     </div>
@@ -1215,6 +1385,8 @@ elif navigation_option == "Season":
     
     with col_sea_left:
         hist_sea_df = historical_df.dropna(subset=['date_dt', 'bill_php']).copy()
+        if school_selection != "Both":
+            hist_sea_df = hist_sea_df[hist_sea_df['school'] == target_school]
         hist_sea_df['month_num'] = hist_sea_df['date_dt'].dt.month
         monthly_summary = hist_sea_df.groupby('month_num')['bill_php'].mean().reset_index()
         month_names = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
@@ -1223,7 +1395,8 @@ elif navigation_option == "Season":
         monthly_summary['seasonal_index'] = monthly_summary['bill_php'] / overall_mean
         
         # Bankio Minimal Green Palette: Deep Emerald for Dry, Soft Matcha for Wet
-        bar_colors = ["#0B4F46" if m in [4, 5, 11, 12, 1, 2, 3] else "#5A9E87" for m in monthly_summary['month_num']]
+        dry_month_numbers = {all_months.index(month) + 1 for month in dry_months}
+        bar_colors = ["#0B4F46" if m in dry_month_numbers else "#5A9E87" for m in monthly_summary['month_num']]
         fig_sea = go.Figure()
         fig_sea.add_trace(go.Bar(
             x=monthly_summary['month_name'],
@@ -1534,7 +1707,8 @@ elif navigation_option == "Scenario":
     </div>
     """, unsafe_allow_html=True)
     
-    scenarios_df = simulate_conservation_scenarios(bau_base)
+    active_reduction_rate = avg_red_pct / 100.0
+    scenarios_df = simulate_conservation_scenarios(bau_base, [active_reduction_rate])
     
     st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #111827; margin-top: 1rem; margin-bottom: 0.75rem;">Simulated Conservation Scenarios Comparison</h3>', unsafe_allow_html=True)
     render_bankio_table(scenarios_df)
@@ -1847,12 +2021,7 @@ CO₂ avoided: <strong>2,884.31 kg CO₂e / year</strong>
         
     st.markdown("<hr style='margin: 2rem 0; border: 0; border-top: 1px solid #EAECF0;'>", unsafe_allow_html=True)
     
-    # 3. METHODOLOGY & REPRODUCIBILITY AUDIT
+    # 3. COMPUTATIONAL CONSISTENCY AUDIT
     st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #111827; margin-bottom: 0.75rem;">Systemic Computational Consistency Audit</h3>', unsafe_allow_html=True)
     val_table = verify_computational_consistency()
     render_bankio_table(val_table)
-    
-    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #111827; margin-top: 1.25rem; margin-bottom: 0.75rem;">Methodology Formulations</h3>', unsafe_allow_html=True)
-    st.latex(r"\text{Monthly Energy Consumption (kWh)} = \frac{P \times Q \times H \times D}{1000}")
-    st.latex(r"\text{CO}_2\text{e (kg)} = \text{Electricity Consumption (kWh)} \times \text{Emission Factor (0.70 kg CO}_2\text{e/kWh)}")
-    st.latex(r"\text{MAPE} = \frac{100}{n} \sum_{i=1}^n \left| \frac{A_i - F_i}{A_i} \right|, \quad \text{RMSE} = \sqrt{\frac{1}{n} \sum_{i=1}^n (A_i - F_i)^2}")
