@@ -529,13 +529,27 @@ def apply_blue_theme(fig, title=""):
     )
     return fig
 
+PAGE_HEADER_TITLES = {
+    "Dashboard": "ENERGYSCAPE",
+    "Data Input": "DATA INPUT",
+    "Season": "MULTI-SEASONAL ANALYSIS",
+    "Energy L.": "ENERGY LOAD INVENTORY",
+    "Forecast": "ELECTRICITY FORECAST",
+    "Carbon": "CARBON FOOTPRINT AUDIT",
+    "Scenario": "CONSERVATION SCENARIO MODELING",
+    "Optimization": "OPTIMIZATION",
+    "Impact": "IMPACT ASSESSMENT",
+    "Reports": "REPORTS & COMPARATIVE ANALYSIS"
+}
+
 # ----------------------------------------------------
 # TOP HEADER BAR WITH SEARCH INPUT
 # ----------------------------------------------------
+current_page_title = PAGE_HEADER_TITLES.get(navigation_option, "ENERGYSCAPE")
 top_c1, top_c2 = st.columns([2.2, 1])
 with top_c1:
-    if navigation_option == "Dashboard":
-        st.markdown('<div style="display: flex; align-items: center; gap: 12px; margin-bottom: 0.5rem;"><h1 style="font-size: 1.8rem; font-weight: 800; color: #0F172A; margin: 0;">ENERGYSCAPE</h1><span class="pill-badge-green">Decision Support System</span></div>', unsafe_allow_html=True)
+    badge_html = '<span class="pill-badge-green">Decision Support System</span>' if navigation_option == "Dashboard" else ''
+    st.markdown(f'<div style="display: flex; align-items: center; gap: 12px; margin-bottom: 0.5rem;"><h1 style="font-size: 1.8rem; font-weight: 800; color: #0F172A; margin: 0;">{current_page_title}</h1>{badge_html}</div>', unsafe_allow_html=True)
 with top_c2:
     search_term = st.text_input("Search", placeholder="🔍 Search dashboard metrics...", label_visibility="collapsed")
 
@@ -675,7 +689,6 @@ if navigation_option == "Dashboard":
 
 # --- 2. DATA INPUT ---
 elif navigation_option == "Data Input":
-    st.markdown('<h2 style="font-size: 1.5rem; font-weight: 800; color: #0F172A; margin-bottom: 0.5rem;">DATA INPUT</h2>', unsafe_allow_html=True)
     st.markdown('<p style="font-size: 0.88rem; color: #64748B; margin-bottom: 1.25rem;">Electrical Billing Records & Appliance Load Inventories</p>', unsafe_allow_html=True)
     
     # Institution Badge
@@ -752,7 +765,6 @@ elif navigation_option == "Data Input":
 
 # --- 3. SEASON ---
 elif navigation_option == "Season":
-    st.markdown('<h2 style="font-size: 1.5rem; font-weight: 800; color: #0F172A; margin-bottom: 0.5rem;">MULTI-SEASONAL ANALYSIS</h2>', unsafe_allow_html=True)
     st.markdown('<p style="font-size: 0.88rem; color: #64748B; margin-bottom: 1.25rem;">Multi-Seasonal Load Comparison & Climate Dynamics</p>', unsafe_allow_html=True)
     
     with st.container():
@@ -842,7 +854,6 @@ elif navigation_option == "Season":
 
 # --- 4. ENERGY L. ---
 elif navigation_option == "Energy L.":
-    st.markdown('<h2 style="font-size: 1.5rem; font-weight: 800; color: #0F172A; margin-bottom: 0.5rem;">ENERGY LOAD CHARACTERIZATION</h2>', unsafe_allow_html=True)
     st.markdown('<p style="font-size: 0.88rem; color: #64748B; margin-bottom: 1.25rem;">Appliance Electrical Load & Consumption Breakdown</p>', unsafe_allow_html=True)
     
     # Horizontal Bar Chart for Appliance Load Characterization
@@ -906,7 +917,6 @@ elif navigation_option == "Energy L.":
 
 # --- 5. FORECAST ---
 elif navigation_option == "Forecast":
-    st.markdown('<h2 style="font-size: 1.5rem; font-weight: 800; color: #0F172A; margin-bottom: 0.5rem;">ELECTRICITY FORECAST</h2>', unsafe_allow_html=True)
     st.markdown('<p style="font-size: 0.88rem; color: #64748B; margin-bottom: 1.25rem;">Holt-Winters Exponential Smoothing (ETS) Projections</p>', unsafe_allow_html=True)
     
     fc_df = ets_res["forecast_df"]
@@ -981,7 +991,6 @@ elif navigation_option == "Forecast":
 
 # --- 6. CARBON ---
 elif navigation_option == "Carbon":
-    st.markdown('<h2 style="font-size: 1.5rem; font-weight: 800; color: #0F172A; margin-bottom: 0.5rem;">CARBON EMISSION QUANTIFICATION</h2>', unsafe_allow_html=True)
     st.markdown('<p style="font-size: 0.88rem; color: #64748B; margin-bottom: 1.25rem;">Scope 2 Carbon Footprint Quantification & Projections</p>', unsafe_allow_html=True)
     
     bau = calculate_bau_baseline(load_summary.get("total_kwh", 2289.10), electricity_rate, emission_factor)
@@ -1043,7 +1052,6 @@ elif navigation_option == "Carbon":
 
 # --- 7. SCENARIO ---
 elif navigation_option == "Scenario":
-    st.markdown('<h2 style="font-size: 1.5rem; font-weight: 800; color: #0F172A; margin-bottom: 0.5rem;">CONSERVATION SCENARIO SIMULATOR</h2>', unsafe_allow_html=True)
     st.markdown('<p style="font-size: 0.88rem; color: #64748B; margin-bottom: 1.25rem;">Adjust Appliance Duty-Cycles & Simulate Energy Savings Scenarios</p>', unsafe_allow_html=True)
     
     st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 0.25rem; margin-bottom: 0.75rem;">ADJUST INTERVENTION LEVELS:</h3>', unsafe_allow_html=True)
@@ -1121,7 +1129,6 @@ elif navigation_option == "Scenario":
 
 # --- 8. OPTIMIZATION ---
 elif navigation_option == "Optimization":
-    st.markdown('<h2 style="font-size: 1.5rem; font-weight: 800; color: #0F172A; margin-bottom: 0.5rem;">OPTIMIZATION</h2>', unsafe_allow_html=True)
     st.markdown('<p style="font-size: 0.88rem; color: #64748B; margin-bottom: 1.25rem;">Linear Goal Programming Optimization & Operational Constraints</p>', unsafe_allow_html=True)
     
     st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 0.25rem; margin-bottom: 0.75rem;">OBJECTIVE FUNCTION</h3>', unsafe_allow_html=True)
@@ -1244,7 +1251,6 @@ elif navigation_option == "Optimization":
 
 # --- 9. IMPACT ---
 elif navigation_option == "Impact":
-    st.markdown('<h2 style="font-size: 1.5rem; font-weight: 800; color: #0F172A; margin-bottom: 0.5rem;">IMPACT</h2>', unsafe_allow_html=True)
     st.markdown('<p style="font-size: 0.88rem; color: #64748B; margin-bottom: 1.25rem;">Institutional Impact, Baseline vs. Optimized Savings, & Sensitivity Elasticity</p>', unsafe_allow_html=True)
     
     kwh_savings_annual = opt_res["annual_kwh_savings"]
@@ -1319,7 +1325,6 @@ elif navigation_option == "Impact":
 
 # --- 10. REPORTS ---
 elif navigation_option == "Reports":
-    st.markdown('<h2 style="font-size: 1.5rem; font-weight: 800; color: #0F172A; margin-bottom: 0.5rem;">COMPARATIVE ANALYSIS & REPORT</h2>', unsafe_allow_html=True)
     st.markdown('<p style="font-size: 0.88rem; color: #64748B; margin-bottom: 1.25rem;">Multi-Institutional Comparative Benchmark & Executive Summary Report Generator</p>', unsafe_allow_html=True)
     
     # 1. COMPARATIVE ANALYSIS SECTION (Wireframe 1)
