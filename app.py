@@ -207,10 +207,10 @@ st.markdown("""
         white-space: nowrap !important;
     }
 
-    /* Sidebar Base Background & Clean Styling */
+    /* Sidebar Base Background & Harmonious Ocean Sapphire Gradient Styling */
     section[data-testid="stSidebar"] {
-        background-color: #166534 !important;
-        border-right: 1px solid #15803D !important;
+        background: linear-gradient(180deg, #0A2540 0%, #0F4C81 40%, #0D9488 100%) !important;
+        border-right: 1px solid #0D9488 !important;
     }
     
     /* Strictly Scoped Nav Content Typography (Leaves collapse button untouched) */
@@ -229,7 +229,7 @@ st.markdown("""
         font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif !important;
         margin-bottom: 1.5rem;
         padding-bottom: 0.85rem;
-        border-bottom: 2px solid #22C55E;
+        border-bottom: 2px solid #0D9488;
         letter-spacing: -0.01em;
     }
     .sidebar-section-header {
@@ -272,15 +272,15 @@ st.markdown("""
         color: #FFFFFF !important;
     }
     div[role="radiogroup"] label[data-checked="true"] {
-        background: linear-gradient(135deg, #FFFFFF 0%, #F0FDF4 100%) !important;
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15) !important;
+        background: linear-gradient(135deg, #FFFFFF 0%, #F0FDFA 100%) !important;
+        box-shadow: 0 6px 18px rgba(13, 148, 136, 0.25) !important;
     }
     div[role="radiogroup"] label[data-checked="true"],
     div[role="radiogroup"] label[data-checked="true"] p,
     div[role="radiogroup"] label[data-checked="true"] span,
     div[role="radiogroup"] label[data-checked="true"] div,
     div[role="radiogroup"] label[data-checked="true"] * {
-        color: #166534 !important;
+        color: #0F766E !important;
         font-weight: 800 !important;
         font-size: 1.1rem !important;
     }
