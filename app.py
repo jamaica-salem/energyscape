@@ -580,51 +580,51 @@ if navigation_option == "Dashboard":
     col_p, col_f = st.columns([1.1, 1])
     
     with col_p:
-        st.markdown('<h3 style="font-size: 1.15rem; font-weight: 800; color: #0F172A; margin-top: 0.25rem; margin-bottom: 0.85rem;">PRIORITY LOAD</h3>', unsafe_allow_html=True)
+        st.markdown('<h3 style="font-size: 1.15rem; font-weight: 700; color: #111827; margin-top: 0.25rem; margin-bottom: 0.85rem;">PRIORITY LOAD</h3>', unsafe_allow_html=True)
         top_apps = apps_processed.sort_values(by='monthly_kwh', ascending=False).head(3)
         
         for idx, row in top_apps.iterrows():
             st.markdown(f"""
-            <div class="ui-card card-teal" style="margin-bottom: 0.85rem !important; padding: 1.1rem 1.35rem !important;">
+            <div class="ui-card" style="margin-bottom: 0.85rem !important; padding: 1.1rem 1.35rem !important;">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <div>
-                        <div style="font-weight: 800; font-size: 1rem; color: #0F172A;">{row['appliance']}</div>
-                        <div style="font-size: 0.82rem; color: #64748B; margin-top: 0.25rem;">
+                        <div style="font-weight: 700; font-size: 1rem; color: #111827;">{row['appliance']}</div>
+                        <div style="font-size: 0.82rem; color: #6B7280; margin-top: 0.25rem;">
                             <strong>{format_kwh(row['monthly_kwh'])}</strong> ({row['percentage_share']:.1f}% share) | {format_currency(row['monthly_cost_php'])}/mo
                         </div>
                     </div>
-                    <span class="pill-badge-teal" style="font-size: 0.78rem; padding: 0.3rem 0.75rem;">{row['priority']}</span>
+                    <span class="pill-badge-green" style="font-size: 0.78rem; padding: 0.3rem 0.75rem;">{row['priority']}</span>
                 </div>
             </div>
             """, unsafe_allow_html=True)
             
     with col_f:
-        st.markdown('<h3 style="font-size: 1.15rem; font-weight: 800; color: #0F172A; margin-top: 0.25rem; margin-bottom: 0.85rem;">FORECAST SUMMARY</h3>', unsafe_allow_html=True)
+        st.markdown('<h3 style="font-size: 1.15rem; font-weight: 700; color: #111827; margin-top: 0.25rem; margin-bottom: 0.85rem;">FORECAST SUMMARY</h3>', unsafe_allow_html=True)
         fc_df = ets_res["forecast_df"]
         avg_fc_bill = fc_df['forecast_bill'].mean()
         
         st.markdown(f"""
-        <div class="ui-card card-blue" style="margin-bottom: 0.85rem !important; padding: 1.1rem 1.35rem !important;">
+        <div class="ui-card" style="margin-bottom: 0.85rem !important; padding: 1.1rem 1.35rem !important;">
             <div class="kpi-label">Projected Monthly Avg ({forecast_horizon} Months)</div>
-            <div class="kpi-val" style="font-size: 1.6rem; color: #1E3A8A;">{format_currency(avg_fc_bill)}</div>
-            <div style="margin-top: 0.4rem; font-size: 0.82rem; color: #64748B;">
-                MAPE Accuracy: <span style="color: #0D9488; font-weight: 800;">{ets_res['val_mape']:.2f}%</span> | RMSE: <strong>{format_currency(ets_res['val_rmse'])}</strong>
+            <div class="kpi-val" style="font-size: 1.6rem; color: #0B4F46;">{format_currency(avg_fc_bill)}</div>
+            <div style="margin-top: 0.4rem; font-size: 0.82rem; color: #6B7280;">
+                MAPE Accuracy: <span style="color: #047857; font-weight: 800;">{ets_res['val_mape']:.2f}%</span> | RMSE: <strong>{format_currency(ets_res['val_rmse'])}</strong>
             </div>
         </div>
         """, unsafe_allow_html=True)
         
         st.markdown(f"""
-        <div class="ui-card card-emerald" style="margin-bottom: 0.85rem !important; padding: 1.1rem 1.35rem !important;">
+        <div class="ui-card" style="margin-bottom: 0.85rem !important; padding: 1.1rem 1.35rem !important;">
             <div class="kpi-label">Confidence Interval Range</div>
-            <div style="font-size: 1.15rem; font-weight: 800; color: #065F46; margin-top: 0.2rem;">{format_currency(fc_df['lower_bound'].mean())} – {format_currency(fc_df['upper_bound'].mean())}</div>
-            <div style="margin-top: 0.4rem; font-size: 0.82rem; color: #64748B;">
+            <div style="font-size: 1.15rem; font-weight: 800; color: #047857; margin-top: 0.2rem;">{format_currency(fc_df['lower_bound'].mean())} – {format_currency(fc_df['upper_bound'].mean())}</div>
+            <div style="margin-top: 0.4rem; font-size: 0.82rem; color: #6B7280;">
                 Exponential Smoothing (ETS) Baseline Projection
             </div>
         </div>
         """, unsafe_allow_html=True)
 
     # 3. Bottom Row: ELECTRICITY TREND (Full-Width Section)
-    st.markdown('<h3 style="font-size: 1.15rem; font-weight: 800; color: #0F172A; margin-top: 1.5rem; margin-bottom: 0.85rem;">ELECTRICITY TREND</h3>', unsafe_allow_html=True)
+    st.markdown('<h3 style="font-size: 1.15rem; font-weight: 700; color: #111827; margin-top: 1.5rem; margin-bottom: 0.85rem;">ELECTRICITY TREND</h3>', unsafe_allow_html=True)
     plot_df = historical_df[historical_df['bill_php'].notna()]
     if school_selection != "Both":
         plot_df = plot_df[plot_df['school'] == school_selection]
@@ -639,21 +639,21 @@ if navigation_option == "Dashboard":
         height=360
     )
     fig_tr = apply_blue_theme(fig_tr, "Historical Monthly Electricity Expenditure (₱)")
-    fig_tr.update_traces(line=dict(width=3, color="#0D9488"))
+    fig_tr.update_traces(line=dict(width=3, color="#0B4F46"))
     st.plotly_chart(fig_tr, use_container_width=True)
     
     st.markdown(f"""
-    <div class="ui-card card-teal" style="margin-top: 0.75rem; padding: 1.1rem 1.5rem !important;">
+    <div class="ui-card" style="margin-top: 0.75rem; padding: 1.1rem 1.5rem !important;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <div>
                 <div class="kpi-label">Historical Average Bill</div>
-                <div style="font-size: 1.3rem; font-weight: 800; color: #0F172A;">{format_currency(hist_metrics.get("avg_bill", 0))}</div>
+                <div style="font-size: 1.3rem; font-weight: 800; color: #111827;">{format_currency(hist_metrics.get("avg_bill", 0))}</div>
             </div>
             <div>
                 <div class="kpi-label">Historical Peak Bill</div>
-                <div style="font-size: 1.3rem; font-weight: 800; color: #0D9488;">{format_currency(hist_metrics.get("max_bill", 0))}</div>
+                <div style="font-size: 1.3rem; font-weight: 800; color: #0B4F46;">{format_currency(hist_metrics.get("max_bill", 0))}</div>
             </div>
-            <span class="pill-badge-teal" style="font-size: 0.82rem; padding: 0.35rem 0.85rem;">Coverage: SY 2021–2026</span>
+            <span class="pill-badge-green" style="font-size: 0.82rem; padding: 0.35rem 0.85rem;">Coverage: SY 2021–2026</span>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -665,11 +665,11 @@ if navigation_option == "Dashboard":
 
 # --- 2. DATA INPUT ---
 elif navigation_option == "Data Input":
-    st.markdown('<p style="font-size: 0.88rem; color: #64748B; margin-bottom: 1.25rem;">Electrical Billing Records & Appliance Load Inventories</p>', unsafe_allow_html=True)
+    st.markdown('<p style="font-size: 0.88rem; color: #6B7280; margin-bottom: 1.25rem;">Electrical Billing Records & Appliance Load Inventories</p>', unsafe_allow_html=True)
     
     # Institution Badge
     st.markdown(f"""
-    <div class="ui-card card-teal" style="padding: 1rem 1.25rem !important; margin-bottom: 1rem !important;">
+    <div class="ui-card" style="padding: 1rem 1.25rem !important; margin-bottom: 1rem !important;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <div>
                 <div class="kpi-label">SELECTED INSTITUTION</div>
@@ -694,41 +694,41 @@ elif navigation_option == "Data Input":
         except Exception as ex:
             st.error(f"Error parsing uploaded file: {ex}")
     
-    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 1.25rem; margin-bottom: 0.75rem;">Appliance Electrical Load Inventory</h3>', unsafe_allow_html=True)
+    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #111827; margin-top: 1.25rem; margin-bottom: 0.75rem;">Appliance Electrical Load Inventory</h3>', unsafe_allow_html=True)
     if search_term:
         app_display = appliance_df[appliance_df['appliance'].str.contains(search_term, case=False)]
     else:
         app_display = appliance_df
     st.dataframe(app_display, use_container_width=True)
     
-    # Data Validity Checklist Section matching Wireframe 2
-    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 1.5rem; margin-bottom: 0.75rem;">DATA VALIDITY AUDIT CHECKLIST</h3>', unsafe_allow_html=True)
+    # Data Validity Checklist Section matching Bankio Minimal Style
+    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #111827; margin-top: 1.5rem; margin-bottom: 0.75rem;">DATA VALIDITY AUDIT CHECKLIST</h3>', unsafe_allow_html=True)
     
     hist_val = validate_dataset(historical_df, "historical")
     app_val = validate_dataset(appliance_df, "appliance")
     
     st.markdown(f"""
-    <div class="ui-card card-emerald" style="padding: 1.25rem 1.5rem !important;">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; font-size: 0.9rem; color: #334155;">
+    <div class="ui-card" style="padding: 1.25rem 1.5rem !important;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; font-size: 0.9rem; color: #374151;">
             <div style="display: flex; align-items: center; justify-content: space-between;">
-                <span><span style="color: #10B981; margin-right: 8px;">✓</span> NO MISSING VALUES</span>
+                <span><span style="color: #047857; margin-right: 8px;">✓</span> NO MISSING VALUES</span>
                 <span class="pill-badge-green">PASS ({hist_val['missing_records']} Missing)</span>
             </div>
             <div style="display: flex; align-items: center; justify-content: space-between;">
-                <span><span style="color: #10B981; margin-right: 8px;">✓</span> NON-NEGATIVE VALUES</span>
+                <span><span style="color: #047857; margin-right: 8px;">✓</span> NON-NEGATIVE VALUES</span>
                 <span class="pill-badge-green">PASS</span>
             </div>
             <div style="display: flex; align-items: center; justify-content: space-between;">
-                <span><span style="color: #10B981; margin-right: 8px;">✓</span> VALID RANGES (Hours 1-24, Days 1-31)</span>
+                <span><span style="color: #047857; margin-right: 8px;">✓</span> VALID RANGES (Hours 1-24, Days 1-31)</span>
                 <span class="pill-badge-green">PASS</span>
             </div>
             <div style="display: flex; align-items: center; justify-content: space-between;">
-                <span><span style="color: #10B981; margin-right: 8px;">✓</span> COMPLETE DATE TIMESTAMPS</span>
-                <span style="color: #10B981; font-weight: 800;">100% Sequence</span>
+                <span><span style="color: #047857; margin-right: 8px;">✓</span> COMPLETE DATE TIMESTAMPS</span>
+                <span style="color: #047857; font-weight: 800;">100% Sequence</span>
             </div>
             <div style="display: flex; align-items: center; justify-content: space-between; grid-column: span 2; padding-top: 4px;">
-                <span><span style="color: #0D9488; margin-right: 8px;">✓</span> POTENTIAL OUTLIERS</span>
-                <span class="pill-badge-teal">3 Outlier Peaks Handled</span>
+                <span><span style="color: #0B4F46; margin-right: 8px;">✓</span> POTENTIAL OUTLIERS</span>
+                <span class="pill-badge-green">3 Outlier Peaks Handled</span>
             </div>
         </div>
     </div>
@@ -741,10 +741,10 @@ elif navigation_option == "Data Input":
 
 # --- 3. SEASON ---
 elif navigation_option == "Season":
-    st.markdown('<p style="font-size: 0.88rem; color: #64748B; margin-bottom: 1.25rem;">Multi-Seasonal Load Comparison & Climate Dynamics</p>', unsafe_allow_html=True)
+    st.markdown('<p style="font-size: 0.88rem; color: #6B7280; margin-bottom: 1.25rem;">Multi-Seasonal Load Comparison & Climate Dynamics</p>', unsafe_allow_html=True)
     
     with st.container():
-        st.markdown('<h4 style="font-size: 0.95rem; font-weight: 700; color: #1E3A8A; margin-bottom: 0.25rem;">Season Classification Parameters</h4>', unsafe_allow_html=True)
+        st.markdown('<h4 style="font-size: 0.95rem; font-weight: 700; color: #111827; margin-bottom: 0.25rem;">Season Classification Parameters</h4>', unsafe_allow_html=True)
         all_months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
         dry_months = st.multiselect(
             "Select Dry Season Months",
@@ -767,8 +767,8 @@ elif navigation_option == "Season":
         overall_mean = monthly_summary['bill_php'].mean()
         monthly_summary['seasonal_index'] = monthly_summary['bill_php'] / overall_mean
         
-        # Strict Blue-Green seasonal bars: Teal for Dry, Blue for Wet
-        bar_colors = ["#0D9488" if m in [4, 5, 11, 12, 1, 2, 3] else "#2563EB" for m in monthly_summary['month_num']]
+        # Bankio Minimal Green Palette: Deep Emerald for Dry, Ocean Mint for Wet
+        bar_colors = ["#0B4F46" if m in [4, 5, 11, 12, 1, 2, 3] else "#10B981" for m in monthly_summary['month_num']]
         fig_sea = go.Figure()
         fig_sea.add_trace(go.Bar(
             x=monthly_summary['month_name'],
@@ -781,7 +781,7 @@ elif navigation_option == "Season":
             y=monthly_summary['seasonal_index'] * overall_mean,
             name="Seasonal Trend Index",
             mode="lines+markers",
-            line=dict(color="#10B981", width=3.5)
+            line=dict(color="#047857", width=3.5)
         ))
         fig_sea = apply_blue_theme(fig_sea, "Monthly Electricity Expenditure & Seasonal Index Trend")
         fig_sea.update_layout(height=320)
@@ -789,19 +789,19 @@ elif navigation_option == "Season":
         
         # Bottom Left Metrics
         st.markdown(f"""
-        <div class="ui-card card-teal" style="padding: 1rem 1.25rem !important;">
+        <div class="ui-card" style="padding: 1rem 1.25rem !important;">
             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
                 <div>
                     <div class="kpi-label">PEAK PERIOD</div>
-                    <div style="font-weight: 800; font-size: 1.05rem; color: #0F766E;">APRIL–MAY</div>
+                    <div style="font-weight: 800; font-size: 1.05rem; color: #0B4F46;">APRIL–MAY</div>
                 </div>
                 <div>
                     <div class="kpi-label">SEASONAL INDEX</div>
-                    <div style="font-weight: 800; font-size: 1.05rem; color: #1E3A8A;">1.24 (24% Peak)</div>
+                    <div style="font-weight: 800; font-size: 1.05rem; color: #111827;">1.24 (24% Peak)</div>
                 </div>
                 <div>
                     <div class="kpi-label">LOWEST PERIOD</div>
-                    <div style="font-weight: 800; font-size: 1.05rem; color: #10B981;">DECEMBER</div>
+                    <div style="font-weight: 800; font-size: 1.05rem; color: #047857;">DECEMBER</div>
                 </div>
             </div>
         </div>
@@ -809,15 +809,15 @@ elif navigation_option == "Season":
         
     with col_sea_right:
         st.markdown("""
-        <div class="ui-card card-blue" style="height: 100%; min-height: 420px;">
-            <h3 style="font-size: 1.1rem; font-weight: 800; color: #1E3A8A; margin-bottom: 0.75rem;">INTERPRETATION:</h3>
-            <p style="font-size: 0.88rem; color: #334155; line-height: 1.6; margin-bottom: 0.75rem;">
+        <div class="ui-card" style="height: 100%; min-height: 420px;">
+            <h3 style="font-size: 1.1rem; font-weight: 800; color: #111827; margin-bottom: 0.75rem;">INTERPRETATION:</h3>
+            <p style="font-size: 0.88rem; color: #374151; line-height: 1.6; margin-bottom: 0.75rem;">
                 <strong>Dry Season Thermal Surge:</strong> Electricity expenditure peaks during April–May due to elevated ambient temperatures in Abra, driving continuous operation of cooling systems (Air Conditioners & Electric Fans).
             </p>
-            <p style="font-size: 0.88rem; color: #334155; line-height: 1.6; margin-bottom: 0.75rem;">
+            <p style="font-size: 0.88rem; color: #374151; line-height: 1.6; margin-bottom: 0.75rem;">
                 <strong>Seasonal Variance:</strong> Dry Season average monthly billing (<strong>₱26,450</strong>) exceeds Wet Season baseline (<strong>₱23,820</strong>) by approximately <strong>11.04%</strong>.
             </p>
-            <p style="font-size: 0.88rem; color: #334155; line-height: 1.6; margin: 0;">
+            <p style="font-size: 0.88rem; color: #374151; line-height: 1.6; margin: 0;">
                 <strong>Operational Action:</strong> Targeted thermal insulation and air conditioner duty-cycle management during the peak April–May window offers maximum potential for load curtailment.
             </p>
         </div>
@@ -837,13 +837,13 @@ elif navigation_option == "Energy L.":
     
     # Strict Blue-Green color mapping for appliances
     color_map = {
-        "Air Conditioner": "#0F4C81", # Deep Sapphire
-        "Computers": "#0D9488",        # Ocean Teal
-        "Refrigerator": "#10B981",     # Emerald Green
-        "Lighting": "#06B6D4",         # Bright Cyan
-        "Electric Fan": "#14B8A6",     # Light Teal
-        "Water Pump": "#2563EB",       # Royal Blue
-        "Printer / Scanner": "#0284C7" # Sky Blue
+        "Air Conditioner": "#0B4F46",
+        "Computers": "#047857",
+        "Refrigerator": "#10B981",
+        "Lighting": "#059669",
+        "Electric Fan": "#34D399",
+        "Water Pump": "#063B34",
+        "Printer / Scanner": "#A7F3D0"
     }
     
     fig_hbar = px.bar(
@@ -861,25 +861,25 @@ elif navigation_option == "Energy L.":
     fig_hbar.update_layout(showlegend=False)
     st.plotly_chart(fig_hbar, use_container_width=True)
     
-    # Bottom Metrics Card matching Wireframe 4
+    # Bottom Metrics Card matching Bankio Style
     st.markdown(f"""
-    <div class="ui-card card-purple" style="margin-top: 0.5rem; padding: 1.1rem 1.5rem !important;">
+    <div class="ui-card" style="margin-top: 0.5rem; padding: 1.25rem 1.5rem !important;">
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
             <div>
-                <div class="kpi-label" style="font-size: 0.85rem !important; color: #8B5CF6 !important;">CONTRIBUTION</div>
-                <div style="font-size: 1.4rem; font-weight: 800; color: #6D28D9;">{load_summary['top2_combined_share']:.1f}% ESTIMATED</div>
-                <div style="font-size: 0.78rem; color: #64748B;">Top 2 Combined Load ({load_summary['top_appliance']} + Computers)</div>
+                <div class="kpi-label">CONTRIBUTION</div>
+                <div style="font-size: 1.4rem; font-weight: 800; color: #111827;">{load_summary['top2_combined_share']:.1f}% ESTIMATED</div>
+                <div style="font-size: 0.78rem; color: #6B7280;">Top 2 Combined Load ({load_summary['top_appliance']} + Computers)</div>
             </div>
             <div>
-                <div class="kpi-label" style="font-size: 0.85rem !important; color: #10B981 !important;">CONSUMPTION</div>
-                <div style="font-size: 1.4rem; font-weight: 800; color: #047857;">{load_summary['total_kwh']:.2f} KWH</div>
-                <div style="font-size: 0.78rem; color: #64748B;">Total Campus Baseline Monthly Load</div>
+                <div class="kpi-label">CONSUMPTION</div>
+                <div style="font-size: 1.4rem; font-weight: 800; color: #0B4F46;">{load_summary['total_kwh']:.2f} KWH</div>
+                <div style="font-size: 0.78rem; color: #6B7280;">Total Campus Baseline Monthly Load</div>
             </div>
         </div>
     </div>
     """, unsafe_allow_html=True)
     
-    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 1rem; margin-bottom: 0.75rem;">Appliance Load Inventory Matrix</h3>', unsafe_allow_html=True)
+    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #111827; margin-top: 1rem; margin-bottom: 0.75rem;">Appliance Load Inventory Matrix</h3>', unsafe_allow_html=True)
     if search_term:
         apps_view = apps_processed[apps_processed['appliance'].str.contains(search_term, case=False)]
     else:
@@ -893,18 +893,18 @@ elif navigation_option == "Energy L.":
 
 # --- 5. FORECAST ---
 elif navigation_option == "Forecast":
-    st.markdown('<p style="font-size: 0.88rem; color: #64748B; margin-bottom: 1.25rem;">Holt-Winters Exponential Smoothing (ETS) Projections</p>', unsafe_allow_html=True)
+    st.markdown('<p style="font-size: 0.88rem; color: #6B7280; margin-bottom: 1.25rem;">Holt-Winters Exponential Smoothing (ETS) Projections</p>', unsafe_allow_html=True)
     
     fc_df = ets_res["forecast_df"]
     
-    # 3-Line Forecast Chart matching Wireframe 5 with Shaded Confidence Ribbon
+    # 3-Line Forecast Chart matching Bankio Green Theme
     fig_fc_line = go.Figure()
     fig_fc_line.add_trace(go.Scatter(
         x=fc_df['date_str'],
         y=fc_df['lower_bound'],
         name="Lower Confidence Bound",
         mode="lines",
-        line=dict(color="rgba(59, 130, 246, 0.3)", width=1, dash="dash"),
+        line=dict(color="rgba(11, 79, 70, 0.3)", width=1, dash="dash"),
         showlegend=False
     ))
     fig_fc_line.add_trace(go.Scatter(
@@ -913,16 +913,16 @@ elif navigation_option == "Forecast":
         name="95% Confidence Interval Band",
         mode="lines",
         fill='tonexty',
-        fillcolor="rgba(59, 130, 246, 0.12)",
-        line=dict(color="rgba(59, 130, 246, 0.3)", width=1, dash="dash")
+        fillcolor="rgba(11, 79, 70, 0.12)",
+        line=dict(color="rgba(11, 79, 70, 0.3)", width=1, dash="dash")
     ))
     fig_fc_line.add_trace(go.Scatter(
         x=fc_df['date_str'],
         y=fc_df['forecast_bill'],
         name="ETS Forecasted Bill (₱)",
         mode="lines+markers",
-        line=dict(color="#2563EB", width=3.5),
-        marker=dict(size=7, color="#1D4ED8")
+        line=dict(color="#0B4F46", width=3.5),
+        marker=dict(size=7, color="#063B34")
     ))
     fig_fc_line = apply_blue_theme(fig_fc_line, f"Forecasted Electricity Bills — {target_school} ({forecast_horizon} Months)")
     fig_fc_line.update_layout(height=360)
@@ -934,22 +934,22 @@ elif navigation_option == "Forecast":
     lower_ann_kwh = (fc_df['lower_bound'].sum() / electricity_rate)
     upper_ann_kwh = (fc_df['upper_bound'].sum() / electricity_rate)
     
-    # Bottom Metrics Card matching Wireframe 5
+    # Bottom Metrics Card matching Bankio Style
     st.markdown(f"""
     <div class="ui-card" style="margin-top: 0.5rem; padding: 1.25rem 1.5rem !important;">
         <div style="display: grid; grid-template-columns: 1fr 1.4fr; gap: 24px;">
             <div>
-                <div class="kpi-label" style="font-size: 0.85rem !important; color: #1E3A8A !important;">MODEL PERFORMANCE</div>
-                <div style="font-size: 0.9rem; color: #334155; line-height: 1.6; margin-top: 0.4rem;">
+                <div class="kpi-label">MODEL PERFORMANCE</div>
+                <div style="font-size: 0.9rem; color: #374151; line-height: 1.6; margin-top: 0.4rem;">
                     <strong>MAE:</strong> {format_currency(mae_val)}<br>
                     <strong>RMSE:</strong> {format_currency(ets_res["val_rmse"])}<br>
-                    <strong>MAPE:</strong> <span style="color: #166534; font-weight: 800;">{ets_res["val_mape"]:.2f}%</span> ({interpret_mape(ets_res["val_mape"])})
+                    <strong>MAPE:</strong> <span style="color: #047857; font-weight: 800;">{ets_res["val_mape"]:.2f}%</span> ({interpret_mape(ets_res["val_mape"])})
                 </div>
             </div>
             <div>
-                <div class="kpi-label" style="font-size: 0.85rem !important; color: #1E3A8A !important;">FORECASTED ANNUAL CONSUMPTION</div>
-                <div style="font-size: 1.4rem; font-weight: 800; color: #0F172A; margin-top: 0.2rem;">{ann_kwh:,.0f} KWH ({format_currency(fc_df['forecast_bill'].sum())})</div>
-                <div style="font-size: 0.82rem; color: #64748B; margin-top: 0.4rem;">
+                <div class="kpi-label">FORECASTED ANNUAL CONSUMPTION</div>
+                <div style="font-size: 1.4rem; font-weight: 800; color: #111827; margin-top: 0.2rem;">{ann_kwh:,.0f} KWH ({format_currency(fc_df['forecast_bill'].sum())})</div>
+                <div style="font-size: 0.82rem; color: #6B7280; margin-top: 0.4rem;">
                     <strong>PREDICTION INTERVAL:</strong> {lower_ann_kwh:,.0f} KWH – {upper_ann_kwh:,.0f} KWH
                 </div>
             </div>
@@ -957,7 +957,7 @@ elif navigation_option == "Forecast":
     </div>
     """, unsafe_allow_html=True)
     
-    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 1rem; margin-bottom: 0.75rem;">Projected Monthly Expenditure Table</h3>', unsafe_allow_html=True)
+    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #111827; margin-top: 1rem; margin-bottom: 0.75rem;">Projected Monthly Expenditure Table</h3>', unsafe_allow_html=True)
     st.dataframe(fc_df[['date_str', 'month', 'forecast_bill', 'lower_bound', 'upper_bound']], use_container_width=True)
 
     # PROCEED BUTTON
@@ -967,7 +967,7 @@ elif navigation_option == "Forecast":
 
 # --- 6. CARBON ---
 elif navigation_option == "Carbon":
-    st.markdown('<p style="font-size: 0.88rem; color: #64748B; margin-bottom: 1.25rem;">Scope 2 Carbon Footprint Quantification & Projections</p>', unsafe_allow_html=True)
+    st.markdown('<p style="font-size: 0.88rem; color: #6B7280; margin-bottom: 1.25rem;">Scope 2 Carbon Footprint Quantification & Projections</p>', unsafe_allow_html=True)
     
     bau = calculate_bau_baseline(load_summary.get("total_kwh", 2289.10), electricity_rate, emission_factor)
     fc_df = ets_res["forecast_df"]
@@ -977,10 +977,10 @@ elif navigation_option == "Carbon":
     col_c1, col_c2 = st.columns(2)
     with col_c1:
         st.markdown(f"""
-        <div class="ui-card" style="border-left: 6px solid #1D4ED8 !important;">
-            <div class="kpi-label" style="font-size: 0.9rem !important; color: #1E3A8A !important;">BASELINE</div>
-            <div style="font-size: 1.8rem; font-weight: 800; color: #0F172A; margin-top: 0.3rem;">{bau['monthly_co2_kg']:,.2f} kg CO₂e</div>
-            <div style="font-size: 0.82rem; color: #64748B; margin-top: 0.4rem;">
+        <div class="ui-card">
+            <div class="kpi-label">BASELINE</div>
+            <div style="font-size: 1.8rem; font-weight: 800; color: #111827; margin-top: 0.3rem;">{bau['monthly_co2_kg']:,.2f} kg CO₂e</div>
+            <div style="font-size: 0.82rem; color: #6B7280; margin-top: 0.4rem;">
                 Monthly Baseline Footprint ({bau['annual_co2_kg']/1000:.2f} t CO₂e / Year)
             </div>
         </div>
@@ -988,10 +988,10 @@ elif navigation_option == "Carbon":
         
     with col_c2:
         st.markdown(f"""
-        <div class="ui-card" style="border-left: 6px solid #166534 !important;">
-            <div class="kpi-label" style="font-size: 0.9rem !important; color: #166534 !important;">FORECAST</div>
-            <div style="font-size: 1.8rem; font-weight: 800; color: #0F172A; margin-top: 0.3rem;">{(fc_annual_co2/12):,.2f} kg CO₂e</div>
-            <div style="font-size: 0.82rem; color: #64748B; margin-top: 0.4rem;">
+        <div class="ui-card">
+            <div class="kpi-label">FORECAST</div>
+            <div style="font-size: 1.8rem; font-weight: 800; color: #0B4F46; margin-top: 0.3rem;">{(fc_annual_co2/12):,.2f} kg CO₂e</div>
+            <div style="font-size: 0.82rem; color: #6B7280; margin-top: 0.4rem;">
                 Projected Monthly Average ({fc_annual_co2/1000:.2f} t CO₂e / Year)
             </div>
         </div>
@@ -1002,10 +1002,10 @@ elif navigation_option == "Carbon":
     <div class="ui-card" style="margin-top: 0.5rem; padding: 1.25rem 1.5rem !important;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <div>
-                <div style="font-size: 1.1rem; font-weight: 800; color: #0F172A;">Projected Annual CO₂</div>
-                <div style="font-size: 0.82rem; color: #64748B;">Calculated with Grid Emission Factor = {emission_factor:.2f} kg CO₂e/kWh</div>
+                <div style="font-size: 1.1rem; font-weight: 800; color: #111827;">Projected Annual CO₂</div>
+                <div style="font-size: 0.82rem; color: #6B7280;">Calculated with Grid Emission Factor = {emission_factor:.2f} kg CO₂e/kWh</div>
             </div>
-            <div style="font-size: 1.8rem; font-weight: 800; color: #1E3A8A;">{bau['annual_co2_kg']:,.0f} kg CO₂e</div>
+            <div style="font-size: 1.8rem; font-weight: 800; color: #0B4F46;">{bau['annual_co2_kg']:,.0f} kg CO₂e</div>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -1028,9 +1028,9 @@ elif navigation_option == "Carbon":
 
 # --- 7. SCENARIO ---
 elif navigation_option == "Scenario":
-    st.markdown('<p style="font-size: 0.88rem; color: #64748B; margin-bottom: 1.25rem;">Adjust Appliance Duty-Cycles & Simulate Energy Savings Scenarios</p>', unsafe_allow_html=True)
+    st.markdown('<p style="font-size: 0.88rem; color: #6B7280; margin-bottom: 1.25rem;">Adjust Appliance Duty-Cycles & Simulate Energy Savings Scenarios</p>', unsafe_allow_html=True)
     
-    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 0.25rem; margin-bottom: 0.75rem;">ADJUST INTERVENTION LEVELS:</h3>', unsafe_allow_html=True)
+    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #111827; margin-top: 0.25rem; margin-bottom: 0.75rem;">ADJUST INTERVENTION LEVELS:</h3>', unsafe_allow_html=True)
     
     col_sl1, col_sl2, col_sl3 = st.columns(3)
     with col_sl1:
@@ -1054,30 +1054,30 @@ elif navigation_option == "Scenario":
     co2_avoided_m = kwh_saved * emission_factor
     co2_avoided_y = co2_avoided_m * 12
     
-    st.markdown('<h3 style="font-size: 1.15rem; font-weight: 800; color: #0F172A; margin-top: 1.5rem; margin-bottom: 0.75rem;">SCENARIO RESULT</h3>', unsafe_allow_html=True)
+    st.markdown('<h3 style="font-size: 1.15rem; font-weight: 700; color: #111827; margin-top: 1.5rem; margin-bottom: 0.75rem;">SCENARIO RESULT</h3>', unsafe_allow_html=True)
     
     st.markdown(f"""
-    <div class="ui-card" style="background-color: #FFFFFF !important; border-left: 6px solid #166534 !important; padding: 1.25rem 1.5rem !important;">
+    <div class="ui-card" style="padding: 1.25rem 1.5rem !important;">
         <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
             <div>
                 <div class="kpi-label">BASELINE SCENARIO</div>
-                <div style="font-size: 1.3rem; font-weight: 800; color: #0F172A;">{base_kwh:,.2f} KWH</div>
-                <div style="font-size: 0.78rem; color: #64748B;">Monthly Baseline</div>
+                <div style="font-size: 1.3rem; font-weight: 800; color: #111827;">{base_kwh:,.2f} KWH</div>
+                <div style="font-size: 0.78rem; color: #6B7280;">Monthly Baseline</div>
             </div>
             <div>
                 <div class="kpi-label">PROJECTED SCENARIO</div>
-                <div style="font-size: 1.3rem; font-weight: 800; color: #1E3A8A;">{sim_kwh:,.2f} KWH</div>
-                <div style="font-size: 0.78rem; color: #64748B;">Simulated Monthly Target</div>
+                <div style="font-size: 1.3rem; font-weight: 800; color: #0B4F46;">{sim_kwh:,.2f} KWH</div>
+                <div style="font-size: 0.78rem; color: #6B7280;">Simulated Monthly Target</div>
             </div>
             <div>
                 <div class="kpi-label">ENERGY SAVED REDUCTION</div>
-                <div style="font-size: 1.3rem; font-weight: 800; color: #166534;">{kwh_saved:,.2f} KWH</div>
-                <div style="font-size: 0.78rem; color: #166534; font-weight: 700;">{avg_red_pct:.2f}% REDUCTION</div>
+                <div style="font-size: 1.3rem; font-weight: 800; color: #047857;">{kwh_saved:,.2f} KWH</div>
+                <div style="font-size: 0.78rem; color: #047857; font-weight: 700;">{avg_red_pct:.2f}% REDUCTION</div>
             </div>
             <div>
                 <div class="kpi-label">COST SAVED & CO₂ AVOIDED</div>
-                <div style="font-size: 1.15rem; font-weight: 800; color: #1E3A8A;">{format_currency(cost_saved_m)}/mo</div>
-                <div style="font-size: 0.78rem; color: #166534; font-weight: 700;">{co2_avoided_m:,.1f} KG CO₂e / month</div>
+                <div style="font-size: 1.15rem; font-weight: 800; color: #0B4F46;">{format_currency(cost_saved_m)}/mo</div>
+                <div style="font-size: 0.78rem; color: #047857; font-weight: 700;">{co2_avoided_m:,.1f} KG CO₂e / month</div>
             </div>
         </div>
     </div>
@@ -1085,7 +1085,7 @@ elif navigation_option == "Scenario":
     
     scenarios_df = simulate_conservation_scenarios(bau_base)
     
-    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 1rem; margin-bottom: 0.75rem;">Simulated Conservation Scenarios Comparison</h3>', unsafe_allow_html=True)
+    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #111827; margin-top: 1rem; margin-bottom: 0.75rem;">Simulated Conservation Scenarios Comparison</h3>', unsafe_allow_html=True)
     st.dataframe(scenarios_df, use_container_width=True)
     
     col_sc1, col_sc2 = st.columns(2)
@@ -1105,9 +1105,9 @@ elif navigation_option == "Scenario":
 
 # --- 8. OPTIMIZATION ---
 elif navigation_option == "Optimization":
-    st.markdown('<p style="font-size: 0.88rem; color: #64748B; margin-bottom: 1.25rem;">Linear Goal Programming Optimization & Operational Constraints</p>', unsafe_allow_html=True)
+    st.markdown('<p style="font-size: 0.88rem; color: #6B7280; margin-bottom: 1.25rem;">Linear Goal Programming Optimization & Operational Constraints</p>', unsafe_allow_html=True)
     
-    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 0.25rem; margin-bottom: 0.75rem;">OBJECTIVE FUNCTION</h3>', unsafe_allow_html=True)
+    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #111827; margin-top: 0.25rem; margin-bottom: 0.75rem;">OBJECTIVE FUNCTION</h3>', unsafe_allow_html=True)
     opt_goal = st.selectbox(
         "Optimization Objective",
         [
@@ -1119,27 +1119,27 @@ elif navigation_option == "Optimization":
         label_visibility="collapsed"
     )
     
-    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 1rem; margin-bottom: 0.75rem;">OPERATIONAL CONSTRAINTS:</h3>', unsafe_allow_html=True)
+    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #111827; margin-top: 1rem; margin-bottom: 0.75rem;">OPERATIONAL CONSTRAINTS:</h3>', unsafe_allow_html=True)
     col_c1, col_c2, col_c3 = st.columns(3)
     with col_c1:
         st.markdown("""
         <div class="ui-card" style="padding: 1rem 1.25rem !important;">
             <div class="kpi-label">MAXIMUM AIR CONDITIONER REDUCTION</div>
-            <div style="font-size: 1.3rem; font-weight: 800; color: #1E3A8A;">15% Limit</div>
+            <div style="font-size: 1.3rem; font-weight: 800; color: #0B4F46;">15% Limit</div>
         </div>
         """, unsafe_allow_html=True)
     with col_c2:
         st.markdown("""
         <div class="ui-card" style="padding: 1rem 1.25rem !important;">
             <div class="kpi-label">MAXIMUM COMPUTERS REDUCTION</div>
-            <div style="font-size: 1.3rem; font-weight: 800; color: #1E3A8A;">15% Limit</div>
+            <div style="font-size: 1.3rem; font-weight: 800; color: #0B4F46;">15% Limit</div>
         </div>
         """, unsafe_allow_html=True)
     with col_c3:
         st.markdown("""
         <div class="ui-card" style="padding: 1rem 1.25rem !important;">
             <div class="kpi-label">MAXIMUM LIGHTING & OTHER REDUCTION</div>
-            <div style="font-size: 1.3rem; font-weight: 800; color: #1E3A8A;">10% Limit</div>
+            <div style="font-size: 1.3rem; font-weight: 800; color: #0B4F46;">10% Limit</div>
         </div>
         """, unsafe_allow_html=True)
         
@@ -1153,7 +1153,7 @@ elif navigation_option == "Optimization":
         <div class="ui-card">
             <div class="kpi-label">Optimal Strategy</div>
             <div class="kpi-val">{opt_res["selected_scenario"]}</div>
-            <div style="font-size: 0.78rem; color: #64748B;">Linear Goal Programming</div>
+            <div style="font-size: 0.78rem; color: #6B7280;">Linear Goal Programming</div>
         </div>
         """, unsafe_allow_html=True)
     with op2:
@@ -1161,7 +1161,7 @@ elif navigation_option == "Optimization":
         <div class="ui-card">
             <div class="kpi-label">Optimized Target</div>
             <div class="kpi-val">{format_kwh(opt_res["optimized_monthly_kwh"])}</div>
-            <div style="font-size: 0.78rem; color: #64748B;">Monthly target load</div>
+            <div style="font-size: 0.78rem; color: #6B7280;">Monthly target load</div>
         </div>
         """, unsafe_allow_html=True)
     with op3:
@@ -1169,7 +1169,7 @@ elif navigation_option == "Optimization":
         <div class="ui-card">
             <div class="kpi-label">Annual Cost Savings</div>
             <div class="kpi-val">{format_currency(opt_res["annual_cost_savings_php"])}</div>
-            <div style="font-size: 0.78rem; color: #64748B;">Financial budget relief</div>
+            <div style="font-size: 0.78rem; color: #6B7280;">Financial budget relief</div>
         </div>
         """, unsafe_allow_html=True)
     with op4:
@@ -1177,11 +1177,11 @@ elif navigation_option == "Optimization":
         <div class="ui-card">
             <div class="kpi-label">Annual Avoided CO₂</div>
             <div class="kpi-val">{format_co2(opt_res["annual_avoided_co2_kg"])}</div>
-            <div style="font-size: 0.78rem; color: #64748B;">Greenhouse reduction</div>
+            <div style="font-size: 0.78rem; color: #6B7280;">Greenhouse reduction</div>
         </div>
         """, unsafe_allow_html=True)
         
-    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 0.5rem; margin-bottom: 0.75rem;">Optimized Baseline vs Target Comparison Table</h3>', unsafe_allow_html=True)
+    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #111827; margin-top: 0.5rem; margin-bottom: 0.75rem;">Optimized Baseline vs Target Comparison Table</h3>', unsafe_allow_html=True)
     opt_table = pd.DataFrame([
         {"Indicator": "Monthly Electricity Consumption", "BAU/Current": format_kwh(opt_res["bau_monthly_kwh"]), "Optimized Target": format_kwh(opt_res["optimized_monthly_kwh"]), "Reduction": format_kwh(opt_res["monthly_kwh_savings"])},
         {"Indicator": "Annual Electricity Consumption", "BAU/Current": format_kwh(opt_res["bau_monthly_kwh"] * 12), "Optimized Target": format_kwh(opt_res["optimized_monthly_kwh"] * 12), "Reduction": format_kwh(opt_res["annual_kwh_savings"])},
@@ -1191,7 +1191,7 @@ elif navigation_option == "Optimization":
     ])
     st.dataframe(opt_table, use_container_width=True)
     
-    st.markdown('<h4 style="font-size: 0.95rem; font-weight: 700; color: #1E3A8A; margin-top: 1.25rem; margin-bottom: 0.25rem;">Operational Target Monitor Input</h4>', unsafe_allow_html=True)
+    st.markdown('<h4 style="font-size: 0.95rem; font-weight: 700; color: #111827; margin-top: 1.25rem; margin-bottom: 0.25rem;">Operational Target Monitor Input</h4>', unsafe_allow_html=True)
     col_t1, col_t2 = st.columns(2)
     with col_t1:
         actual_input = st.number_input("Actual Monthly Electricity Consumption (kWh)", min_value=0.0, max_value=10000.0, value=1800.0, step=25.0)
@@ -1201,9 +1201,9 @@ elif navigation_option == "Optimization":
     mon_res = monitor_target_consumption(actual_input, target_input)
     if mon_res["is_on_target"]:
         st.markdown(f"""
-        <div style="background-color: #ECFDF5; border: 1.5px solid #10B981; border-radius: 12px; padding: 1.25rem 1.5rem; display: flex; align-items: center; justify-content: space-between; margin-top: 0.5rem; margin-bottom: 1.25rem;">
+        <div style="background-color: #E6F4EA; border: 1px solid #A7F3D0; border-radius: 12px; padding: 1.25rem 1.5rem; display: flex; align-items: center; justify-content: space-between; margin-top: 0.5rem; margin-bottom: 1.25rem;">
             <div>
-                <h4 style="color: #065F46; font-size: 1.05rem; font-weight: 700; margin: 0;">STATUS: COMPLIANT WITH ENERGY TARGET</h4>
+                <h4 style="color: #047857; font-size: 1.05rem; font-weight: 700; margin: 0;">STATUS: COMPLIANT WITH ENERGY TARGET</h4>
                 <p style="color: #047857; font-size: 0.88rem; margin: 0.25rem 0 0 0;">Actual consumption ({format_kwh(mon_res['actual_kwh'])}) is below target ceiling ({format_kwh(mon_res['target_kwh'])}).</p>
             </div>
             <span class="pill-badge-green" style="font-size: 0.95rem; padding: 0.4rem 1rem;">COMPLIANT</span>
@@ -1211,7 +1211,7 @@ elif navigation_option == "Optimization":
         """, unsafe_allow_html=True)
     else:
         st.markdown(f"""
-        <div style="background-color: #FEF2F2; border: 1.5px solid #EF4444; border-radius: 12px; padding: 1.25rem 1.5rem; display: flex; align-items: center; justify-content: space-between; margin-top: 0.5rem; margin-bottom: 1.25rem;">
+        <div style="background-color: #FEF2F2; border: 1px solid #FCA5A5; border-radius: 12px; padding: 1.25rem 1.5rem; display: flex; align-items: center; justify-content: space-between; margin-top: 0.5rem; margin-bottom: 1.25rem;">
             <div>
                 <h4 style="color: #991B1B; font-size: 1.05rem; font-weight: 700; margin: 0;">STATUS: EXCEEDS ENERGY TARGET (ACTION REQUIRED)</h4>
                 <p style="color: #B91C1C; font-size: 0.88rem; margin: 0.25rem 0 0 0;">Actual consumption ({format_kwh(mon_res['actual_kwh'])}) exceeds target benchmark by {format_kwh(mon_res['difference_kwh'])}.</p>
@@ -1227,7 +1227,7 @@ elif navigation_option == "Optimization":
 
 # --- 9. IMPACT ---
 elif navigation_option == "Impact":
-    st.markdown('<p style="font-size: 0.88rem; color: #64748B; margin-bottom: 1.25rem;">Institutional Impact, Baseline vs. Optimized Savings, & Sensitivity Elasticity</p>', unsafe_allow_html=True)
+    st.markdown('<p style="font-size: 0.88rem; color: #6B7280; margin-bottom: 1.25rem;">Institutional Impact, Baseline vs. Optimized Savings, & Sensitivity Elasticity</p>', unsafe_allow_html=True)
     
     kwh_savings_annual = opt_res["annual_kwh_savings"]
     cost_savings_annual = opt_res["annual_cost_savings_php"]
@@ -1236,36 +1236,36 @@ elif navigation_option == "Impact":
     col_imp1, col_imp2, col_imp3 = st.columns(3)
     with col_imp1:
         st.markdown(f"""
-        <div class="ui-card" style="border-top: 5px solid #166534 !important;">
-            <div class="kpi-label" style="color: #166534 !important;">Energy kWh Saved</div>
-            <div style="font-size: 1.7rem; font-weight: 800; color: #0F172A; margin-top: 0.3rem;">{kwh_savings_annual:,.2f} KWH</div>
-            <div style="font-size: 0.82rem; color: #64748B; margin-top: 0.4rem;">
+        <div class="ui-card">
+            <div class="kpi-label">Energy kWh Saved</div>
+            <div style="font-size: 1.7rem; font-weight: 800; color: #047857; margin-top: 0.3rem;">{kwh_savings_annual:,.2f} KWH</div>
+            <div style="font-size: 0.82rem; color: #6B7280; margin-top: 0.4rem;">
                 Annual Saved Energy ({opt_res['monthly_kwh_savings']:,.2f} kWh/mo)
             </div>
         </div>
         """, unsafe_allow_html=True)
     with col_imp2:
         st.markdown(f"""
-        <div class="ui-card" style="border-top: 5px solid #1D4ED8 !important;">
-            <div class="kpi-label" style="color: #1E3A8A !important;">Cost ₱ Saved</div>
-            <div style="font-size: 1.7rem; font-weight: 800; color: #0F172A; margin-top: 0.3rem;">{format_currency(cost_savings_annual)}</div>
-            <div style="font-size: 0.82rem; color: #64748B; margin-top: 0.4rem;">
+        <div class="ui-card">
+            <div class="kpi-label">Cost ₱ Saved</div>
+            <div style="font-size: 1.7rem; font-weight: 800; color: #111827; margin-top: 0.3rem;">{format_currency(cost_savings_annual)}</div>
+            <div style="font-size: 0.82rem; color: #6B7280; margin-top: 0.4rem;">
                 Annual Budget Relief ({format_currency(opt_res['monthly_cost_savings_php'])}/mo)
             </div>
         </div>
         """, unsafe_allow_html=True)
     with col_imp3:
         st.markdown(f"""
-        <div class="ui-card" style="border-top: 5px solid #D97706 !important;">
-            <div class="kpi-label" style="color: #D97706 !important;">Carbon kg Avoided</div>
-            <div style="font-size: 1.7rem; font-weight: 800; color: #0F172A; margin-top: 0.3rem;">{co2_savings_annual:,.2f} KG</div>
-            <div style="font-size: 0.82rem; color: #64748B; margin-top: 0.4rem;">
+        <div class="ui-card">
+            <div class="kpi-label">Carbon kg Avoided</div>
+            <div style="font-size: 1.7rem; font-weight: 800; color: #0B4F46; margin-top: 0.3rem;">{co2_savings_annual:,.2f} KG</div>
+            <div style="font-size: 0.82rem; color: #6B7280; margin-top: 0.4rem;">
                 Annual CO₂e Reduction ({opt_res['monthly_kwh_savings']*emission_factor:,.1f} kg/mo)
             </div>
         </div>
         """, unsafe_allow_html=True)
         
-    st.markdown('<h3 style="font-size: 1.15rem; font-weight: 800; color: #0F172A; margin-top: 1rem; margin-bottom: 0.75rem;">BASELINE VS OPTIMIZED IMPACT TABLE</h3>', unsafe_allow_html=True)
+    st.markdown('<h3 style="font-size: 1.15rem; font-weight: 700; color: #111827; margin-top: 1rem; margin-bottom: 0.75rem;">BASELINE VS OPTIMIZED IMPACT TABLE</h3>', unsafe_allow_html=True)
     imp_table = pd.DataFrame([
         {"Impact Category": "Monthly Electricity (kWh)", "Baseline (BAU)": format_kwh(opt_res["bau_monthly_kwh"]), "Optimized": format_kwh(opt_res["optimized_monthly_kwh"]), "Annual Net Impact": f"-{kwh_savings_annual:,.2f} kWh Saved/Year"},
         {"Impact Category": "Monthly Expenditure (₱)", "Baseline (BAU)": format_currency(opt_res["bau_monthly_kwh"] * electricity_rate), "Optimized": format_currency(opt_res["optimized_monthly_kwh"] * electricity_rate), "Annual Net Impact": f"-{format_currency(cost_savings_annual)} Saved/Year"},
@@ -1287,11 +1287,11 @@ elif navigation_option == "Impact":
         {"Indicator": "Highest Historical Bill (₱)", "An-anaao Integrated School": format_currency(m_an.get("max_bill")), "La Paz Integrated School": format_currency(m_lp.get("max_bill")), "Difference": format_currency(m_lp.get("max_bill", 0) - m_an.get("max_bill", 0))},
         {"Indicator": "Average Forecasted Bill (₱)", "An-anaao Integrated School": format_currency(fc_an_mean), "La Paz Integrated School": format_currency(fc_lp_mean), "Difference": format_currency(fc_lp_mean - fc_an_mean)},
     ])
-    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 1.25rem; margin-bottom: 0.75rem;">Comparative School Benchmark Matrix</h3>', unsafe_allow_html=True)
+    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #111827; margin-top: 1.25rem; margin-bottom: 0.75rem;">Comparative School Benchmark Matrix</h3>', unsafe_allow_html=True)
     st.dataframe(comp_df, use_container_width=True)
     
     sens_df = calculate_sensitivity_analysis()
-    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 1.25rem; margin-bottom: 0.75rem;">Sensitivity Ratios & Rate Elasticity Table</h3>', unsafe_allow_html=True)
+    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #111827; margin-top: 1.25rem; margin-bottom: 0.75rem;">Sensitivity Ratios & Rate Elasticity Table</h3>', unsafe_allow_html=True)
     st.dataframe(sens_df, use_container_width=True)
 
     # PROCEED BUTTON
@@ -1301,10 +1301,10 @@ elif navigation_option == "Impact":
 
 # --- 10. REPORTS ---
 elif navigation_option == "Reports":
-    st.markdown('<p style="font-size: 0.88rem; color: #64748B; margin-bottom: 1.25rem;">Multi-Institutional Comparative Benchmark & Executive Summary Report Generator</p>', unsafe_allow_html=True)
+    st.markdown('<p style="font-size: 0.88rem; color: #6B7280; margin-bottom: 1.25rem;">Multi-Institutional Comparative Benchmark & Executive Summary Report Generator</p>', unsafe_allow_html=True)
     
     # 1. COMPARATIVE ANALYSIS SECTION (Wireframe 1)
-    st.markdown('<h3 style="font-size: 1.15rem; font-weight: 800; color: #0F172A; margin-top: 0.25rem; margin-bottom: 0.75rem;">COMPARATIVE ANALYSIS</h3>', unsafe_allow_html=True)
+    st.markdown('<h3 style="font-size: 1.15rem; font-weight: 700; color: #111827; margin-top: 0.25rem; margin-bottom: 0.75rem;">COMPARATIVE ANALYSIS</h3>', unsafe_allow_html=True)
     
     m_an = calculate_historical_metrics(historical_df, "An-anaao Integrated School")
     m_lp = calculate_historical_metrics(historical_df, "La Paz Integrated School")
@@ -1331,51 +1331,51 @@ elif navigation_option == "Reports":
     with col_r2:
         run_comp = st.button("⚡ RUN COMPARATIVE ANALYSIS", key="btn_run_comp", use_container_width=True)
         
-    st.markdown("<hr style='margin: 2rem 0; border: 0; border-top: 1px solid #E2E8F0;'>", unsafe_allow_html=True)
+    st.markdown("<hr style='margin: 2rem 0; border: 0; border-top: 1px solid #EAECF0;'>", unsafe_allow_html=True)
     
     # 2. EXECUTIVE REPORT SECTION (Wireframe 2)
-    st.markdown('<h3 style="font-size: 1.15rem; font-weight: 800; color: #0F172A; margin-bottom: 0.75rem;">EXECUTIVE REPORT</h3>', unsafe_allow_html=True)
+    st.markdown('<h3 style="font-size: 1.15rem; font-weight: 700; color: #111827; margin-bottom: 0.75rem;">EXECUTIVE REPORT</h3>', unsafe_allow_html=True)
     
     report_school = st.selectbox("Selected School", ["An-anaao Integrated School", "La Paz Integrated School"], index=0, key="report_school_select")
     
-    report_html = f"""<div class="ui-card" style="border-left: 6px solid #166534 !important; padding: 1.5rem 1.75rem !important;">
-<div style="font-size: 1.15rem; font-weight: 800; color: #0F172A; margin-bottom: 1rem;">
-School: <span style="color: #166534;">{report_school}</span>
+    report_html = f"""<div class="ui-card" style="padding: 1.5rem 1.75rem !important;">
+<div style="font-size: 1.15rem; font-weight: 700; color: #111827; margin-bottom: 1rem;">
+School: <span style="color: #0B4F46;">{report_school}</span>
 </div>
 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
-<div style="background: #F8FAFC; padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid #E2E8F0;">
-<div class="kpi-label" style="color: #1E3A8A !important;">SEASONAL FINDING</div>
-<div style="font-size: 0.95rem; font-weight: 700; color: #0F172A; margin-top: 0.3rem;">
-Peak consumption: <span style="color: #D97706;">April – May (Seasonal Index: 1.24)</span>
+<div style="background: #F9FAFB; padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid #EAECF0;">
+<div class="kpi-label">SEASONAL FINDING</div>
+<div style="font-size: 0.95rem; font-weight: 700; color: #111827; margin-top: 0.3rem;">
+Peak consumption: <span style="color: #0B4F46;">April – May (Seasonal Index: 1.24)</span>
 </div>
 </div>
-<div style="background: #F8FAFC; padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid #E2E8F0;">
-<div class="kpi-label" style="color: #1E3A8A !important;">ENERGY LOAD</div>
-<div style="font-size: 0.95rem; font-weight: 700; color: #0F172A; margin-top: 0.3rem;">
-Priority load: <span style="color: #DC2626;">Air Conditioner (792.00 kWh/mo, 34.6% share)</span>
+<div style="background: #F9FAFB; padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid #EAECF0;">
+<div class="kpi-label">ENERGY LOAD</div>
+<div style="font-size: 0.95rem; font-weight: 700; color: #111827; margin-top: 0.3rem;">
+Priority load: <span style="color: #0B4F46;">Air Conditioner (792.00 kWh/mo, 34.6% share)</span>
 </div>
 </div>
-<div style="background: #F8FAFC; padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid #E2E8F0;">
-<div class="kpi-label" style="color: #1E3A8A !important;">FORECAST</div>
-<div style="font-size: 0.95rem; font-weight: 700; color: #0F172A; margin-top: 0.3rem;">
-Expected consumption: <span style="color: #1E3A8A;">₱15,114.62 / month (MAPE: 12.52%)</span>
+<div style="background: #F9FAFB; padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid #EAECF0;">
+<div class="kpi-label">FORECAST</div>
+<div style="font-size: 0.95rem; font-weight: 700; color: #111827; margin-top: 0.3rem;">
+Expected consumption: <span style="color: #0B4F46;">₱15,114.62 / month (MAPE: 12.52%)</span>
 </div>
 </div>
-<div style="background: #F8FAFC; padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid #E2E8F0;">
-<div class="kpi-label" style="color: #1E3A8A !important;">CARBON</div>
-<div style="font-size: 0.95rem; font-weight: 700; color: #0F172A; margin-top: 0.3rem;">
-Projected emissions: <span style="color: #166534;">19,228.44 kg CO₂e / year</span>
+<div style="background: #F9FAFB; padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid #EAECF0;">
+<div class="kpi-label">CARBON</div>
+<div style="font-size: 0.95rem; font-weight: 700; color: #111827; margin-top: 0.3rem;">
+Projected emissions: <span style="color: #0B4F46;">19,228.44 kg CO₂e / year</span>
 </div>
 </div>
-<div style="background: #F8FAFC; padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid #E2E8F0; grid-column: span 2;">
-<div class="kpi-label" style="color: #1E3A8A !important;">OPTIMIZATION</div>
-<div style="font-size: 0.95rem; font-weight: 700; color: #0F172A; margin-top: 0.3rem;">
-Recommended strategy: <span style="color: #166534;">15% Multi-Tier Duty Cycle Optimization (1,945.73 kWh / mo target)</span>
+<div style="background: #F9FAFB; padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid #EAECF0; grid-column: span 2;">
+<div class="kpi-label">OPTIMIZATION</div>
+<div style="font-size: 0.95rem; font-weight: 700; color: #111827; margin-top: 0.3rem;">
+Recommended strategy: <span style="color: #0B4F46;">15% Multi-Tier Duty Cycle Optimization (1,945.73 kWh / mo target)</span>
 </div>
 </div>
-<div style="background: #ECFDF5; padding: 1.2rem 1.25rem; border-radius: 12px; border: 1px solid #A7F3D0; grid-column: span 2;">
-<div class="kpi-label" style="color: #065F46 !important;">IMPACT & SAVINGS</div>
-<div style="font-size: 0.95rem; font-weight: 700; color: #065F46; margin-top: 0.4rem; line-height: 1.6;">
+<div style="background: #E6F4EA; padding: 1.2rem 1.25rem; border-radius: 12px; border: 1px solid #A7F3D0; grid-column: span 2;">
+<div class="kpi-label" style="color: #047857 !important;">IMPACT & SAVINGS</div>
+<div style="font-size: 0.95rem; font-weight: 700; color: #047857; margin-top: 0.4rem; line-height: 1.6;">
 Energy saved: <strong>4,120.44 kWh / year</strong><br>
 Cost saved: <strong>₱45,324.84 / year</strong><br>
 CO₂ avoided: <strong>2,884.31 kg CO₂e / year</strong>
@@ -1392,14 +1392,14 @@ CO₂ avoided: <strong>2,884.31 kg CO₂e / year</strong>
     if gen_rep:
         st.success(f"🎉 Executive Energy Audit Report for '{report_school}' successfully generated and ready for export!")
         
-    st.markdown("<hr style='margin: 2rem 0; border: 0; border-top: 1px solid #E2E8F0;'>", unsafe_allow_html=True)
+    st.markdown("<hr style='margin: 2rem 0; border: 0; border-top: 1px solid #EAECF0;'>", unsafe_allow_html=True)
     
     # 3. METHODOLOGY & REPRODUCIBILITY AUDIT
-    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem;">Systemic Computational Consistency Audit</h3>', unsafe_allow_html=True)
+    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #111827; margin-bottom: 0.75rem;">Systemic Computational Consistency Audit</h3>', unsafe_allow_html=True)
     val_table = verify_computational_consistency()
     st.dataframe(val_table, use_container_width=True)
     
-    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 1.25rem; margin-bottom: 0.75rem;">Methodology Formulations</h3>', unsafe_allow_html=True)
+    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #111827; margin-top: 1.25rem; margin-bottom: 0.75rem;">Methodology Formulations</h3>', unsafe_allow_html=True)
     st.latex(r"\text{Monthly Energy Consumption (kWh)} = \frac{P \times Q \times H \times D}{1000}")
     st.latex(r"\text{CO}_2\text{e (kg)} = \text{Electricity Consumption (kWh)} \times \text{Emission Factor (0.70 kg CO}_2\text{e/kWh)}")
     st.latex(r"\text{MAPE} = \frac{100}{n} \sum_{i=1}^n \left| \frac{A_i - F_i}{A_i} \right|, \quad \text{RMSE} = \sqrt{\frac{1}{n} \sum_{i=1}^n (A_i - F_i)^2}")
