@@ -689,10 +689,12 @@ elif navigation_option == "Data Input":
     """, unsafe_allow_html=True)
     
     # Interactive File Drop Uploader Section matching Wireframe 2
+    st.markdown('<div style="text-align: center; font-size: 1.15rem; font-weight: 800; color: #0F766E; margin-top: 0.5rem; margin-bottom: 0.6rem; width: 100%;">DROP FILE HERE OR CLICK TO UPLOAD</div>', unsafe_allow_html=True)
     uploaded_file = st.file_uploader(
         "DROP FILE HERE OR CLICK TO UPLOAD",
         type=["csv"],
         key="data_input_uploader",
+        label_visibility="collapsed",
         help="Drag and drop or click to upload CSV electrical billing records or appliance load inventories."
     )
     if uploaded_file is not None:
