@@ -1615,8 +1615,8 @@ elif navigation_option == "Target Monitor":
         </div>
         """, unsafe_allow_html=True)
         
-    with st.container(border=True):
-        st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem;">Compliance Evaluation Status</h3>', unsafe_allow_html=True)
+    with st.container():
+        st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 0.35rem; margin-bottom: 0.75rem;">Compliance Evaluation Status</h3>', unsafe_allow_html=True)
         if mon_res["is_on_target"]:
             st.markdown(f"""
             <div style="background-color: #ECFDF5; border: 1.5px solid #10B981; border-radius: 12px; padding: 1.25rem 1.5rem; display: flex; align-items: center; justify-content: space-between;">
