@@ -355,6 +355,9 @@ NAV_OPTIONS = [
 if "nav_selection" not in st.session_state or st.session_state["nav_selection"] not in NAV_OPTIONS:
     st.session_state["nav_selection"] = "Dashboard"
 
+def navigate_to_page(target_page: str):
+    st.session_state["nav_selection"] = target_page
+
 with st.sidebar:
     st.markdown('<div class="sidebar-brand">⚡ <span>ENERGYSCAPE</span></div>', unsafe_allow_html=True)
     
@@ -588,9 +591,7 @@ if navigation_option == "Dashboard":
     # PROCEED BUTTON TO DATA INPUT
     col_proc1, col_proc2, col_proc3 = st.columns([1, 1.5, 1])
     with col_proc2:
-        if st.button("PROCEED ➔", key="btn_proceed_dashboard", use_container_width=True):
-            st.session_state["nav_selection"] = "Data Input"
-            st.rerun()
+        st.button("PROCEED ➔", key="btn_proceed_dashboard", on_click=navigate_to_page, args=("Data Input",), use_container_width=True)
 
 # --- 2. DATA INPUT ---
 elif navigation_option == "Data Input":
@@ -662,9 +663,7 @@ elif navigation_option == "Data Input":
     # PROCEED BUTTON
     col_proc1, col_proc2, col_proc3 = st.columns([1, 1.5, 1])
     with col_proc2:
-        if st.button("PROCEED ➔", key="btn_proceed_data_input", use_container_width=True):
-            st.session_state["nav_selection"] = "Season"
-            st.rerun()
+        st.button("PROCEED ➔", key="btn_proceed_data_input", on_click=navigate_to_page, args=("Season",), use_container_width=True)
 
 # --- 3. SEASON ---
 elif navigation_option == "Season":
@@ -754,9 +753,7 @@ elif navigation_option == "Season":
     # PROCEED BUTTON
     col_proc1, col_proc2, col_proc3 = st.columns([1, 1.5, 1])
     with col_proc2:
-        if st.button("PROCEED ➔", key="btn_proceed_season", use_container_width=True):
-            st.session_state["nav_selection"] = "Energy L."
-            st.rerun()
+        st.button("PROCEED ➔", key="btn_proceed_season", on_click=navigate_to_page, args=("Energy L.",), use_container_width=True)
 
 # --- 4. ENERGY L. ---
 elif navigation_option == "Energy L.":
@@ -820,9 +817,7 @@ elif navigation_option == "Energy L.":
     # PROCEED BUTTON
     col_proc1, col_proc2, col_proc3 = st.columns([1, 1.5, 1])
     with col_proc2:
-        if st.button("PROCEED ➔", key="btn_proceed_energy_l", use_container_width=True):
-            st.session_state["nav_selection"] = "Forecast"
-            st.rerun()
+        st.button("PROCEED ➔", key="btn_proceed_energy_l", on_click=navigate_to_page, args=("Forecast",), use_container_width=True)
 
 # --- 5. FORECAST ---
 elif navigation_option == "Forecast":
@@ -897,9 +892,7 @@ elif navigation_option == "Forecast":
     # PROCEED BUTTON
     col_proc1, col_proc2, col_proc3 = st.columns([1, 1.5, 1])
     with col_proc2:
-        if st.button("PROCEED ➔", key="btn_proceed_forecast", use_container_width=True):
-            st.session_state["nav_selection"] = "Carbon"
-            st.rerun()
+        st.button("PROCEED ➔", key="btn_proceed_forecast", on_click=navigate_to_page, args=("Carbon",), use_container_width=True)
 
 # --- 6. CARBON ---
 elif navigation_option == "Carbon":
@@ -961,9 +954,7 @@ elif navigation_option == "Carbon":
     # PROCEED BUTTON
     col_proc1, col_proc2, col_proc3 = st.columns([1, 1.5, 1])
     with col_proc2:
-        if st.button("PROCEED ➔", key="btn_proceed_carbon", use_container_width=True):
-            st.session_state["nav_selection"] = "Scenario"
-            st.rerun()
+        st.button("PROCEED ➔", key="btn_proceed_carbon", on_click=navigate_to_page, args=("Scenario",), use_container_width=True)
 
 # --- 7. SCENARIO ---
 elif navigation_option == "Scenario":
@@ -1041,9 +1032,7 @@ elif navigation_option == "Scenario":
     # PROCEED BUTTON
     col_proc1, col_proc2, col_proc3 = st.columns([1, 1.5, 1])
     with col_proc2:
-        if st.button("PROCEED ➔", key="btn_proceed_scenario", use_container_width=True):
-            st.session_state["nav_selection"] = "Optimization"
-            st.rerun()
+        st.button("PROCEED ➔", key="btn_proceed_scenario", on_click=navigate_to_page, args=("Optimization",), use_container_width=True)
 
 # --- 8. OPTIMIZATION ---
 elif navigation_option == "Optimization":
@@ -1166,9 +1155,7 @@ elif navigation_option == "Optimization":
     # PROCEED BUTTON
     col_proc1, col_proc2, col_proc3 = st.columns([1, 1.5, 1])
     with col_proc2:
-        if st.button("PROCEED ➔", key="btn_proceed_opt", use_container_width=True):
-            st.session_state["nav_selection"] = "Impact"
-            st.rerun()
+        st.button("PROCEED ➔", key="btn_proceed_opt", on_click=navigate_to_page, args=("Impact",), use_container_width=True)
 
 # --- 9. IMPACT ---
 elif navigation_option == "Impact":
@@ -1243,9 +1230,7 @@ elif navigation_option == "Impact":
     # PROCEED BUTTON
     col_proc1, col_proc2, col_proc3 = st.columns([1, 1.5, 1])
     with col_proc2:
-        if st.button("PROCEED ➔", key="btn_proceed_impact", use_container_width=True):
-            st.session_state["nav_selection"] = "Reports"
-            st.rerun()
+        st.button("PROCEED ➔", key="btn_proceed_impact", on_click=navigate_to_page, args=("Reports",), use_container_width=True)
 
 # --- 10. REPORTS ---
 elif navigation_option == "Reports":
