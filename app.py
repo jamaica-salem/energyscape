@@ -266,11 +266,14 @@ st.markdown("""
     div[data-baseweb="input"],
     div[data-baseweb="input"] > div,
     div[data-baseweb="base-input"],
+    div[data-testid="stNumberInputContainer"],
+    div[data-testid="stNumberInputContainer"] > div,
     input[type="number"],
     input[type="text"] {
         background-color: #FFFFFF !important;
         color: #0F172A !important;
-        border: 1px solid #CBD5E1 !important;
+        border: none !important;
+        box-shadow: none !important;
         border-radius: 10px !important;
     }
 
