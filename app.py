@@ -771,8 +771,8 @@ school_selection = "An-anaao Integrated School"
 electricity_rate = 11.00
 emission_factor = 0.70
 forecast_horizon = 12
-uploaded_bills = None
-uploaded_loads = None
+uploaded_bills = st.session_state.get("uploaded_bills", None)
+uploaded_loads = st.session_state.get("uploaded_loads", None)
 
 # ----------------------------------------------------
 # DATA INGESTION
@@ -1055,8 +1055,29 @@ elif navigation_option == "Data Input":
     )
     if uploaded_file is not None:
         try:
+            uploaded_file.seek(0)
             custom_df = pd.read_csv(uploaded_file)
-            st.success(f"✓ File '{uploaded_file.name}' loaded successfully! ({len(custom_df)} rows imported)")
+            cols = set(str(c).lower() for c in custom_df.columns)
+            if "bill_php" in cols or "date" in cols or "school_year" in cols:
+                uploaded_file.seek(0)
+                if st.session_state.get("uploaded_bills_filename") != uploaded_file.name:
+                    st.session_state["uploaded_bills"] = uploaded_file
+                    st.session_state["uploaded_bills_filename"] = uploaded_file.name
+                    st.success(f"✓ Historical Billing Dataset '{uploaded_file.name}' loaded & applied system-wide! ({len(custom_df)} rows imported)")
+                    st.rerun()
+                else:
+                    st.success(f"✓ Active Historical Billing Dataset: '{uploaded_file.name}' ({len(custom_df)} rows)")
+            elif "appliance" in cols or "power_watts" in cols or "quantity" in cols:
+                uploaded_file.seek(0)
+                if st.session_state.get("uploaded_loads_filename") != uploaded_file.name:
+                    st.session_state["uploaded_loads"] = uploaded_file
+                    st.session_state["uploaded_loads_filename"] = uploaded_file.name
+                    st.success(f"✓ Appliance Inventory Dataset '{uploaded_file.name}' loaded & applied system-wide! ({len(custom_df)} rows imported)")
+                    st.rerun()
+                else:
+                    st.success(f"✓ Active Appliance Inventory Dataset: '{uploaded_file.name}' ({len(custom_df)} rows)")
+            else:
+                st.info(f"File '{uploaded_file.name}' imported ({len(custom_df)} rows).")
         except Exception as ex:
             st.error(f"Error parsing uploaded file: {ex}")
     
