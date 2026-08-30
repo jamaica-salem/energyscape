@@ -610,9 +610,11 @@ elif navigation_option == "Season":
     col_sea_left, col_sea_right = st.columns([1.6, 1])
     
     with col_sea_left:
-        # Seasonal Bar & Line Chart
-        monthly_summary = historical_df.groupby('month_num')['bill_php'].mean().reset_index()
-        monthly_summary['month_name'] = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+        hist_sea_df = historical_df.dropna(subset=['date_dt', 'bill_php']).copy()
+        hist_sea_df['month_num'] = hist_sea_df['date_dt'].dt.month
+        monthly_summary = hist_sea_df.groupby('month_num')['bill_php'].mean().reset_index()
+        month_names = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+        monthly_summary['month_name'] = [month_names[int(m)-1] for m in monthly_summary['month_num']]
         overall_mean = monthly_summary['bill_php'].mean()
         monthly_summary['seasonal_index'] = monthly_summary['bill_php'] / overall_mean
         
