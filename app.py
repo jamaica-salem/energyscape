@@ -931,10 +931,10 @@ elif navigation_option == "Data Input":
 
 # --- 3. SEASON ---
 elif navigation_option == "Season":
-    st.markdown('<p style="font-size: 0.88rem; color: #6B7280; margin-bottom: 1.25rem;">Multi-Seasonal Load Comparison & Climate Dynamics</p>', unsafe_allow_html=True)
+    st.markdown('<p style="font-size: 0.88rem; color: #6B7280; margin-bottom: 1.5rem;">Multi-Seasonal Load Comparison & Climate Dynamics</p>', unsafe_allow_html=True)
     
     with st.container():
-        st.markdown('<h4 style="font-size: 0.95rem; font-weight: 700; color: #111827; margin-bottom: 0.25rem;">Season Classification Parameters</h4>', unsafe_allow_html=True)
+        st.markdown('<h4 style="font-size: 0.95rem; font-weight: 700; color: #111827; margin-bottom: 0.5rem;">Season Classification Parameters</h4>', unsafe_allow_html=True)
         all_months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
         dry_months = st.multiselect(
             "Select Dry Season Months",
@@ -945,6 +945,8 @@ elif navigation_option == "Season":
         wet_months = [m for m in all_months if m not in dry_months]
         
     s_metrics = calculate_seasonal_metrics(historical_df, dry_months, wet_months)
+    
+    st.markdown('<div style="margin-bottom: 1.5rem;"></div>', unsafe_allow_html=True)
     
     col_sea_left, col_sea_right = st.columns([1.6, 1])
     
@@ -976,6 +978,8 @@ elif navigation_option == "Season":
         fig_sea = apply_blue_theme(fig_sea, "Monthly Electricity Expenditure & Seasonal Index Trend")
         fig_sea.update_layout(height=320)
         st.plotly_chart(fig_sea, use_container_width=True)
+        
+        st.markdown('<div style="margin-top: 1rem;"></div>', unsafe_allow_html=True)
         
         # Bottom Left Metrics
         st.markdown(f"""
@@ -1014,6 +1018,7 @@ elif navigation_option == "Season":
         """, unsafe_allow_html=True)
 
     # PROCEED BUTTON
+    st.markdown('<div style="margin-top: 1.75rem;"></div>', unsafe_allow_html=True)
     col_proc1, col_proc2, col_proc3 = st.columns([1, 1.5, 1])
     with col_proc2:
         st.button("PROCEED", key="btn_proceed_season", on_click=navigate_to_page, args=("Energy L.",), use_container_width=True)
