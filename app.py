@@ -968,9 +968,49 @@ elif navigation_option == "Scenario":
 
 # --- 8. OPTIMIZATION ---
 elif navigation_option == "Optimization":
-    st.markdown('<h2 style="font-size: 1.5rem; font-weight: 800; color: #0F172A; margin-bottom: 0.5rem;">Mathematical Optimization & Target Monitor</h2>', unsafe_allow_html=True)
-    st.markdown('<p style="font-size: 0.88rem; color: #64748B; margin-bottom: 1.25rem;">Linear goal programming optimization and operational target monitoring tool.</p>', unsafe_allow_html=True)
+    st.markdown('<h2 style="font-size: 1.5rem; font-weight: 800; color: #0F172A; margin-bottom: 0.5rem;">ENERGYSCAPE OPTIMIZATION</h2>', unsafe_allow_html=True)
+    st.markdown('<p style="font-size: 0.88rem; color: #64748B; margin-bottom: 1.25rem;">Linear Goal Programming Optimization & Operational Constraints</p>', unsafe_allow_html=True)
     
+    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 0.25rem; margin-bottom: 0.75rem;">OBJECTIVE FUNCTION</h3>', unsafe_allow_html=True)
+    opt_goal = st.selectbox(
+        "Optimization Objective",
+        [
+            "MINIMIZE ELECTRICITY + COST + CO₂",
+            "MINIMIZE ELECTRICITY LOAD (kWh)",
+            "MINIMIZE OPERATIONAL EXPENDITURE (₱)",
+            "MINIMIZE GREENHOUSE GAS EMISSIONS (kg CO₂e)"
+        ],
+        label_visibility="collapsed"
+    )
+    
+    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 1rem; margin-bottom: 0.75rem;">OPERATIONAL CONSTRAINTS:</h3>', unsafe_allow_html=True)
+    col_c1, col_c2, col_c3 = st.columns(3)
+    with col_c1:
+        st.markdown("""
+        <div class="ui-card" style="padding: 1rem 1.25rem !important;">
+            <div class="kpi-label">MAXIMUM AIR CONDITIONER REDUCTION</div>
+            <div style="font-size: 1.3rem; font-weight: 800; color: #1E3A8A;">15% Limit</div>
+        </div>
+        """, unsafe_allow_html=True)
+    with col_c2:
+        st.markdown("""
+        <div class="ui-card" style="padding: 1rem 1.25rem !important;">
+            <div class="kpi-label">MAXIMUM COMPUTERS REDUCTION</div>
+            <div style="font-size: 1.3rem; font-weight: 800; color: #1E3A8A;">15% Limit</div>
+        </div>
+        """, unsafe_allow_html=True)
+    with col_c3:
+        st.markdown("""
+        <div class="ui-card" style="padding: 1rem 1.25rem !important;">
+            <div class="kpi-label">MAXIMUM LIGHTING & OTHER REDUCTION</div>
+            <div style="font-size: 1.3rem; font-weight: 800; color: #1E3A8A;">10% Limit</div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+    col_r1, col_r2, col_r3 = st.columns([1, 1.5, 1])
+    with col_r2:
+        run_opt = st.button("⚡ RUN OPTIMIZATION", key="btn_run_opt", use_container_width=True)
+        
     op1, op2, op3, op4 = st.columns(4)
     with op1:
         st.markdown(f"""
@@ -1005,7 +1045,7 @@ elif navigation_option == "Optimization":
         </div>
         """, unsafe_allow_html=True)
         
-    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 0.25rem; margin-bottom: 0.75rem;">Optimized Baseline vs Target Comparison Table</h3>', unsafe_allow_html=True)
+    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 0.5rem; margin-bottom: 0.75rem;">Optimized Baseline vs Target Comparison Table</h3>', unsafe_allow_html=True)
     opt_table = pd.DataFrame([
         {"Indicator": "Monthly Electricity Consumption", "BAU/Current": format_kwh(opt_res["bau_monthly_kwh"]), "Optimized Target": format_kwh(opt_res["optimized_monthly_kwh"]), "Reduction": format_kwh(opt_res["monthly_kwh_savings"])},
         {"Indicator": "Annual Electricity Consumption", "BAU/Current": format_kwh(opt_res["bau_monthly_kwh"] * 12), "Optimized Target": format_kwh(opt_res["optimized_monthly_kwh"] * 12), "Reduction": format_kwh(opt_res["annual_kwh_savings"])},
@@ -1025,7 +1065,7 @@ elif navigation_option == "Optimization":
     mon_res = monitor_target_consumption(actual_input, target_input)
     if mon_res["is_on_target"]:
         st.markdown(f"""
-        <div style="background-color: #ECFDF5; border: 1.5px solid #10B981; border-radius: 12px; padding: 1.25rem 1.5rem; display: flex; align-items: center; justify-content: space-between; margin-top: 0.5rem;">
+        <div style="background-color: #ECFDF5; border: 1.5px solid #10B981; border-radius: 12px; padding: 1.25rem 1.5rem; display: flex; align-items: center; justify-content: space-between; margin-top: 0.5rem; margin-bottom: 1.25rem;">
             <div>
                 <h4 style="color: #065F46; font-size: 1.05rem; font-weight: 700; margin: 0;">STATUS: COMPLIANT WITH ENERGY TARGET</h4>
                 <p style="color: #047857; font-size: 0.88rem; margin: 0.25rem 0 0 0;">Actual consumption ({format_kwh(mon_res['actual_kwh'])}) is below target ceiling ({format_kwh(mon_res['target_kwh'])}).</p>
@@ -1035,7 +1075,7 @@ elif navigation_option == "Optimization":
         """, unsafe_allow_html=True)
     else:
         st.markdown(f"""
-        <div style="background-color: #FEF2F2; border: 1.5px solid #EF4444; border-radius: 12px; padding: 1.25rem 1.5rem; display: flex; align-items: center; justify-content: space-between; margin-top: 0.5rem;">
+        <div style="background-color: #FEF2F2; border: 1.5px solid #EF4444; border-radius: 12px; padding: 1.25rem 1.5rem; display: flex; align-items: center; justify-content: space-between; margin-top: 0.5rem; margin-bottom: 1.25rem;">
             <div>
                 <h4 style="color: #991B1B; font-size: 1.05rem; font-weight: 700; margin: 0;">STATUS: EXCEEDS ENERGY TARGET (ACTION REQUIRED)</h4>
                 <p style="color: #B91C1C; font-size: 0.88rem; margin: 0.25rem 0 0 0;">Actual consumption ({format_kwh(mon_res['actual_kwh'])}) exceeds target benchmark by {format_kwh(mon_res['difference_kwh'])}.</p>
@@ -1043,6 +1083,13 @@ elif navigation_option == "Optimization":
             <span class="pill-badge-red" style="font-size: 0.95rem; padding: 0.4rem 1rem;">ACTION REQUIRED</span>
         </div>
         """, unsafe_allow_html=True)
+
+    # PROCEED BUTTON
+    col_proc1, col_proc2, col_proc3 = st.columns([1, 1.5, 1])
+    with col_proc2:
+        if st.button("PROCEED ➔", key="btn_proceed_opt", use_container_width=True):
+            st.session_state["nav_selection"] = "Impact"
+            st.rerun()
 
 # --- 9. IMPACT ---
 elif navigation_option == "Impact":
