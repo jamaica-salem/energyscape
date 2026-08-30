@@ -313,23 +313,17 @@ st.markdown("""
         font-size: 0.875rem !important;
     }
     
-    /* Form Inputs, Selectboxes, Search Bar & Dropdown Fields - No Black Borders */
+    /* Form Inputs, Selectboxes & Dropdown Fields */
     div[data-baseweb="select"],
     div[data-baseweb="select"] *,
     div[data-baseweb="base-input"],
     div[data-baseweb="base-input"] *,
-    div[data-baseweb="input"],
-    div[data-baseweb="input"] *,
-    div[data-testid="stTextInput"],
-    div[data-testid="stTextInput"] *,
     div[data-testid="stNumberInputContainer"],
     div[data-testid="stNumberInputContainer"] *,
     div[data-testid="stSelectbox"] *,
     div[data-testid="stMultiSelect"] *,
     button[data-testid*="stNumberInputStep"],
-    input[type="number"],
-    input[type="text"],
-    input {
+    input[type="number"] {
         background-color: #FFFFFF !important;
         color: #111827 !important;
         border-color: #EAECF0 !important;
@@ -341,22 +335,40 @@ st.markdown("""
 
     div[data-baseweb="select"]:hover *,
     div[data-baseweb="select"]:focus-within *,
-    div[data-baseweb="input"]:hover *,
-    div[data-baseweb="input"]:focus-within *,
-    div[data-baseweb="input"]:active *,
-    div[data-testid="stTextInput"]:hover *,
-    div[data-testid="stTextInput"]:focus-within *,
-    div[data-testid="stTextInput"]:active *,
     div[data-testid="stSelectbox"]:hover *,
     div[data-testid="stSelectbox"]:focus-within *,
     div[data-testid="stMultiSelect"]:hover *,
-    div[data-testid="stMultiSelect"]:focus-within *,
-    input:hover,
-    input:focus,
-    input:active,
-    input:focus-visible {
+    div[data-testid="stMultiSelect"]:focus-within * {
         border-color: #0B4F46 !important;
         box-shadow: 0 0 0 1px #0B4F46 !important;
+        outline: none !important;
+        outline-width: 0 !important;
+    }
+
+    /* ABSOLUTE ZERO EFFECT & ZERO BLACK BORDER ON SEARCH BAR AT ALL TIMES */
+    div[data-testid="stTextInput"],
+    div[data-testid="stTextInput"] *,
+    div[data-testid="stTextInput"] input,
+    div[data-testid="stTextInput"] div,
+    div[data-testid="stTextInput"] [data-baseweb="input"],
+    div[data-testid="stTextInput"] [data-baseweb="base-input"],
+    div[data-testid="stTextInput"]:hover,
+    div[data-testid="stTextInput"]:hover *,
+    div[data-testid="stTextInput"]:focus,
+    div[data-testid="stTextInput"]:focus *,
+    div[data-testid="stTextInput"]:focus-within,
+    div[data-testid="stTextInput"]:focus-within *,
+    div[data-testid="stTextInput"]:active,
+    div[data-testid="stTextInput"]:active *,
+    div[data-testid="stTextInput"] input:hover,
+    div[data-testid="stTextInput"] input:focus,
+    div[data-testid="stTextInput"] input:active,
+    div[data-testid="stTextInput"] input:focus-visible {
+        border: 1px solid #EAECF0 !important;
+        border-color: #EAECF0 !important;
+        border-radius: 9999px !important;
+        background-color: #FFFFFF !important;
+        box-shadow: none !important;
         outline: none !important;
         outline-width: 0 !important;
     }
