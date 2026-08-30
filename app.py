@@ -1208,59 +1208,52 @@ elif navigation_option == "Reports":
     
     report_school = st.selectbox("Selected School", ["An-anaao Integrated School", "La Paz Integrated School"], index=0, key="report_school_select")
     
-    st.markdown(f"""
-    <div class="ui-card" style="border-left: 6px solid #166534 !important; padding: 1.5rem 1.75rem !important;">
-        <div style="font-size: 1.15rem; font-weight: 800; color: #0F172A; margin-bottom: 1rem;">
-            School: <span style="color: #166534;">{report_school}</span>
-        </div>
-        
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
-            <div style="background: #F8FAFC; padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid #E2E8F0;">
-                <div class="kpi-label" style="color: #1E3A8A !important;">SEASONAL FINDING</div>
-                <div style="font-size: 0.95rem; font-weight: 700; color: #0F172A; margin-top: 0.3rem;">
-                    Peak consumption: <span style="color: #D97706;">April – May (Seasonal Index: 1.24)</span>
-                </div>
-            </div>
-            
-            <div style="background: #F8FAFC; padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid #E2E8F0;">
-                <div class="kpi-label" style="color: #1E3A8A !important;">ENERGY LOAD</div>
-                <div style="font-size: 0.95rem; font-weight: 700; color: #0F172A; margin-top: 0.3rem;">
-                    Priority load: <span style="color: #DC2626;">Air Conditioner (792.00 kWh/mo, 34.6% share)</span>
-                </div>
-            </div>
-            
-            <div style="background: #F8FAFC; padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid #E2E8F0;">
-                <div class="kpi-label" style="color: #1E3A8A !important;">FORECAST</div>
-                <div style="font-size: 0.95rem; font-weight: 700; color: #0F172A; margin-top: 0.3rem;">
-                    Expected consumption: <span style="color: #1E3A8A;">₱15,114.62 / month (MAPE: 12.52%)</span>
-                </div>
-            </div>
-            
-            <div style="background: #F8FAFC; padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid #E2E8F0;">
-                <div class="kpi-label" style="color: #1E3A8A !important;">CARBON</div>
-                <div style="font-size: 0.95rem; font-weight: 700; color: #0F172A; margin-top: 0.3rem;">
-                    Projected emissions: <span style="color: #166534;">19,228.44 kg CO₂e / year</span>
-                </div>
-            </div>
-            
-            <div style="background: #F8FAFC; padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid #E2E8F0; grid-column: span 2;">
-                <div class="kpi-label" style="color: #1E3A8A !important;">OPTIMIZATION</div>
-                <div style="font-size: 0.95rem; font-weight: 700; color: #0F172A; margin-top: 0.3rem;">
-                    Recommended strategy: <span style="color: #166534;">15% Multi-Tier Duty Cycle Optimization (1,945.73 kWh / mo target)</span>
-                </div>
-            </div>
-            
-            <div style="background: #ECFDF5; padding: 1.2rem 1.25rem; border-radius: 12px; border: 1px solid #A7F3D0; grid-column: span 2;">
-                <div class="kpi-label" style="color: #065F46 !important;">IMPACT & SAVINGS</div>
-                <div style="font-size: 0.95rem; font-weight: 700; color: #065F46; margin-top: 0.4rem; line-height: 1.6;">
-                    Energy saved: <strong>4,120.44 kWh / year</strong><br>
-                    Cost saved: <strong>₱45,324.84 / year</strong><br>
-                    CO₂ avoided: <strong>2,884.31 kg CO₂e / year</strong>
-                </div>
-            </div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+    report_html = f"""<div class="ui-card" style="border-left: 6px solid #166534 !important; padding: 1.5rem 1.75rem !important;">
+<div style="font-size: 1.15rem; font-weight: 800; color: #0F172A; margin-bottom: 1rem;">
+School: <span style="color: #166534;">{report_school}</span>
+</div>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+<div style="background: #F8FAFC; padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid #E2E8F0;">
+<div class="kpi-label" style="color: #1E3A8A !important;">SEASONAL FINDING</div>
+<div style="font-size: 0.95rem; font-weight: 700; color: #0F172A; margin-top: 0.3rem;">
+Peak consumption: <span style="color: #D97706;">April – May (Seasonal Index: 1.24)</span>
+</div>
+</div>
+<div style="background: #F8FAFC; padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid #E2E8F0;">
+<div class="kpi-label" style="color: #1E3A8A !important;">ENERGY LOAD</div>
+<div style="font-size: 0.95rem; font-weight: 700; color: #0F172A; margin-top: 0.3rem;">
+Priority load: <span style="color: #DC2626;">Air Conditioner (792.00 kWh/mo, 34.6% share)</span>
+</div>
+</div>
+<div style="background: #F8FAFC; padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid #E2E8F0;">
+<div class="kpi-label" style="color: #1E3A8A !important;">FORECAST</div>
+<div style="font-size: 0.95rem; font-weight: 700; color: #0F172A; margin-top: 0.3rem;">
+Expected consumption: <span style="color: #1E3A8A;">₱15,114.62 / month (MAPE: 12.52%)</span>
+</div>
+</div>
+<div style="background: #F8FAFC; padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid #E2E8F0;">
+<div class="kpi-label" style="color: #1E3A8A !important;">CARBON</div>
+<div style="font-size: 0.95rem; font-weight: 700; color: #0F172A; margin-top: 0.3rem;">
+Projected emissions: <span style="color: #166534;">19,228.44 kg CO₂e / year</span>
+</div>
+</div>
+<div style="background: #F8FAFC; padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid #E2E8F0; grid-column: span 2;">
+<div class="kpi-label" style="color: #1E3A8A !important;">OPTIMIZATION</div>
+<div style="font-size: 0.95rem; font-weight: 700; color: #0F172A; margin-top: 0.3rem;">
+Recommended strategy: <span style="color: #166534;">15% Multi-Tier Duty Cycle Optimization (1,945.73 kWh / mo target)</span>
+</div>
+</div>
+<div style="background: #ECFDF5; padding: 1.2rem 1.25rem; border-radius: 12px; border: 1px solid #A7F3D0; grid-column: span 2;">
+<div class="kpi-label" style="color: #065F46 !important;">IMPACT & SAVINGS</div>
+<div style="font-size: 0.95rem; font-weight: 700; color: #065F46; margin-top: 0.4rem; line-height: 1.6;">
+Energy saved: <strong>4,120.44 kWh / year</strong><br>
+Cost saved: <strong>₱45,324.84 / year</strong><br>
+CO₂ avoided: <strong>2,884.31 kg CO₂e / year</strong>
+</div>
+</div>
+</div>
+</div>"""
+    st.markdown(report_html, unsafe_allow_html=True)
     
     col_gen1, col_gen2, col_gen3 = st.columns([1, 1.5, 1])
     with col_gen2:
