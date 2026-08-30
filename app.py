@@ -339,24 +339,30 @@ st.markdown("""
 # ----------------------------------------------------
 # SIDEBAR NAVIGATION (EXACT 10 ITEMS - NO EMOJIS)
 # ----------------------------------------------------
+NAV_OPTIONS = [
+    "Dashboard",
+    "Data Input",
+    "Season",
+    "Energy L.",
+    "Forecast",
+    "Carbon",
+    "Scenario",
+    "Optimization",
+    "Impact",
+    "Reports"
+]
+
+if "nav_selection" not in st.session_state or st.session_state["nav_selection"] not in NAV_OPTIONS:
+    st.session_state["nav_selection"] = "Dashboard"
+
 with st.sidebar:
     st.markdown('<div class="sidebar-brand">⚡ <span>ENERGYSCAPE</span></div>', unsafe_allow_html=True)
     
     st.markdown('<div class="sidebar-section-header">NAVIGATION VIEWS</div>', unsafe_allow_html=True)
     navigation_option = st.radio(
         "Navigation",
-        [
-            "Dashboard",
-            "Data Input",
-            "Season",
-            "Energy L.",
-            "Forecast",
-            "Carbon",
-            "Scenario",
-            "Optimization",
-            "Impact",
-            "Reports"
-        ],
+        NAV_OPTIONS,
+        key="nav_selection",
         label_visibility="collapsed"
     )
     
@@ -578,6 +584,13 @@ if navigation_option == "Dashboard":
         </div>
     </div>
     """, unsafe_allow_html=True)
+
+    # PROCEED BUTTON TO DATA INPUT
+    col_proc1, col_proc2, col_proc3 = st.columns([1, 1.5, 1])
+    with col_proc2:
+        if st.button("PROCEED ➔", key="btn_proceed_dashboard", use_container_width=True):
+            st.session_state["nav_selection"] = "Data Input"
+            st.rerun()
 
 # --- 2. DATA INPUT ---
 elif navigation_option == "Data Input":
