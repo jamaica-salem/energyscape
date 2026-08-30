@@ -492,13 +492,13 @@ if navigation_option == "Dashboard":
             st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 0.25rem; margin-bottom: 0.75rem;">ELECTRICITY TREND</h3>', unsafe_allow_html=True)
             plot_df = historical_df[historical_df['bill_php'].notna()]
             if school_selection != "Both":
-                plot_df = plot_df[plot_df['school_name'] == school_selection]
+                plot_df = plot_df[plot_df['school'] == school_selection]
                 
             fig_tr = px.line(
                 plot_df, 
                 x="date_dt", 
                 y="bill_php", 
-                color="school_name" if school_selection == "Both" else None,
+                color="school" if school_selection == "Both" else None,
                 markers=True,
                 height=390
             )
