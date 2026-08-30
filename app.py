@@ -824,38 +824,51 @@ elif navigation_option == "Forecast":
 
 # --- 6. CARBON ---
 elif navigation_option == "Carbon":
-    st.markdown('<h2 style="font-size: 1.5rem; font-weight: 800; color: #0F172A; margin-bottom: 0.5rem;">Greenhouse Gas & Carbon Footprint Audit</h2>', unsafe_allow_html=True)
-    st.markdown('<p style="font-size: 0.88rem; color: #64748B; margin-bottom: 1.25rem;">Quantify electricity-related Scope 2 emissions based on grid emission factors.</p>', unsafe_allow_html=True)
+    st.markdown('<h2 style="font-size: 1.5rem; font-weight: 800; color: #0F172A; margin-bottom: 0.5rem;">CARBON EMISSION QUANTIFICATION</h2>', unsafe_allow_html=True)
+    st.markdown('<p style="font-size: 0.88rem; color: #64748B; margin-bottom: 1.25rem;">Scope 2 Carbon Footprint Quantification & Projections</p>', unsafe_allow_html=True)
     
     bau = calculate_bau_baseline(load_summary.get("total_kwh", 2289.10), electricity_rate, emission_factor)
+    fc_df = ets_res["forecast_df"]
+    fc_annual_kwh = (fc_df['forecast_bill'].sum() / electricity_rate)
+    fc_annual_co2 = fc_annual_kwh * emission_factor
     
-    c1, c2, c3 = st.columns(3)
-    with c1:
+    col_c1, col_c2 = st.columns(2)
+    with col_c1:
         st.markdown(f"""
-        <div class="ui-card">
-            <div class="kpi-label">BAU Monthly CO₂e</div>
-            <div class="kpi-val">{format_co2(bau["monthly_co2_kg"])}</div>
-            <div style="font-size: 0.78rem; color: #64748B;">Monthly carbon footprint</div>
-        </div>
-        """, unsafe_allow_html=True)
-    with c2:
-        st.markdown(f"""
-        <div class="ui-card">
-            <div class="kpi-label">BAU Annual CO₂e</div>
-            <div class="kpi-val">{format_co2(bau["annual_co2_kg"])}</div>
-            <div style="font-size: 0.78rem; color: #64748B;">Annual total emissions</div>
-        </div>
-        """, unsafe_allow_html=True)
-    with c3:
-        st.markdown(f"""
-        <div class="ui-card">
-            <div class="kpi-label">Emission Factor Baseline</div>
-            <div class="kpi-val">{emission_factor:.2f} kg/kWh</div>
-            <div style="font-size: 0.78rem; color: #64748B;">Grid emission multiplier</div>
+        <div class="ui-card" style="border-left: 6px solid #1D4ED8 !important;">
+            <div class="kpi-label" style="font-size: 0.9rem !important; color: #1E3A8A !important;">BASELINE</div>
+            <div style="font-size: 1.8rem; font-weight: 800; color: #0F172A; margin-top: 0.3rem;">{bau['monthly_co2_kg']:,.2f} kg CO₂e</div>
+            <div style="font-size: 0.82rem; color: #64748B; margin-top: 0.4rem;">
+                Monthly Baseline Footprint ({bau['annual_co2_kg']/1000:.2f} t CO₂e / Year)
+            </div>
         </div>
         """, unsafe_allow_html=True)
         
-    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 0.35rem; margin-bottom: 0.75rem;">Business-as-Usual (BAU) Benchmark Table</h3>', unsafe_allow_html=True)
+    with col_c2:
+        st.markdown(f"""
+        <div class="ui-card" style="border-left: 6px solid #166534 !important;">
+            <div class="kpi-label" style="font-size: 0.9rem !important; color: #166534 !important;">FORECAST</div>
+            <div style="font-size: 1.8rem; font-weight: 800; color: #0F172A; margin-top: 0.3rem;">{(fc_annual_co2/12):,.2f} kg CO₂e</div>
+            <div style="font-size: 0.82rem; color: #64748B; margin-top: 0.4rem;">
+                Projected Monthly Average ({fc_annual_co2/1000:.2f} t CO₂e / Year)
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+    # Projected Annual CO2 Banner
+    st.markdown(f"""
+    <div class="ui-card" style="margin-top: 0.5rem; padding: 1.25rem 1.5rem !important;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <div style="font-size: 1.1rem; font-weight: 800; color: #0F172A;">Projected Annual CO₂</div>
+                <div style="font-size: 0.82rem; color: #64748B;">Calculated with Grid Emission Factor = {emission_factor:.2f} kg CO₂e/kWh</div>
+            </div>
+            <div style="font-size: 1.8rem; font-weight: 800; color: #1E3A8A;">{bau['annual_co2_kg']:,.0f} kg CO₂e</div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+        
+    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 1rem; margin-bottom: 0.75rem;">Business-as-Usual (BAU) Benchmark Table</h3>', unsafe_allow_html=True)
     bau_table = pd.DataFrame([
         {"Indicator": "Monthly Electricity Consumption", "Value": format_kwh(bau["monthly_kwh"])},
         {"Indicator": "Annual Electricity Consumption", "Value": format_kwh(bau["annual_kwh"])},
@@ -865,6 +878,13 @@ elif navigation_option == "Carbon":
         {"Indicator": "Annual Carbon Emissions", "Value": format_co2(bau["annual_co2_kg"])},
     ])
     st.dataframe(bau_table, use_container_width=True)
+
+    # PROCEED BUTTON
+    col_proc1, col_proc2, col_proc3 = st.columns([1, 1.5, 1])
+    with col_proc2:
+        if st.button("PROCEED ➔", key="btn_proceed_carbon", use_container_width=True):
+            st.session_state["nav_selection"] = "Scenario"
+            st.rerun()
 
 # --- 7. SCENARIO ---
 elif navigation_option == "Scenario":
