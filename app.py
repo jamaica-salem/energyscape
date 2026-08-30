@@ -312,20 +312,40 @@ st.markdown("""
         font-weight: 600 !important;
         font-size: 0.875rem !important;
     }
+    
+    /* Form Inputs, Selectboxes & Dropdown Fields - No Black Borders */
     div[data-baseweb="select"],
     div[data-baseweb="select"] > div,
-    div[data-testid="stMultiSelect"] > div,
-    div[data-testid="stSelectbox"] > div,
-    div[data-baseweb="input"],
+    div[data-baseweb="select"] [role="combobox"],
     div[data-baseweb="base-input"],
     div[data-testid="stNumberInputContainer"],
+    div[data-testid="stSelectbox"] > div > div,
+    div[data-testid="stMultiSelect"] > div > div,
     button[data-testid*="stNumberInputStep"],
     input[type="number"],
     input[type="text"] {
         background-color: #FFFFFF !important;
         color: #111827 !important;
         border: 1px solid #EAECF0 !important;
+        border-color: #EAECF0 !important;
         border-radius: 12px !important;
+        box-shadow: none !important;
+        outline: none !important;
+    }
+
+    div[data-baseweb="select"]:hover > div,
+    div[data-baseweb="select"]:focus-within > div,
+    div[data-baseweb="select"] > div:hover,
+    div[data-baseweb="select"] > div:focus,
+    div[data-baseweb="select"] > div:focus-within,
+    div[data-baseweb="select"] > div:active,
+    div[data-testid="stSelectbox"] > div > div:hover,
+    div[data-testid="stSelectbox"] > div > div:focus-within,
+    div[data-testid="stMultiSelect"] > div > div:hover,
+    div[data-testid="stMultiSelect"] > div > div:focus-within {
+        border-color: #0B4F46 !important;
+        box-shadow: 0 0 0 1px #0B4F46 !important;
+        outline: none !important;
     }
 
     /* Multiselect Tag Pills (100% Emerald Green #0B4F46) */
