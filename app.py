@@ -1120,7 +1120,7 @@ elif navigation_option == "Scenario":
 
 # --- 8. OPTIMIZATION ---
 elif navigation_option == "Optimization":
-    st.markdown('<h2 style="font-size: 1.5rem; font-weight: 800; color: #0F172A; margin-bottom: 0.5rem;">ENERGYSCAPE OPTIMIZATION</h2>', unsafe_allow_html=True)
+    st.markdown('<h2 style="font-size: 1.5rem; font-weight: 800; color: #0F172A; margin-bottom: 0.5rem;">OPTIMIZATION</h2>', unsafe_allow_html=True)
     st.markdown('<p style="font-size: 0.88rem; color: #64748B; margin-bottom: 1.25rem;">Linear Goal Programming Optimization & Operational Constraints</p>', unsafe_allow_html=True)
     
     st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 0.25rem; margin-bottom: 0.75rem;">OBJECTIVE FUNCTION</h3>', unsafe_allow_html=True)
@@ -1318,7 +1318,7 @@ elif navigation_option == "Impact":
 
 # --- 10. REPORTS ---
 elif navigation_option == "Reports":
-    st.markdown('<h2 style="font-size: 1.5rem; font-weight: 800; color: #0F172A; margin-bottom: 0.5rem;">COMPARATIVE ANALYSIS & ENERGYSCAPE REPORT</h2>', unsafe_allow_html=True)
+    st.markdown('<h2 style="font-size: 1.5rem; font-weight: 800; color: #0F172A; margin-bottom: 0.5rem;">COMPARATIVE ANALYSIS & REPORT</h2>', unsafe_allow_html=True)
     st.markdown('<p style="font-size: 0.88rem; color: #64748B; margin-bottom: 1.25rem;">Multi-Institutional Comparative Benchmark & Executive Summary Report Generator</p>', unsafe_allow_html=True)
     
     # 1. COMPARATIVE ANALYSIS SECTION (Wireframe 1)
@@ -1351,8 +1351,8 @@ elif navigation_option == "Reports":
         
     st.markdown("<hr style='margin: 2rem 0; border: 0; border-top: 1px solid #E2E8F0;'>", unsafe_allow_html=True)
     
-    # 2. ENERGYSCAPE REPORT SECTION (Wireframe 2)
-    st.markdown('<h3 style="font-size: 1.15rem; font-weight: 800; color: #0F172A; margin-bottom: 0.75rem;">ENERGYSCAPE REPORT</h3>', unsafe_allow_html=True)
+    # 2. EXECUTIVE REPORT SECTION (Wireframe 2)
+    st.markdown('<h3 style="font-size: 1.15rem; font-weight: 800; color: #0F172A; margin-bottom: 0.75rem;">EXECUTIVE REPORT</h3>', unsafe_allow_html=True)
     
     report_school = st.selectbox("Selected School", ["An-anaao Integrated School", "La Paz Integrated School"], index=0, key="report_school_select")
     
