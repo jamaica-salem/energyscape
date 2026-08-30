@@ -552,16 +552,45 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-def render_bankio_table(df: pd.DataFrame, first_col_green: bool = False):
+def filter_dataframe_by_search(df: pd.DataFrame, query: str) -> pd.DataFrame:
+    """
+    Filters any Pandas DataFrame across all string and numeric columns matching the search query.
+    Case-insensitive search.
+    """
+    if not query or df is None or df.empty:
+        return df
+    
+    q = str(query).strip().lower()
+    if not q:
+        return df
+    
+    mask = pd.Series(False, index=df.index)
+    for col in df.columns:
+        col_str = df[col].astype(str).str.lower()
+        mask = mask | col_str.str.contains(q, regex=False, na=False)
+        
+    return df[mask]
+
+def render_bankio_table(df: pd.DataFrame, first_col_green: bool = False, search_query: str = ""):
     """
     Renders a custom HTML table matching the Bankio UI design in IMG_3512.jpeg.
     - TOP HEADER ROW ONLY: Deep Emerald Green (#0B4F46) background with White text (#FFFFFF)
     - Data rows: Crisp white background with dark charcoal text (#111827).
+    - Automatically filters rows when a search query is active!
     """
     if df is None or df.empty:
         return
     
     display_df = df.copy()
+    
+    # Apply global search query filtering if active
+    active_search = search_query if search_query else st.session_state.get("global_search_term", "")
+    if active_search:
+        display_df = filter_dataframe_by_search(display_df, active_search)
+        
+    if display_df.empty:
+        st.markdown(f'<div style="padding: 1rem 1.25rem; color: #6B7280; font-size: 0.88rem; font-style: italic; background: #FFFFFF; border: 1px solid #EAECF0; border-radius: 12px; margin: 0.75rem 0;">No matching records found for "{active_search}".</div>', unsafe_allow_html=True)
+        return
     
     html = ['<div class="bankio-table-container">']
     html.append('<table class="bankio-table">')
@@ -717,7 +746,29 @@ with top_c1:
     badge_html = '<span class="pill-badge-green">Decision Support System</span>' if navigation_option == "Dashboard" else ''
     st.markdown(f'<div style="margin-bottom: 0.5rem;"><div style="display: flex; align-items: center; gap: 12px;"><h1 style="font-size: 1.75rem; font-weight: 700; color: #111827; margin: 0; letter-spacing: -0.02em;">{current_page_title}</h1>{badge_html}</div>{greeting_sub}</div>', unsafe_allow_html=True)
 with top_c2:
-    search_term = st.text_input("Search", placeholder="🔍 Search dashboard metrics...", label_visibility="collapsed")
+    search_term = st.text_input("Search", placeholder="🔍 Search dashboard metrics...", label_visibility="collapsed", key="global_search_input")
+    st.session_state["global_search_term"] = search_term
+
+# Render Search Active Status Banner if user enters a search term
+if search_term and search_term.strip():
+    c_s1, c_s2 = st.columns([4, 1])
+    with c_s1:
+        st.markdown(f"""
+        <div class="ui-card" style="padding: 0.75rem 1.25rem !important; margin-bottom: 1.25rem !important; border-left: 4px solid #0B4F46 !important; background-color: #E8F5E9 !important;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                    <span style="font-size: 0.85rem; font-weight: 700; color: #1B5E20;">🔍 SEARCH FILTER ACTIVE:</span>
+                    <span style="font-size: 0.9rem; font-weight: 800; color: #0B4F46; margin-left: 8px;">"{search_term.strip()}"</span>
+                </div>
+                <span style="font-size: 0.8rem; color: #1B5E20;">Filtering system tables & metrics matching query</span>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+    with c_s2:
+        if st.button("CLEAR SEARCH", key="btn_clear_search", use_container_width=True):
+            st.session_state["global_search_input"] = ""
+            st.session_state["global_search_term"] = ""
+            st.rerun()
 
 # ----------------------------------------------------
 # NAVIGATION VIEWS IMPLEMENTATION
@@ -1028,7 +1079,8 @@ elif navigation_option == "Energy L.":
     st.markdown('<p style="font-size: 0.88rem; color: #64748B; margin-bottom: 1.25rem;">Appliance Electrical Load & Consumption Breakdown</p>', unsafe_allow_html=True)
     
     # Horizontal Bar Chart for Appliance Load Characterization
-    apps_chart_df = apps_processed.sort_values(by='monthly_kwh', ascending=True)
+    apps_filtered = filter_dataframe_by_search(apps_processed, search_term)
+    apps_chart_df = apps_filtered.sort_values(by='monthly_kwh', ascending=True)
     
     # Soothing Matcha & Dark Forest Green Palette (No Bright/Neon Greens)
     green_bar_palette = ["#063B34", "#0B4F46", "#194D40", "#286654", "#3C826D", "#5A9E87", "#7CAF9B", "#A0CFC0"]
