@@ -296,7 +296,7 @@ st.markdown("""
     div[data-baseweb="tag"],
     span[data-baseweb="tag"] *,
     div[data-baseweb="tag"] * {
-        background-color: #1D4ED8 !important;
+        background-color: #0D9488 !important;
         color: #FFFFFF !important;
         fill: #FFFFFF !important;
     }
@@ -305,6 +305,33 @@ st.markdown("""
         border-radius: 8px !important;
         padding: 3px 10px !important;
         margin: 2px !important;
+    }
+
+    /* Vibrant Green Action Buttons Styling */
+    div.stButton > button,
+    button[data-testid="stBaseButton-secondary"],
+    button[data-testid="stBaseButton-primary"] {
+        background: linear-gradient(135deg, #166534 0%, #15803D 50%, #16A34A 100%) !important;
+        color: #FFFFFF !important;
+        border: none !important;
+        border-radius: 9999px !important;
+        padding: 0.65rem 1.75rem !important;
+        font-weight: 800 !important;
+        font-size: 0.95rem !important;
+        letter-spacing: 0.03em !important;
+        box-shadow: 0 4px 14px rgba(22, 101, 52, 0.35) !important;
+        transition: all 0.2s ease !important;
+    }
+    div.stButton > button:hover,
+    button[data-testid="stBaseButton-secondary"]:hover,
+    button[data-testid="stBaseButton-primary"]:hover {
+        background: linear-gradient(135deg, #15803D 0%, #16A34A 50%, #22C55E 100%) !important;
+        color: #FFFFFF !important;
+        box-shadow: 0 6px 20px rgba(22, 101, 52, 0.45) !important;
+        transform: translateY(-2px) !important;
+    }
+    div.stButton > button * {
+        color: #FFFFFF !important;
     }
 </style>
 """, unsafe_allow_html=True)
