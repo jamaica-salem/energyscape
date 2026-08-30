@@ -341,8 +341,18 @@ st.markdown("""
         outline: none !important;
     }
 
-    /* ABSOLUTE ZERO EFFECT & ZERO BLACK BORDER ON SEARCH BAR AT ALL TIMES */
+    /* ABSOLUTE CLEAN SEARCH BAR - NO WHITE RECTANGLE BACKGROUND CONTAINER */
+    div[data-testid="stTextInput"] {
+        background-color: transparent !important;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        outline: none !important;
+        border-radius: 9999px !important;
+    }
     div[data-testid="stTextInput"] > div,
+    div[data-testid="stTextInput"] [data-baseweb="input"],
+    div[data-testid="stTextInput"] [data-baseweb="base-input"],
     div[data-testid="stTextInput"] input {
         border: 1px solid #EAECF0 !important;
         border-color: #EAECF0 !important;
@@ -351,11 +361,10 @@ st.markdown("""
         box-shadow: none !important;
         outline: none !important;
     }
-    div[data-testid="stTextInput"] > div:hover,
-    div[data-testid="stTextInput"] > div:focus-within,
-    div[data-testid="stTextInput"] input:hover,
-    div[data-testid="stTextInput"] input:focus {
-        border: 1px solid #EAECF0 !important;
+    div[data-testid="stTextInput"] *:hover,
+    div[data-testid="stTextInput"] *:focus,
+    div[data-testid="stTextInput"] *:focus-within,
+    div[data-testid="stTextInput"] *:active {
         border-color: #EAECF0 !important;
         box-shadow: none !important;
         outline: none !important;
