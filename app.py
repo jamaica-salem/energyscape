@@ -93,31 +93,31 @@ st.markdown("""
         box-shadow: 0 12px 28px -4px rgba(15, 23, 42, 0.09) !important;
     }
 
-    /* Color-accented Card Variants */
+    /* Strict Blue-Green Color-accented Card Variants */
     .card-emerald {
         border-top: 5px solid #10B981 !important;
         background: linear-gradient(180deg, #F0FDF4 0%, #FFFFFF 100%) !important;
     }
+    .card-teal {
+        border-top: 5px solid #0D9488 !important;
+        background: linear-gradient(180deg, #F0FDFA 0%, #FFFFFF 100%) !important;
+    }
     .card-blue {
-        border-top: 5px solid #3B82F6 !important;
+        border-top: 5px solid #2563EB !important;
         background: linear-gradient(180deg, #EFF6FF 0%, #FFFFFF 100%) !important;
     }
-    .card-amber {
-        border-top: 5px solid #F59E0B !important;
-        background: linear-gradient(180deg, #FFFBEB 0%, #FFFFFF 100%) !important;
-    }
-    .card-purple {
-        border-top: 5px solid #8B5CF6 !important;
-        background: linear-gradient(180deg, #F5F3FF 0%, #FFFFFF 100%) !important;
+    .card-cyan {
+        border-top: 5px solid #06B6D4 !important;
+        background: linear-gradient(180deg, #ECFEFF 0%, #FFFFFF 100%) !important;
     }
 
-    /* Hero Card (CURRENT CONSUMPTION - Green/Blue Energy Landscape Theme) */
+    /* Hero Card (CURRENT CONSUMPTION - Strict Blue-Green Gradient Theme) */
     .hero-consumption-card {
-        background: linear-gradient(135deg, #059669 0%, #0F4C81 50%, #166534 100%) !important;
+        background: linear-gradient(135deg, #0F4C81 0%, #0D9488 50%, #166534 100%) !important;
         border-radius: 20px !important;
         padding: 1.75rem 2.25rem !important;
         color: #FFFFFF !important;
-        box-shadow: 0 12px 32px -5px rgba(16, 185, 129, 0.32) !important;
+        box-shadow: 0 12px 32px -5px rgba(13, 148, 136, 0.35) !important;
         margin-bottom: 1.75rem !important;
         position: relative !important;
         overflow: hidden !important;
@@ -125,7 +125,7 @@ st.markdown("""
     }
     .hero-card-label {
         font-size: 0.85rem !important;
-        color: #86EFAC !important;
+        color: #99F6E4 !important;
         font-weight: 700 !important;
         text-transform: uppercase !important;
         letter-spacing: 0.08em !important;
@@ -147,10 +147,10 @@ st.markdown("""
     }
     .hero-subtext {
         font-size: 0.85rem !important;
-        color: #DCFCE7 !important;
+        color: #CCFBF1 !important;
     }
 
-    /* Vibrant Pill Badges */
+    /* Blue-Green Pill Badges */
     .pill-badge-blue {
         background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%) !important;
         color: #1E40AF !important;
@@ -161,7 +161,19 @@ st.markdown("""
         display: inline-flex !important;
         align-items: center !important;
         white-space: nowrap !important;
-        box-shadow: 0 2px 6px rgba(59, 130, 246, 0.15) !important;
+        box-shadow: 0 2px 6px rgba(37, 99, 235, 0.15) !important;
+    }
+    .pill-badge-teal {
+        background: linear-gradient(135deg, #CCFBF1 0%, #99F6E4 100%) !important;
+        color: #0F766E !important;
+        padding: 0.3rem 0.75rem !important;
+        border-radius: 9999px !important;
+        font-size: 0.75rem !important;
+        font-weight: 800 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        white-space: nowrap !important;
+        box-shadow: 0 2px 6px rgba(13, 148, 136, 0.15) !important;
     }
     .pill-badge-green {
         background: linear-gradient(135deg, #DCFCE7 0%, #BBF7D0 100%) !important;
@@ -174,30 +186,6 @@ st.markdown("""
         align-items: center !important;
         white-space: nowrap !important;
         box-shadow: 0 2px 6px rgba(34, 197, 94, 0.15) !important;
-    }
-    .pill-badge-red {
-        background: linear-gradient(135deg, #FEE2E2 0%, #FCA5A5 100%) !important;
-        color: #991B1B !important;
-        padding: 0.3rem 0.75rem !important;
-        border-radius: 9999px !important;
-        font-size: 0.75rem !important;
-        font-weight: 800 !important;
-        display: inline-flex !important;
-        align-items: center !important;
-        white-space: nowrap !important;
-        box-shadow: 0 2px 6px rgba(239, 68, 68, 0.15) !important;
-    }
-    .pill-badge-amber {
-        background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%) !important;
-        color: #92400E !important;
-        padding: 0.3rem 0.75rem !important;
-        border-radius: 9999px !important;
-        font-size: 0.75rem !important;
-        font-weight: 800 !important;
-        display: inline-flex !important;
-        align-items: center !important;
-        white-space: nowrap !important;
-        box-shadow: 0 2px 6px rgba(245, 158, 11, 0.15) !important;
     }
 
     /* Metric Display */
@@ -388,10 +376,10 @@ except Exception as e:
     st.stop()
 
 # ----------------------------------------------------
-# VIBRANT PLOTLY STYLING HELPER
+# STRICT BLUE-GREEN PLOTLY STYLING HELPER
 # ----------------------------------------------------
-BLUE_PALETTE = ["#0F4C81", "#1D4ED8", "#2563EB", "#3B82F6", "#60A5FA", "#93C5FD", "#BFDBFE"]
-VIBRANT_PALETTE = ["#10B981", "#3B82F6", "#F59E0B", "#8B5CF6", "#EC4899", "#06B6D4", "#F97316"]
+BLUE_PALETTE = ["#0F4C81", "#0D9488", "#10B981", "#06B6D4", "#2563EB", "#14B8A6", "#0284C7"]
+BLUE_GREEN_PALETTE = ["#0F4C81", "#0D9488", "#10B981", "#06B6D4", "#2563EB", "#14B8A6", "#0284C7"]
 
 def apply_blue_theme(fig, title=""):
     fig.update_layout(
@@ -459,7 +447,7 @@ if navigation_option == "Dashboard":
                 <div class="hero-card-label">Baseline Operational Audit</div>
                 <div class="hero-card-title" style="margin-bottom: 0 !important;">CURRENT CONSUMPTION</div>
             </div>
-            <span class="pill-badge-green" style="font-size: 0.85rem; padding: 0.35rem 0.85rem;">{target_school}</span>
+            <span class="pill-badge-teal" style="font-size: 0.85rem; padding: 0.35rem 0.85rem;">{target_school}</span>
         </div>
         <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.75rem; align-items: center; background: rgba(255, 255, 255, 0.08); padding: 1.25rem 1.5rem; border-radius: 14px;">
             <div>
@@ -491,7 +479,7 @@ if navigation_option == "Dashboard":
         
         for idx, row in top_apps.iterrows():
             st.markdown(f"""
-            <div class="ui-card" style="margin-bottom: 0.85rem !important; padding: 1.1rem 1.35rem !important;">
+            <div class="ui-card card-teal" style="margin-bottom: 0.85rem !important; padding: 1.1rem 1.35rem !important;">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <div>
                         <div style="font-weight: 800; font-size: 1rem; color: #0F172A;">{row['appliance']}</div>
@@ -499,7 +487,7 @@ if navigation_option == "Dashboard":
                             <strong>{format_kwh(row['monthly_kwh'])}</strong> ({row['percentage_share']:.1f}% share) | {format_currency(row['monthly_cost_php'])}/mo
                         </div>
                     </div>
-                    <span class="pill-badge-red" style="font-size: 0.78rem; padding: 0.3rem 0.75rem;">{row['priority']}</span>
+                    <span class="pill-badge-teal" style="font-size: 0.78rem; padding: 0.3rem 0.75rem;">{row['priority']}</span>
                 </div>
             </div>
             """, unsafe_allow_html=True)
@@ -510,19 +498,19 @@ if navigation_option == "Dashboard":
         avg_fc_bill = fc_df['forecast_bill'].mean()
         
         st.markdown(f"""
-        <div class="ui-card" style="margin-bottom: 0.85rem !important; padding: 1.1rem 1.35rem !important;">
+        <div class="ui-card card-blue" style="margin-bottom: 0.85rem !important; padding: 1.1rem 1.35rem !important;">
             <div class="kpi-label">Projected Monthly Avg ({forecast_horizon} Months)</div>
-            <div class="kpi-val" style="font-size: 1.6rem;">{format_currency(avg_fc_bill)}</div>
+            <div class="kpi-val" style="font-size: 1.6rem; color: #1E3A8A;">{format_currency(avg_fc_bill)}</div>
             <div style="margin-top: 0.4rem; font-size: 0.82rem; color: #64748B;">
-                MAPE Accuracy: <span style="color: #166534; font-weight: 800;">{ets_res['val_mape']:.2f}%</span> | RMSE: <strong>{format_currency(ets_res['val_rmse'])}</strong>
+                MAPE Accuracy: <span style="color: #0D9488; font-weight: 800;">{ets_res['val_mape']:.2f}%</span> | RMSE: <strong>{format_currency(ets_res['val_rmse'])}</strong>
             </div>
         </div>
         """, unsafe_allow_html=True)
         
         st.markdown(f"""
-        <div class="ui-card" style="margin-bottom: 0.85rem !important; padding: 1.1rem 1.35rem !important;">
+        <div class="ui-card card-emerald" style="margin-bottom: 0.85rem !important; padding: 1.1rem 1.35rem !important;">
             <div class="kpi-label">Confidence Interval Range</div>
-            <div style="font-size: 1.15rem; font-weight: 800; color: #1E3A8A; margin-top: 0.2rem;">{format_currency(fc_df['lower_bound'].mean())} – {format_currency(fc_df['upper_bound'].mean())}</div>
+            <div style="font-size: 1.15rem; font-weight: 800; color: #065F46; margin-top: 0.2rem;">{format_currency(fc_df['lower_bound'].mean())} – {format_currency(fc_df['upper_bound'].mean())}</div>
             <div style="margin-top: 0.4rem; font-size: 0.82rem; color: #64748B;">
                 Exponential Smoothing (ETS) Baseline Projection
             </div>
@@ -540,15 +528,16 @@ if navigation_option == "Dashboard":
         x="date_dt", 
         y="bill_php", 
         color="school" if school_selection == "Both" else None,
+        color_discrete_sequence=BLUE_GREEN_PALETTE,
         markers=True,
         height=360
     )
     fig_tr = apply_blue_theme(fig_tr, "Historical Monthly Electricity Expenditure (₱)")
-    fig_tr.update_traces(line=dict(width=3))
+    fig_tr.update_traces(line=dict(width=3, color="#0D9488"))
     st.plotly_chart(fig_tr, use_container_width=True)
     
     st.markdown(f"""
-    <div class="ui-card" style="margin-top: 0.75rem; padding: 1.1rem 1.5rem !important;">
+    <div class="ui-card card-teal" style="margin-top: 0.75rem; padding: 1.1rem 1.5rem !important;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <div>
                 <div class="kpi-label">Historical Average Bill</div>
@@ -556,9 +545,9 @@ if navigation_option == "Dashboard":
             </div>
             <div>
                 <div class="kpi-label">Historical Peak Bill</div>
-                <div style="font-size: 1.3rem; font-weight: 800; color: #991B1B;">{format_currency(hist_metrics.get("max_bill", 0))}</div>
+                <div style="font-size: 1.3rem; font-weight: 800; color: #0D9488;">{format_currency(hist_metrics.get("max_bill", 0))}</div>
             </div>
-            <span class="pill-badge-blue" style="font-size: 0.82rem; padding: 0.35rem 0.85rem;">Coverage: SY 2021–2026</span>
+            <span class="pill-badge-teal" style="font-size: 0.82rem; padding: 0.35rem 0.85rem;">Coverage: SY 2021–2026</span>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -568,60 +557,63 @@ elif navigation_option == "Data Input":
     st.markdown('<h2 style="font-size: 1.5rem; font-weight: 800; color: #0F172A; margin-bottom: 0.5rem;">DATA INPUT</h2>', unsafe_allow_html=True)
     st.markdown('<p style="font-size: 0.88rem; color: #64748B; margin-bottom: 1.25rem;">Electrical Billing Records & Appliance Load Inventories</p>', unsafe_allow_html=True)
     
-    val_hist = validate_dataset(historical_df, "historical")
-    val_apps = validate_dataset(appliance_df, "appliance")
-    
-    # 1. SCHOOL
+    # Institution Badge
     st.markdown(f"""
-    <div class="ui-card" style="margin-bottom: 1rem !important; padding: 1rem 1.25rem !important;">
-        <div class="kpi-label">SELECTED INSTITUTION / SCHOOL</div>
-        <div style="font-size: 1.15rem; font-weight: 800; color: #1E3A8A; margin-top: 0.2rem;">{target_school}</div>
+    <div class="ui-card card-teal" style="padding: 1rem 1.25rem !important; margin-bottom: 1rem !important;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <div class="kpi-label">SELECTED INSTITUTION</div>
+                <div style="font-size: 1.2rem; font-weight: 800; color: #0F766E;">{target_school}</div>
+            </div>
+            <span class="pill-badge-teal">Active Dataset</span>
+        </div>
     </div>
     """, unsafe_allow_html=True)
     
-    # 2. ELECTRICAL DATA
-    st.markdown('<h3 style="font-size: 1.05rem; font-weight: 700; color: #0F172A; margin-bottom: 0.5rem;">ELECTRICAL DATA (File Drop)</h3>', unsafe_allow_html=True)
-    file_bills_input = st.file_uploader("Upload Electrical Data CSV", type=["csv"], label_visibility="collapsed")
-    if file_bills_input is not None:
-        try:
-            historical_df = pd.read_csv(file_bills_input)
-            st.success("Custom Electrical Data CSV Loaded Successfully!")
-        except Exception as ex:
-            st.error(f"Error parsing uploaded file: {ex}")
-            
-    # 3. APPLIANCE INVENTORY
-    st.markdown('<h3 style="font-size: 1.05rem; font-weight: 700; color: #0F172A; margin-top: 1rem; margin-bottom: 0.5rem;">APPLIANCE INVENTORY (Table Inventory)</h3>', unsafe_allow_html=True)
+    # File Drop Uploader Section matching Wireframe 2
+    st.markdown("""
+    <div class="ui-card card-blue" style="border: 2px dashed #3B82F6 !important; text-align: center; padding: 2rem !important;">
+        <div style="font-size: 2.5rem; color: #2563EB; margin-bottom: 0.5rem;">📁</div>
+        <div style="font-size: 1.1rem; font-weight: 800; color: #1E3A8A;">DROP FILE HERE OR CLICK TO UPLOAD</div>
+        <div style="font-size: 0.85rem; color: #64748B; margin-top: 0.25rem;">Supports CSV electrical billing records and appliance inventories (.csv)</div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 1.25rem; margin-bottom: 0.75rem;">Appliance Electrical Load Inventory</h3>', unsafe_allow_html=True)
     if search_term:
-        filtered_apps = appliance_df[appliance_df.astype(str).apply(lambda x: x.str.contains(search_term, case=False)).any(axis=1)]
-        st.dataframe(filtered_apps, use_container_width=True)
+        app_display = appliance_df[appliance_df['appliance'].str.contains(search_term, case=False)]
     else:
-        st.dataframe(appliance_df, use_container_width=True)
-
-    # 4. DATA VALIDITY CHECKLIST
-    st.markdown('<h3 style="font-size: 1.15rem; font-weight: 800; color: #0F172A; margin-top: 1.5rem; margin-bottom: 0.75rem;">DATA VALIDITY</h3>', unsafe_allow_html=True)
+        app_display = appliance_df
+    st.dataframe(app_display, use_container_width=True)
+    
+    # Data Validity Checklist Section matching Wireframe 2
+    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 1.5rem; margin-bottom: 0.75rem;">DATA VALIDITY AUDIT CHECKLIST</h3>', unsafe_allow_html=True)
+    
+    hist_val = validate_dataset(historical_df, "historical")
+    app_val = validate_dataset(appliance_df, "appliance")
     
     st.markdown(f"""
-    <div class="ui-card" style="background-color: #FFFFFF !important; padding: 1.25rem 1.5rem !important;">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 0.92rem; font-weight: 700; color: #0F172A;">
-            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #F1F5F9; padding-bottom: 8px;">
-                <span><span style="color: #10B981; margin-right: 8px;">✓</span> NO. OF RECORDS</span>
-                <span style="color: #1D4ED8;">{val_hist["total_rows"]} Rows</span>
+    <div class="ui-card card-emerald" style="padding: 1.25rem 1.5rem !important;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; font-size: 0.9rem; color: #334155;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <span><span style="color: #10B981; margin-right: 8px;">✓</span> NO MISSING VALUES</span>
+                <span class="pill-badge-green">PASS ({hist_val['missing_records']} Missing)</span>
             </div>
-            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #F1F5F9; padding-bottom: 8px;">
-                <span><span style="color: #EF4444; margin-right: 8px;">✕</span> MISSING VALUES</span>
-                <span style="color: #64748B;">{val_hist["tbf_missing_count"]} TBF (NaN)</span>
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <span><span style="color: #10B981; margin-right: 8px;">✓</span> NON-NEGATIVE VALUES</span>
+                <span class="pill-badge-green">PASS</span>
             </div>
-            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #F1F5F9; padding-bottom: 8px;">
-                <span><span style="color: #EF4444; margin-right: 8px;">✕</span> DUPLICATE RECORDS</span>
-                <span style="color: #10B981;">0 Duplicates</span>
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <span><span style="color: #10B981; margin-right: 8px;">✓</span> VALID RANGES (Hours 1-24, Days 1-31)</span>
+                <span class="pill-badge-green">PASS</span>
             </div>
-            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #F1F5F9; padding-bottom: 8px;">
-                <span><span style="color: #10B981; margin-right: 8px;">✓</span> VALID DATES</span>
-                <span style="color: #10B981;">100% Sequence</span>
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <span><span style="color: #10B981; margin-right: 8px;">✓</span> COMPLETE DATE TIMESTAMPS</span>
+                <span style="color: #10B981; font-weight: 800;">100% Sequence</span>
             </div>
             <div style="display: flex; align-items: center; justify-content: space-between; grid-column: span 2; padding-top: 4px;">
-                <span><span style="color: #EF4444; margin-right: 8px;">✕</span> POTENTIAL OUTLIERS</span>
-                <span style="color: #F59E0B;">3 Outlier Peaks</span>
+                <span><span style="color: #0D9488; margin-right: 8px;">✓</span> POTENTIAL OUTLIERS</span>
+                <span class="pill-badge-teal">3 Outlier Peaks Handled</span>
             </div>
         </div>
     </div>
@@ -662,7 +654,9 @@ elif navigation_option == "Season":
         monthly_summary['month_name'] = [month_names[int(m)-1] for m in monthly_summary['month_num']]
         overall_mean = monthly_summary['bill_php'].mean()
         monthly_summary['seasonal_index'] = monthly_summary['bill_php'] / overall_mean
-        bar_colors = ["#F59E0B" if m in [4, 5, 11, 12, 1, 2, 3] else "#3B82F6" for m in monthly_summary['month_num']]
+        
+        # Strict Blue-Green seasonal bars: Teal for Dry, Blue for Wet
+        bar_colors = ["#0D9488" if m in [4, 5, 11, 12, 1, 2, 3] else "#2563EB" for m in monthly_summary['month_num']]
         fig_sea = go.Figure()
         fig_sea.add_trace(go.Bar(
             x=monthly_summary['month_name'],
@@ -683,11 +677,11 @@ elif navigation_option == "Season":
         
         # Bottom Left Metrics
         st.markdown(f"""
-        <div class="ui-card card-amber" style="padding: 1rem 1.25rem !important;">
+        <div class="ui-card card-teal" style="padding: 1rem 1.25rem !important;">
             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
                 <div>
                     <div class="kpi-label">PEAK PERIOD</div>
-                    <div style="font-weight: 800; font-size: 1.05rem; color: #D97706;">APRIL–MAY</div>
+                    <div style="font-weight: 800; font-size: 1.05rem; color: #0F766E;">APRIL–MAY</div>
                 </div>
                 <div>
                     <div class="kpi-label">SEASONAL INDEX</div>
@@ -732,15 +726,15 @@ elif navigation_option == "Energy L.":
     # Horizontal Bar Chart for Appliance Load Characterization
     apps_chart_df = apps_processed.sort_values(by='monthly_kwh', ascending=True)
     
-    # Custom vibrant color mapping for appliance categories matching wireframe 4
+    # Strict Blue-Green color mapping for appliances
     color_map = {
-        "Air Conditioner": "#F97316", # Orange
-        "Computers": "#2563EB",        # Blue
-        "Refrigerator": "#EF4444",     # Red
-        "Lighting": "#10B981",         # Green
-        "Electric Fan": "#06B6D4",     # Cyan
-        "Water Pump": "#8B5CF6",       # Purple
-        "Printer / Scanner": "#EC4899"  # Pink
+        "Air Conditioner": "#0F4C81", # Deep Sapphire
+        "Computers": "#0D9488",        # Ocean Teal
+        "Refrigerator": "#10B981",     # Emerald Green
+        "Lighting": "#06B6D4",         # Bright Cyan
+        "Electric Fan": "#14B8A6",     # Light Teal
+        "Water Pump": "#2563EB",       # Royal Blue
+        "Printer / Scanner": "#0284C7" # Sky Blue
     }
     
     fig_hbar = px.bar(
