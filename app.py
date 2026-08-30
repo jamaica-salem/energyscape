@@ -290,13 +290,23 @@ st.markdown("""
         border-radius: 12px !important;
     }
 
-    /* Multiselect Tag Pills */
+    /* Multiselect Tag Pills (100% Emerald Green #0B4F46) */
+    [data-baseweb="tag"],
     span[data-baseweb="tag"],
     div[data-baseweb="tag"],
+    div[data-testid="stMultiSelect"] [data-baseweb="tag"],
+    div[data-testid="stMultiSelect"] span,
     span[data-baseweb="tag"] *,
     div[data-baseweb="tag"] * {
         background-color: #0B4F46 !important;
         color: #FFFFFF !important;
+        fill: #FFFFFF !important;
+        border-color: #0B4F46 !important;
+    }
+    [data-baseweb="tag"] span {
+        color: #FFFFFF !important;
+    }
+    [data-baseweb="tag"] svg path {
         fill: #FFFFFF !important;
     }
     span[data-baseweb="tag"],
