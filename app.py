@@ -262,14 +262,13 @@ st.markdown("""
         font-weight: 700 !important;
         font-size: 0.875rem !important;
     }
-    div[data-baseweb="select"] > div {
-        background-color: #F8FAFC !important;
-        color: #0F172A !important;
-        border: 1px solid #CBD5E1 !important;
-        border-radius: 10px !important;
-    }
-    input[type="number"] {
-        background-color: #F8FAFC !important;
+    div[data-baseweb="select"] > div,
+    div[data-baseweb="input"],
+    div[data-baseweb="input"] > div,
+    div[data-baseweb="base-input"],
+    input[type="number"],
+    input[type="text"] {
+        background-color: #FFFFFF !important;
         color: #0F172A !important;
         border: 1px solid #CBD5E1 !important;
         border-radius: 10px !important;
@@ -1550,7 +1549,7 @@ elif navigation_option == "Target Monitor":
     </div>
     """, unsafe_allow_html=True)
     
-    with st.container(border=True):
+    with st.container():
         st.markdown('<h4 style="font-size: 0.95rem; font-weight: 700; color: #1E3A8A; margin-bottom: 0.25rem;">Consumption Input Parameters</h4>', unsafe_allow_html=True)
         st.markdown('<p style="font-size: 0.82rem; color: #64748B; margin-bottom: 0.75rem;">Adjust actual monthly consumption and target benchmarks to evaluate operational compliance.</p>', unsafe_allow_html=True)
         
