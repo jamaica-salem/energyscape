@@ -51,17 +51,16 @@ st.markdown("""
         background-color: #F3F4F6 !important;
     }
 
-    /* Top Streamlit Header Bar (Deploy & Menu) in Deep Emerald Green #0B4F46 */
+    /* Top Streamlit Header Bar (Deploy & Menu) in Pure White #FFFFFF with Bottom Border #EAECF0 */
     header[data-testid="stHeader"],
     div[data-testid="stHeader"] {
-        background-color: #0B4F46 !important;
-        border: none !important;
-        border-bottom: none !important;
+        background-color: #FFFFFF !important;
+        border-bottom: 1px solid #EAECF0 !important;
     }
     header[data-testid="stHeader"] *,
     div[data-testid="stHeader"] * {
-        color: #FFFFFF !important;
-        fill: #FFFFFF !important;
+        color: #111827 !important;
+        fill: #111827 !important;
     }
     div[data-testid="stDecoration"] {
         display: none !important;
