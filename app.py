@@ -38,33 +38,34 @@ st.set_page_config(
 # ----------------------------------------------------
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&family=Poppins:wght@300;400;500;600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&family=Inter:wght@300;400;500;600;700;800&display=swap');
 
-    /* Global Body & Background */
+    /* Global Body & Background (Bankio Light Warm Gray Theme) */
     html, body, [class*="css"] {
-        font-family: 'Poppins', sans-serif !important;
-        background-color: #F8FAFC !important;
-        color: #0F172A !important;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+        background-color: #F3F4F6 !important;
+        color: #111827 !important;
     }
 
     .stApp {
-        background-color: #F8FAFC !important;
+        background-color: #F3F4F6 !important;
     }
 
     /* Remove default Streamlit header decoration */
     header[data-testid="stHeader"] {
-        background-color: #F8FAFC !important;
-        border-bottom: 1px solid #E2E8F0 !important;
+        background-color: #F3F4F6 !important;
+        border-bottom: 1px solid #EAECF0 !important;
     }
     div[data-testid="stDecoration"] {
         display: none !important;
     }
 
-    /* Headings Typography */
+    /* Headings Typography (Bankio Clean Sans) */
     h1, h2, h3, h4, h5, h6 {
-        color: #0F172A !important;
-        font-family: 'Poppins', sans-serif !important;
-        font-weight: 800 !important;
+        color: #111827 !important;
+        font-family: 'Inter', sans-serif !important;
+        font-weight: 700 !important;
+        letter-spacing: -0.02em !important;
     }
 
     /* Top Greeting & Header Bar */
@@ -76,219 +77,216 @@ st.markdown("""
         padding-bottom: 0.25rem;
     }
 
-    /* Card Containers & Interactive Hover */
+    /* Card Containers & Interactive Hover (Bankio Crisp White Cards) */
     .ui-card {
         background-color: #FFFFFF !important;
-        border: 1px solid #E2E8F0 !important;
+        border: 1px solid #EAECF0 !important;
         border-radius: 18px !important;
-        padding: 1.4rem 1.65rem !important;
+        padding: 1.5rem 1.75rem !important;
         margin-bottom: 1.5rem !important;
-        box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04) !important;
+        box-shadow: 0 1px 3px rgba(16, 24, 40, 0.05) !important;
         box-sizing: border-box !important;
         overflow: visible !important;
         transition: transform 0.2s ease, box-shadow 0.2s ease !important;
     }
     .ui-card:hover {
-        transform: translateY(-3px) !important;
-        box-shadow: 0 12px 28px -4px rgba(15, 23, 42, 0.09) !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 10px 25px -3px rgba(16, 24, 40, 0.08) !important;
     }
 
     /* Strict Blue-Green Color-accented Card Variants */
     .card-emerald {
-        border-top: 5px solid #10B981 !important;
-        background: linear-gradient(180deg, #F0FDF4 0%, #FFFFFF 100%) !important;
+        border-top: 4px solid #10B981 !important;
+        background: #FFFFFF !important;
     }
     .card-teal {
-        border-top: 5px solid #0D9488 !important;
-        background: linear-gradient(180deg, #F0FDFA 0%, #FFFFFF 100%) !important;
+        border-top: 4px solid #0B4F46 !important;
+        background: #FFFFFF !important;
     }
     .card-blue {
-        border-top: 5px solid #2563EB !important;
-        background: linear-gradient(180deg, #EFF6FF 0%, #FFFFFF 100%) !important;
+        border-top: 4px solid #3B82F6 !important;
+        background: #FFFFFF !important;
     }
     .card-cyan {
-        border-top: 5px solid #06B6D4 !important;
-        background: linear-gradient(180deg, #ECFEFF 0%, #FFFFFF 100%) !important;
+        border-top: 4px solid #06B6D4 !important;
+        background: #FFFFFF !important;
     }
 
-    /* Hero Card (CURRENT CONSUMPTION - Matching Wireframe Green Theme) */
+    /* Hero Highlight Card (Bankio Deep Emerald Dark Card #0B4F46) */
     .hero-consumption-card {
-        background: linear-gradient(135deg, #529E72 0%, #468B64 100%) !important;
-        border-radius: 22px !important;
+        background: linear-gradient(135deg, #0B4F46 0%, #063B34 100%) !important;
+        border-radius: 20px !important;
         padding: 1.75rem 2.25rem !important;
         color: #FFFFFF !important;
-        box-shadow: 0 12px 32px -5px rgba(82, 158, 114, 0.35) !important;
+        box-shadow: 0 12px 32px -5px rgba(11, 79, 70, 0.3) !important;
         margin-bottom: 1.75rem !important;
         position: relative !important;
         overflow: hidden !important;
         box-sizing: border-box !important;
     }
     .hero-card-label {
-        font-size: 0.85rem !important;
-        color: #E8F5E9 !important;
-        font-weight: 700 !important;
+        font-size: 0.82rem !important;
+        color: #A7F3D0 !important;
+        font-weight: 600 !important;
         text-transform: uppercase !important;
         letter-spacing: 0.08em !important;
     }
     .hero-card-title {
         font-size: 1.5rem !important;
-        font-weight: 800 !important;
+        font-weight: 700 !important;
         color: #FFFFFF !important;
         margin-bottom: 1rem !important;
         letter-spacing: -0.01em !important;
     }
     .hero-metric-val {
-        font-size: 2.1rem !important;
+        font-size: 2.2rem !important;
         font-weight: 800 !important;
         color: #FFFFFF !important;
-        letter-spacing: -0.02em !important;
+        letter-spacing: -0.03em !important;
         line-height: 1.1 !important;
         margin: 0.2rem 0 !important;
     }
     .hero-subtext {
         font-size: 0.85rem !important;
-        color: #E8F5E9 !important;
+        color: #D1FAE5 !important;
     }
 
-    /* Blue-Green Pill Badges */
+    /* Bankio Style Pill Badges */
     .pill-badge-blue {
-        background-color: #3B709E !important;
-        color: #FFFFFF !important;
-        padding: 0.35rem 0.85rem !important;
+        background-color: #E0F2FE !important;
+        color: #0369A1 !important;
+        padding: 0.3rem 0.8rem !important;
         border-radius: 9999px !important;
         font-size: 0.78rem !important;
-        font-weight: 800 !important;
+        font-weight: 600 !important;
         display: inline-flex !important;
         align-items: center !important;
         white-space: nowrap !important;
-        box-shadow: 0 2px 8px rgba(59, 112, 158, 0.2) !important;
     }
     .pill-badge-teal {
-        background-color: #529E72 !important;
-        color: #FFFFFF !important;
-        padding: 0.35rem 0.85rem !important;
+        background-color: #E6F4EA !important;
+        color: #047857 !important;
+        padding: 0.3rem 0.8rem !important;
         border-radius: 9999px !important;
         font-size: 0.78rem !important;
-        font-weight: 800 !important;
+        font-weight: 600 !important;
         display: inline-flex !important;
         align-items: center !important;
         white-space: nowrap !important;
-        box-shadow: 0 2px 8px rgba(82, 158, 114, 0.2) !important;
     }
     .pill-badge-green {
-        background-color: #468B64 !important;
-        color: #FFFFFF !important;
-        padding: 0.35rem 0.85rem !important;
+        background-color: #E6F4EA !important;
+        color: #047857 !important;
+        padding: 0.3rem 0.8rem !important;
         border-radius: 9999px !important;
         font-size: 0.78rem !important;
-        font-weight: 800 !important;
+        font-weight: 600 !important;
         display: inline-flex !important;
         align-items: center !important;
         white-space: nowrap !important;
-        box-shadow: 0 2px 8px rgba(70, 139, 100, 0.2) !important;
     }
 
     /* Metric Display */
     .kpi-label {
         font-size: 0.8rem !important;
-        color: #64748B !important;
-        font-weight: 700 !important;
+        color: #6B7280 !important;
+        font-weight: 600 !important;
         margin-bottom: 0.15rem !important;
         text-transform: uppercase !important;
         letter-spacing: 0.04em !important;
     }
     .kpi-val {
-        font-size: 1.4rem !important;
-        font-weight: 800 !important;
-        color: #0F172A !important;
+        font-size: 1.5rem !important;
+        font-weight: 700 !important;
+        color: #111827 !important;
         letter-spacing: -0.02em !important;
         margin: 0.15rem 0 !important;
         line-height: 1.2 !important;
         white-space: nowrap !important;
     }
 
-    /* Sidebar Base Background matching reference wireframe image (#529E72 Sage Emerald Green) */
+    /* Sidebar Navigation (Bankio Pure White Sidebar Theme) */
     section[data-testid="stSidebar"] {
-        background-color: #529E72 !important;
-        border-right: 1px solid #458861 !important;
+        background-color: #FFFFFF !important;
+        border-right: 1px solid #EAECF0 !important;
     }
     
-    /* Strictly Scoped Nav Content Typography (Leaves collapse button untouched) */
+    /* Strictly Scoped Nav Content Typography */
     .sidebar-brand,
     .sidebar-section-header,
     div[role="radiogroup"] label {
-        font-family: 'Poppins', sans-serif !important;
+        font-family: 'Inter', sans-serif !important;
     }
     .sidebar-brand {
         display: flex;
         align-items: center;
         gap: 12px;
-        font-size: 1.5rem;
+        font-size: 1.4rem;
         font-weight: 800;
-        color: #FFFFFF !important;
-        font-family: 'Poppins', sans-serif !important;
+        color: #111827 !important;
+        font-family: 'Inter', sans-serif !important;
         margin-bottom: 1.5rem;
         padding-bottom: 0.85rem;
-        border-bottom: 2px solid rgba(255, 255, 255, 0.35);
-        letter-spacing: -0.01em;
+        border-bottom: 1px solid #EAECF0;
+        letter-spacing: -0.02em;
     }
     .sidebar-section-header {
-        font-size: 0.85rem !important;
-        font-weight: 800 !important;
-        color: #FFFFFF !important;
+        font-size: 0.75rem !important;
+        font-weight: 700 !important;
+        color: #9CA3AF !important;
         text-transform: uppercase !important;
-        letter-spacing: 0.1em !important;
+        letter-spacing: 0.08em !important;
         margin-top: 1.2rem !important;
-        margin-bottom: 0.6rem !important;
-        font-family: 'Poppins', sans-serif !important;
+        margin-bottom: 0.5rem !important;
+        font-family: 'Inter', sans-serif !important;
     }
 
-    /* Navigation Radio Items matching reference wireframe */
+    /* Navigation Radio Items (Bankio Selected Deep Teal Pill #0B4F46) */
     div[role="radiogroup"] label,
     div[role="radiogroup"] label p,
     div[role="radiogroup"] label span,
     div[role="radiogroup"] label div,
     div[role="radiogroup"] label * {
-        color: #FFFFFF !important;
-        font-family: 'Poppins', sans-serif !important;
-        font-size: 1.08rem !important;
-        font-weight: 700 !important;
-        letter-spacing: 0.02em !important;
+        color: #374151 !important;
+        font-family: 'Inter', sans-serif !important;
+        font-size: 0.98rem !important;
+        font-weight: 500 !important;
+        letter-spacing: 0.01em !important;
     }
     div[role="radiogroup"] label {
         background-color: transparent !important;
-        padding: 11px 18px !important;
+        padding: 10px 16px !important;
         border-radius: 12px !important;
-        margin-bottom: 6px !important;
-        transition: all 0.22s ease !important;
+        margin-bottom: 4px !important;
+        transition: all 0.2s ease !important;
         display: flex !important;
         align-items: center !important;
     }
     div[role="radiogroup"] label:hover {
-        background-color: rgba(255, 255, 255, 0.2) !important;
-        transform: translateX(4px) !important;
+        background-color: #F3F4F6 !important;
+        transform: translateX(3px) !important;
     }
     div[role="radiogroup"] label:hover * {
-        color: #FFFFFF !important;
+        color: #111827 !important;
     }
     div[role="radiogroup"] label[data-checked="true"] {
-        background-color: #FFFFFF !important;
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12) !important;
+        background-color: #0B4F46 !important;
+        box-shadow: 0 4px 12px rgba(11, 79, 70, 0.25) !important;
     }
     div[role="radiogroup"] label[data-checked="true"],
     div[role="radiogroup"] label[data-checked="true"] p,
     div[role="radiogroup"] label[data-checked="true"] span,
     div[role="radiogroup"] label[data-checked="true"] div,
     div[role="radiogroup"] label[data-checked="true"] * {
-        color: #3B709E !important;
-        font-weight: 800 !important;
-        font-size: 1.1rem !important;
+        color: #FFFFFF !important;
+        font-weight: 700 !important;
+        font-size: 1.02rem !important;
     }
 
-    /* Widget Labels & Inputs */
+    /* Widget Labels & Inputs (Bankio Pure White Rounded Inputs) */
     label[data-testid="stWidgetLabel"] p {
-        color: #475569 !important;
-        font-weight: 700 !important;
+        color: #374151 !important;
+        font-weight: 600 !important;
         font-size: 0.875rem !important;
     }
     div[data-baseweb="select"],
@@ -302,17 +300,9 @@ st.markdown("""
     input[type="number"],
     input[type="text"] {
         background-color: #FFFFFF !important;
-        color: #0F172A !important;
-        border: none !important;
-        box-shadow: none !important;
-    }
-    div[data-testid="stNumberInputContainer"],
-    div[data-testid="stMultiSelect"] > div,
-    div[data-testid="stSelectbox"] > div,
-    div[data-baseweb="input"],
-    div[data-baseweb="select"] > div {
-        border-radius: 10px !important;
-        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04) !important;
+        color: #111827 !important;
+        border: 1px solid #EAECF0 !important;
+        border-radius: 12px !important;
     }
 
     /* Multiselect Tag Pills */
@@ -320,7 +310,7 @@ st.markdown("""
     div[data-baseweb="tag"],
     span[data-baseweb="tag"] *,
     div[data-baseweb="tag"] * {
-        background-color: #3B709E !important;
+        background-color: #0B4F46 !important;
         color: #FFFFFF !important;
         fill: #FFFFFF !important;
     }
@@ -331,27 +321,27 @@ st.markdown("""
         margin: 2px !important;
     }
 
-    /* Action Buttons (PROCEED) matching wireframe steel blue (#3B709E) */
+    /* Action Buttons (Bankio Deep Teal Pill Button #0B4F46) */
     div.stButton > button,
     button[data-testid="stBaseButton-secondary"],
     button[data-testid="stBaseButton-primary"] {
-        background-color: #3B709E !important;
+        background-color: #0B4F46 !important;
         color: #FFFFFF !important;
         border: none !important;
         border-radius: 9999px !important;
         padding: 0.65rem 2rem !important;
-        font-weight: 800 !important;
-        font-size: 1.05rem !important;
-        letter-spacing: 0.04em !important;
-        box-shadow: 0 6px 18px rgba(59, 112, 158, 0.35) !important;
+        font-weight: 600 !important;
+        font-size: 0.95rem !important;
+        letter-spacing: 0.02em !important;
+        box-shadow: 0 4px 14px rgba(11, 79, 70, 0.25) !important;
         transition: all 0.2s ease !important;
     }
     div.stButton > button:hover,
     button[data-testid="stBaseButton-secondary"]:hover,
     button[data-testid="stBaseButton-primary"]:hover {
-        background-color: #2D5880 !important;
+        background-color: #063B34 !important;
         transform: translateY(-2px) !important;
-        box-shadow: 0 10px 24px rgba(59, 112, 158, 0.5) !important;
+        box-shadow: 0 8px 20px rgba(11, 79, 70, 0.35) !important;
     }
     div.stButton > button * {
         color: #FFFFFF !important;
@@ -493,29 +483,29 @@ except Exception as e:
 # ----------------------------------------------------
 # STRICT BLUE-GREEN PLOTLY STYLING HELPER
 # ----------------------------------------------------
-BLUE_PALETTE = ["#3B709E", "#529E72", "#5B86E5", "#468B64", "#2D5880", "#81C784"]
-BLUE_GREEN_PALETTE = ["#3B709E", "#529E72", "#5B86E5", "#468B64", "#2D5880", "#81C784"]
+BLUE_PALETTE = ["#0B4F46", "#10B981", "#3B82F6", "#F59E0B", "#6366F1", "#14B8A6"]
+BLUE_GREEN_PALETTE = ["#0B4F46", "#10B981", "#3B82F6", "#F59E0B", "#6366F1", "#14B8A6"]
 
 def apply_blue_theme(fig, title=""):
     fig.update_layout(
-        title=dict(text=title, font=dict(family="Poppins", size=15, color="#0F172A", weight="bold")),
-        font=dict(family="Poppins", color="#475569"),
+        title=dict(text=title, font=dict(family="Inter", size=15, color="#111827", weight="bold")),
+        font=dict(family="Inter", color="#6B7280"),
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
         margin=dict(l=10, r=10, t=35, b=10),
         xaxis=dict(
             title="",
-            gridcolor="#E2E8F0", 
+            gridcolor="#F3F4F6", 
             showline=True, 
-            linecolor="#CBD5E1", 
-            tickfont=dict(color="#475569", size=11, weight="bold")
+            linecolor="#EAECF0", 
+            tickfont=dict(color="#6B7280", size=11, weight="bold")
         ),
         yaxis=dict(
             title="",
-            gridcolor="#E2E8F0", 
+            gridcolor="#F3F4F6", 
             showline=True, 
-            linecolor="#CBD5E1", 
-            tickfont=dict(color="#475569", size=11, weight="bold")
+            linecolor="#EAECF0", 
+            tickfont=dict(color="#6B7280", size=11, weight="bold")
         ),
         legend=dict(
             title="",
@@ -524,7 +514,7 @@ def apply_blue_theme(fig, title=""):
             y=1.02, 
             xanchor="right", 
             x=1, 
-            font=dict(color="#0F172A", size=11, weight="bold")
+            font=dict(color="#111827", size=11, weight="bold")
         )
     )
     return fig
@@ -548,8 +538,9 @@ PAGE_HEADER_TITLES = {
 current_page_title = PAGE_HEADER_TITLES.get(navigation_option, "ENERGYSCAPE")
 top_c1, top_c2 = st.columns([2.2, 1])
 with top_c1:
+    greeting_sub = '<p style="font-size: 0.88rem; color: #6B7280; margin: 0.2rem 0 0.5rem 0;">Welcome, Administrator! Real-time energy insights & carbon analytics</p>' if navigation_option == "Dashboard" else ''
     badge_html = '<span class="pill-badge-green">Decision Support System</span>' if navigation_option == "Dashboard" else ''
-    st.markdown(f'<div style="display: flex; align-items: center; gap: 12px; margin-bottom: 0.5rem;"><h1 style="font-size: 1.8rem; font-weight: 800; color: #0F172A; margin: 0;">{current_page_title}</h1>{badge_html}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div style="margin-bottom: 0.5rem;"><div style="display: flex; align-items: center; gap: 12px;"><h1 style="font-size: 1.75rem; font-weight: 700; color: #111827; margin: 0; letter-spacing: -0.02em;">{current_page_title}</h1>{badge_html}</div>{greeting_sub}</div>', unsafe_allow_html=True)
 with top_c2:
     search_term = st.text_input("Search", placeholder="🔍 Search dashboard metrics...", label_visibility="collapsed")
 
