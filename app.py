@@ -220,14 +220,11 @@ st.markdown("""
         font-family: 'Inter', sans-serif !important;
     }
 
-    /* Hide Radio Circle Dots / Bullet Points Completely for Clean Sidebar Menu Buttons */
-    div[role="radiogroup"] label > div:not([data-testid="stMarkdownContainer"]),
-    div[role="radiogroup"] label input,
+    /* Hide Radio Circle Dots Completely for Clean Sidebar Menu Buttons */
+    div[role="radiogroup"] label input[type="radio"],
     div[role="radiogroup"] label [data-testid="stRadioButtonCustomIcon"],
     div[role="radiogroup"] label div[aria-hidden="true"],
-    div[role="radiogroup"] label svg,
-    div[role="radiogroup"] label ::before,
-    div[role="radiogroup"] label ::after {
+    div[role="radiogroup"] label svg {
         display: none !important;
         visibility: hidden !important;
         width: 0 !important;
@@ -235,7 +232,6 @@ st.markdown("""
         margin: 0 !important;
         padding: 0 !important;
         opacity: 0 !important;
-        content: "" !important;
     }
 
     /* Navigation Radio Items (Deep Emerald Background with White Text) */
