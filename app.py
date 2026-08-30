@@ -534,7 +534,8 @@ def apply_blue_theme(fig, title=""):
 # ----------------------------------------------------
 top_c1, top_c2 = st.columns([2.2, 1])
 with top_c1:
-    st.markdown('<div style="display: flex; align-items: center; gap: 12px; margin-bottom: 0.5rem;"><h1 style="font-size: 1.8rem; font-weight: 800; color: #0F172A; margin: 0;">ENERGYSCAPE</h1><span class="pill-badge-green">Decision Support System</span></div>', unsafe_allow_html=True)
+    if navigation_option == "Dashboard":
+        st.markdown('<div style="display: flex; align-items: center; gap: 12px; margin-bottom: 0.5rem;"><h1 style="font-size: 1.8rem; font-weight: 800; color: #0F172A; margin: 0;">ENERGYSCAPE</h1><span class="pill-badge-green">Decision Support System</span></div>', unsafe_allow_html=True)
 with top_c2:
     search_term = st.text_input("Search", placeholder="🔍 Search dashboard metrics...", label_visibility="collapsed")
 
