@@ -212,9 +212,20 @@ st.markdown("""
         background-color: #166534 !important;
         border-right: 1px solid #15803D !important;
     }
-    section[data-testid="stSidebar"] * {
+    section[data-testid="stSidebar"] div,
+    section[data-testid="stSidebar"] p,
+    section[data-testid="stSidebar"] label,
+    section[data-testid="stSidebar"] span {
         color: #FFFFFF !important;
         font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif !important;
+    }
+    
+    /* Preserve Streamlit Material Icons for Sidebar Collapse Button */
+    button[data-testid="stSidebarCollapseButton"] *,
+    [data-testid="stSidebarCollapseButton"] *,
+    button[data-testid="stSidebarCollapseButton"] span,
+    [data-testid="collapsedControl"] * {
+        font-family: 'Material Symbols Rounded', 'Material Icons', sans-serif !important;
     }
     .sidebar-brand {
         display: flex;
