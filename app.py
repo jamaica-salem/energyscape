@@ -468,10 +468,14 @@ except Exception as e:
 # ----------------------------------------------------
 # STRICT BLUE-GREEN PLOTLY STYLING HELPER
 # ----------------------------------------------------
-BLUE_PALETTE = ["#0B4F46", "#10B981", "#3B82F6", "#F59E0B", "#6366F1", "#14B8A6"]
-BLUE_GREEN_PALETTE = ["#0B4F46", "#10B981", "#3B82F6", "#F59E0B", "#6366F1", "#14B8A6"]
+# PURE MINIMAL GREEN PLOTLY STYLING HELPER
+# ----------------------------------------------------
+GREEN_PALETTE = ["#0B4F46", "#10B981", "#047857", "#059669", "#34D399", "#A7F3D0", "#063B34"]
+GREEN_MONO_PALETTE = ["#0B4F46", "#10B981", "#047857", "#059669", "#34D399", "#A7F3D0", "#063B34"]
+BLUE_PALETTE = GREEN_PALETTE
+BLUE_GREEN_PALETTE = GREEN_PALETTE
 
-def apply_blue_theme(fig, title=""):
+def apply_green_theme(fig, title=""):
     fig.update_layout(
         title=dict(text=title, font=dict(family="Inter", size=15, color="#111827", weight="bold")),
         font=dict(family="Inter", color="#6B7280"),
@@ -503,6 +507,8 @@ def apply_blue_theme(fig, title=""):
         )
     )
     return fig
+
+apply_blue_theme = apply_green_theme
 
 PAGE_HEADER_TITLES = {
     "Dashboard": "ENERGYSCAPE",
