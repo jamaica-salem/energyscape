@@ -148,12 +148,12 @@ st.markdown("""
         color: #D1FAE5 !important;
     }
 
-    /* Minimal Green Pill Badges (Pure Black & Green Palette) */
+    /* Soothing Matcha Pill Badges (No Bright/Neon Greens) */
     .pill-badge-blue,
     .pill-badge-teal,
     .pill-badge-green {
-        background-color: #E6F4EA !important;
-        color: #047857 !important;
+        background-color: #E8F5E9 !important;
+        color: #1B5E20 !important;
         padding: 0.3rem 0.8rem !important;
         border-radius: 9999px !important;
         font-size: 0.78rem !important;
@@ -630,12 +630,10 @@ except Exception as e:
     st.stop()
 
 # ----------------------------------------------------
-# STRICT BLUE-GREEN PLOTLY STYLING HELPER
+# SOOTHING MATCHA & DARK FOREST GREEN PALETTE (NO BRIGHT/NEON GREENS)
 # ----------------------------------------------------
-# PURE MINIMAL GREEN PLOTLY STYLING HELPER
-# ----------------------------------------------------
-GREEN_PALETTE = ["#0B4F46", "#10B981", "#047857", "#059669", "#34D399", "#A7F3D0", "#063B34"]
-GREEN_MONO_PALETTE = ["#0B4F46", "#10B981", "#047857", "#059669", "#34D399", "#A7F3D0", "#063B34"]
+GREEN_PALETTE = ["#0B4F46", "#194D40", "#286654", "#3C826D", "#5A9E87", "#7CAF9B", "#A0CFC0", "#C8E6DC"]
+GREEN_MONO_PALETTE = GREEN_PALETTE
 BLUE_PALETTE = GREEN_PALETTE
 BLUE_GREEN_PALETTE = GREEN_PALETTE
 
@@ -937,8 +935,8 @@ elif navigation_option == "Season":
         overall_mean = monthly_summary['bill_php'].mean()
         monthly_summary['seasonal_index'] = monthly_summary['bill_php'] / overall_mean
         
-        # Bankio Minimal Green Palette: Deep Emerald for Dry, Ocean Mint for Wet
-        bar_colors = ["#0B4F46" if m in [4, 5, 11, 12, 1, 2, 3] else "#10B981" for m in monthly_summary['month_num']]
+        # Bankio Minimal Green Palette: Deep Emerald for Dry, Soft Matcha for Wet
+        bar_colors = ["#0B4F46" if m in [4, 5, 11, 12, 1, 2, 3] else "#5A9E87" for m in monthly_summary['month_num']]
         fig_sea = go.Figure()
         fig_sea.add_trace(go.Bar(
             x=monthly_summary['month_name'],
@@ -1005,8 +1003,8 @@ elif navigation_option == "Energy L.":
     # Horizontal Bar Chart for Appliance Load Characterization
     apps_chart_df = apps_processed.sort_values(by='monthly_kwh', ascending=True)
     
-    # 100% Pure Green color sequence for all appliance bars
-    green_bar_palette = ["#063B34", "#0B4F46", "#047857", "#059669", "#10B981", "#166534", "#34D399", "#A7F3D0"]
+    # Soothing Matcha & Dark Forest Green Palette (No Bright/Neon Greens)
+    green_bar_palette = ["#063B34", "#0B4F46", "#194D40", "#286654", "#3C826D", "#5A9E87", "#7CAF9B", "#A0CFC0"]
     
     fig_hbar = px.bar(
         apps_chart_df,
