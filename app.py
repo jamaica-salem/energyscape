@@ -333,6 +333,36 @@ st.markdown("""
     div.stButton > button * {
         color: #FFFFFF !important;
     }
+
+    /* Stunning Blue-Green Custom File Uploader Styling */
+    div[data-testid="stFileUploader"] {
+        background: linear-gradient(180deg, #F0FDFA 0%, #FFFFFF 100%) !important;
+        border: 2.5px dashed #0D9488 !important;
+        border-radius: 18px !important;
+        padding: 1.25rem 1.5rem !important;
+        box-shadow: 0 4px 20px rgba(13, 148, 136, 0.08) !important;
+        transition: all 0.25s ease !important;
+    }
+    div[data-testid="stFileUploader"]:hover {
+        border-color: #10B981 !important;
+        background: linear-gradient(180deg, #ECFDF5 0%, #FFFFFF 100%) !important;
+        box-shadow: 0 8px 24px rgba(16, 185, 129, 0.18) !important;
+        transform: translateY(-2px) !important;
+    }
+    div[data-testid="stFileUploader"] section {
+        background-color: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+    }
+    div[data-testid="stFileUploader"] section button {
+        background: linear-gradient(135deg, #166534 0%, #0D9488 100%) !important;
+        color: #FFFFFF !important;
+        border: none !important;
+        border-radius: 9999px !important;
+        font-weight: 800 !important;
+        padding: 0.5rem 1.25rem !important;
+        box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3) !important;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -611,14 +641,19 @@ elif navigation_option == "Data Input":
     </div>
     """, unsafe_allow_html=True)
     
-    # File Drop Uploader Section matching Wireframe 2
-    st.markdown("""
-    <div class="ui-card card-blue" style="border: 2px dashed #3B82F6 !important; text-align: center; padding: 2rem !important;">
-        <div style="font-size: 2.5rem; color: #2563EB; margin-bottom: 0.5rem;">📁</div>
-        <div style="font-size: 1.1rem; font-weight: 800; color: #1E3A8A;">DROP FILE HERE OR CLICK TO UPLOAD</div>
-        <div style="font-size: 0.85rem; color: #64748B; margin-top: 0.25rem;">Supports CSV electrical billing records and appliance inventories (.csv)</div>
-    </div>
-    """, unsafe_allow_html=True)
+    # Interactive File Drop Uploader Section matching Wireframe 2
+    uploaded_file = st.file_uploader(
+        "DROP FILE HERE OR CLICK TO UPLOAD (Supports CSV billing records & appliance inventories)",
+        type=["csv"],
+        key="data_input_uploader",
+        help="Drag and drop or click to upload CSV electrical billing records or appliance load inventories."
+    )
+    if uploaded_file is not None:
+        try:
+            custom_df = pd.read_csv(uploaded_file)
+            st.success(f"✓ File '{uploaded_file.name}' loaded successfully! ({len(custom_df)} rows imported)")
+        except Exception as ex:
+            st.error(f"Error parsing uploaded file: {ex}")
     
     st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 1.25rem; margin-bottom: 0.75rem;">Appliance Electrical Load Inventory</h3>', unsafe_allow_html=True)
     if search_term:
