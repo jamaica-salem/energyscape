@@ -103,9 +103,9 @@ st.markdown("""
         background: #FFFFFF !important;
     }
 
-    /* Hero Highlight Card (Bankio Deep Emerald Dark Card #0B4F46) */
+    /* Hero Highlight Card (Bankio Solid Flat Deep Emerald Card #0B4F46) */
     .hero-consumption-card {
-        background: linear-gradient(135deg, #0B4F46 0%, #063B34 100%) !important;
+        background-color: #0B4F46 !important;
         border-radius: 20px !important;
         padding: 1.75rem 2.25rem !important;
         color: #FFFFFF !important;
@@ -332,20 +332,20 @@ st.markdown("""
         color: #FFFFFF !important;
     }
 
-    /* Stunning Blue-Green Custom File Uploader Styling (Centered Layout) */
+    /* Minimal Flat Custom File Uploader Styling (Centered Layout) */
     div[data-testid="stFileUploader"] {
-        background: linear-gradient(180deg, #F0FDFA 0%, #FFFFFF 100%) !important;
-        border: 2.5px dashed #0D9488 !important;
+        background-color: #FFFFFF !important;
+        border: 2px dashed #0B4F46 !important;
         border-radius: 18px !important;
         padding: 1.5rem 2rem !important;
-        box-shadow: 0 4px 20px rgba(13, 148, 136, 0.08) !important;
+        box-shadow: 0 2px 10px rgba(11, 79, 70, 0.05) !important;
         transition: all 0.25s ease !important;
         text-align: center !important;
     }
     div[data-testid="stFileUploader"]:hover {
         border-color: #10B981 !important;
-        background: linear-gradient(180deg, #ECFDF5 0%, #FFFFFF 100%) !important;
-        box-shadow: 0 8px 24px rgba(16, 185, 129, 0.18) !important;
+        background-color: #F9FAFB !important;
+        box-shadow: 0 4px 14px rgba(16, 185, 129, 0.1) !important;
         transform: translateY(-2px) !important;
     }
     div[data-testid="stFileUploader"] [data-testid="stWidgetLabel"],
@@ -366,8 +366,8 @@ st.markdown("""
         width: 100% !important;
         margin: 0 auto !important;
         font-size: 1.1rem !important;
-        font-weight: 800 !important;
-        color: #0F766E !important;
+        font-weight: 700 !important;
+        color: #0B4F46 !important;
     }
     div[data-testid="stFileUploader"] section {
         background-color: transparent !important;
@@ -395,20 +395,20 @@ st.markdown("""
         text-align: center !important;
     }
     div[data-testid="stFileUploader"] section button {
-        background: linear-gradient(135deg, #166534 0%, #0D9488 100%) !important;
+        background-color: #0B4F46 !important;
         color: #FFFFFF !important;
         border: none !important;
         border-radius: 9999px !important;
-        font-weight: 800 !important;
+        font-weight: 600 !important;
         padding: 0.6rem 1.75rem !important;
-        box-shadow: 0 4px 14px rgba(13, 148, 136, 0.35) !important;
+        box-shadow: 0 4px 12px rgba(11, 79, 70, 0.2) !important;
         margin: 0 auto !important;
     }
     div[data-testid="stFileUploader"] small {
         text-align: center !important;
         display: block !important;
         margin-top: 0.5rem !important;
-        color: #64748B !important;
+        color: #6B7280 !important;
     }
 </style>
 """, unsafe_allow_html=True)
