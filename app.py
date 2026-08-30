@@ -313,11 +313,16 @@ st.markdown("""
         font-size: 0.875rem !important;
     }
     
-    /* Form Inputs, Selectboxes & Dropdown Fields - No Black Borders */
+    /* Form Inputs, Selectboxes, Search Bar & Dropdown Fields - No Black Borders */
     div[data-baseweb="select"],
     div[data-baseweb="select"] > div,
     div[data-baseweb="select"] [role="combobox"],
     div[data-baseweb="base-input"],
+    div[data-baseweb="input"],
+    div[data-baseweb="input"] > div,
+    div[data-testid="stTextInput"],
+    div[data-testid="stTextInput"] > div,
+    div[data-testid="stTextInput"] [data-baseweb="input"],
     div[data-testid="stNumberInputContainer"],
     div[data-testid="stSelectbox"] > div > div,
     div[data-testid="stMultiSelect"] > div > div,
@@ -339,6 +344,12 @@ st.markdown("""
     div[data-baseweb="select"] > div:focus,
     div[data-baseweb="select"] > div:focus-within,
     div[data-baseweb="select"] > div:active,
+    div[data-baseweb="input"]:hover,
+    div[data-baseweb="input"]:focus-within,
+    div[data-baseweb="input"] > div:hover,
+    div[data-baseweb="input"] > div:focus-within,
+    div[data-testid="stTextInput"] > div:hover,
+    div[data-testid="stTextInput"] > div:focus-within,
     div[data-testid="stSelectbox"] > div > div:hover,
     div[data-testid="stSelectbox"] > div > div:focus-within,
     div[data-testid="stMultiSelect"] > div > div:hover,
