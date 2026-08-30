@@ -749,6 +749,10 @@ with top_c2:
     search_term = st.text_input("Search", placeholder="🔍 Search dashboard metrics...", label_visibility="collapsed", key="global_search_input")
     st.session_state["global_search_term"] = search_term
 
+def clear_search_callback():
+    st.session_state["global_search_input"] = ""
+    st.session_state["global_search_term"] = ""
+
 # Render Search Active Status Banner if user enters a search term
 if search_term and search_term.strip():
     c_s1, c_s2 = st.columns([4, 1])
@@ -765,10 +769,7 @@ if search_term and search_term.strip():
         </div>
         """, unsafe_allow_html=True)
     with c_s2:
-        if st.button("CLEAR SEARCH", key="btn_clear_search", use_container_width=True):
-            st.session_state["global_search_input"] = ""
-            st.session_state["global_search_term"] = ""
-            st.rerun()
+        st.button("CLEAR SEARCH", key="btn_clear_search", on_click=clear_search_callback, use_container_width=True)
 
 # ----------------------------------------------------
 # NAVIGATION VIEWS IMPLEMENTATION
