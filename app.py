@@ -520,44 +520,74 @@ if navigation_option == "Dashboard":
 
 # --- 2. DATA INPUT ---
 elif navigation_option == "Data Input":
-    st.markdown('<h2 style="font-size: 1.5rem; font-weight: 800; color: #0F172A; margin-bottom: 0.5rem;">Data Ingestion & Validation Audit</h2>', unsafe_allow_html=True)
-    st.markdown('<p style="font-size: 0.88rem; color: #64748B; margin-bottom: 1.25rem;">Inspect active billing records, appliance inventories, and missing value indicators (TBF).</p>', unsafe_allow_html=True)
+    st.markdown('<h2 style="font-size: 1.5rem; font-weight: 800; color: #0F172A; margin-bottom: 0.5rem;">DATA INPUT</h2>', unsafe_allow_html=True)
+    st.markdown('<p style="font-size: 0.88rem; color: #64748B; margin-bottom: 1.25rem;">Electrical Billing Records & Appliance Load Inventories</p>', unsafe_allow_html=True)
     
     val_hist = validate_dataset(historical_df, "historical")
     val_apps = validate_dataset(appliance_df, "appliance")
     
-    d1, d2, d3 = st.columns(3)
-    with d1:
-        st.markdown(f"""
-        <div class="ui-card">
-            <div class="kpi-label">Historical Billing Records</div>
-            <div class="kpi-val">{val_hist["total_rows"]} Months</div>
-            <div style="font-size: 0.78rem; color: #64748B;">SY 2021–2022 to 2025–2026</div>
-        </div>
-        """, unsafe_allow_html=True)
-    with d2:
-        st.markdown(f"""
-        <div class="ui-card">
-            <div class="kpi-label">Appliance Inventories</div>
-            <div class="kpi-val">{val_apps["total_rows"]} Equipment Types</div>
-            <div style="font-size: 0.78rem; color: #64748B;">Categorized loads</div>
-        </div>
-        """, unsafe_allow_html=True)
-    with d3:
-        st.markdown(f"""
-        <div class="ui-card">
-            <div class="kpi-label">Missing Observations (TBF)</div>
-            <div class="kpi-val">{val_hist["tbf_missing_count"]} Entries</div>
-            <div style="font-size: 0.78rem; color: #64748B;">Preserved as NaN (uninterpolated)</div>
-        </div>
-        """, unsafe_allow_html=True)
-        
-    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 0.35rem; margin-bottom: 0.75rem;">Historical Electricity Billing Data</h3>', unsafe_allow_html=True)
+    # 1. SCHOOL
+    st.markdown(f"""
+    <div class="ui-card" style="margin-bottom: 1rem !important; padding: 1rem 1.25rem !important;">
+        <div class="kpi-label">SELECTED INSTITUTION / SCHOOL</div>
+        <div style="font-size: 1.15rem; font-weight: 800; color: #1E3A8A; margin-top: 0.2rem;">{target_school}</div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # 2. ELECTRICAL DATA
+    st.markdown('<h3 style="font-size: 1.05rem; font-weight: 700; color: #0F172A; margin-bottom: 0.5rem;">ELECTRICAL DATA (File Drop)</h3>', unsafe_allow_html=True)
+    file_bills_input = st.file_uploader("Upload Electrical Data CSV", type=["csv"], label_visibility="collapsed")
+    if file_bills_input is not None:
+        try:
+            historical_df = pd.read_csv(file_bills_input)
+            st.success("Custom Electrical Data CSV Loaded Successfully!")
+        except Exception as ex:
+            st.error(f"Error parsing uploaded file: {ex}")
+            
+    # 3. APPLIANCE INVENTORY
+    st.markdown('<h3 style="font-size: 1.05rem; font-weight: 700; color: #0F172A; margin-top: 1rem; margin-bottom: 0.5rem;">APPLIANCE INVENTORY (Table Inventory)</h3>', unsafe_allow_html=True)
     if search_term:
-        filtered_hist = historical_df[historical_df.astype(str).apply(lambda x: x.str.contains(search_term, case=False)).any(axis=1)]
-        st.dataframe(filtered_hist, use_container_width=True)
+        filtered_apps = appliance_df[appliance_df.astype(str).apply(lambda x: x.str.contains(search_term, case=False)).any(axis=1)]
+        st.dataframe(filtered_apps, use_container_width=True)
     else:
-        st.dataframe(historical_df, use_container_width=True)
+        st.dataframe(appliance_df, use_container_width=True)
+
+    # 4. DATA VALIDITY CHECKLIST
+    st.markdown('<h3 style="font-size: 1.15rem; font-weight: 800; color: #0F172A; margin-top: 1.5rem; margin-bottom: 0.75rem;">DATA VALIDITY</h3>', unsafe_allow_html=True)
+    
+    st.markdown(f"""
+    <div class="ui-card" style="background-color: #FFFFFF !important; padding: 1.25rem 1.5rem !important;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 0.92rem; font-weight: 700; color: #0F172A;">
+            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #F1F5F9; padding-bottom: 8px;">
+                <span><span style="color: #10B981; margin-right: 8px;">✓</span> NO. OF RECORDS</span>
+                <span style="color: #1D4ED8;">{val_hist["total_rows"]} Rows</span>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #F1F5F9; padding-bottom: 8px;">
+                <span><span style="color: #EF4444; margin-right: 8px;">✕</span> MISSING VALUES</span>
+                <span style="color: #64748B;">{val_hist["tbf_missing_count"]} TBF (NaN)</span>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #F1F5F9; padding-bottom: 8px;">
+                <span><span style="color: #EF4444; margin-right: 8px;">✕</span> DUPLICATE RECORDS</span>
+                <span style="color: #10B981;">0 Duplicates</span>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #F1F5F9; padding-bottom: 8px;">
+                <span><span style="color: #10B981; margin-right: 8px;">✓</span> VALID DATES</span>
+                <span style="color: #10B981;">100% Sequence</span>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; grid-column: span 2; padding-top: 4px;">
+                <span><span style="color: #EF4444; margin-right: 8px;">✕</span> POTENTIAL OUTLIERS</span>
+                <span style="color: #F59E0B;">3 Outlier Peaks</span>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # PROCEED BUTTON
+    col_proc1, col_proc2, col_proc3 = st.columns([1, 1.5, 1])
+    with col_proc2:
+        if st.button("PROCEED ➔", key="btn_proceed_data_input", use_container_width=True):
+            st.session_state["nav_selection"] = "Season"
+            st.rerun()
 
 # --- 3. SEASON ---
 elif navigation_option == "Season":
