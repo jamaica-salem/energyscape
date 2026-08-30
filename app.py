@@ -38,7 +38,7 @@ st.set_page_config(
 # ----------------------------------------------------
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
     /* Global Body & Background */
     html, body, [class*="css"] {
@@ -207,25 +207,17 @@ st.markdown("""
         white-space: nowrap !important;
     }
 
-    /* Sidebar Styling (Green Theme Navigation) */
+    /* Sidebar Base Background & Clean Styling */
     section[data-testid="stSidebar"] {
         background-color: #166534 !important;
         border-right: 1px solid #15803D !important;
     }
-    section[data-testid="stSidebar"] div,
-    section[data-testid="stSidebar"] p,
-    section[data-testid="stSidebar"] label,
-    section[data-testid="stSidebar"] span {
-        color: #FFFFFF !important;
-        font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif !important;
-    }
     
-    /* Preserve Streamlit Material Icons for Sidebar Collapse Button */
-    button[data-testid="stSidebarCollapseButton"] *,
-    [data-testid="stSidebarCollapseButton"] *,
-    button[data-testid="stSidebarCollapseButton"] span,
-    [data-testid="collapsedControl"] * {
-        font-family: 'Material Symbols Rounded', 'Material Icons', sans-serif !important;
+    /* Strictly Scoped Nav Content Typography (Leaves collapse button untouched) */
+    .sidebar-brand,
+    .sidebar-section-header,
+    div[role="radiogroup"] label {
+        font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif !important;
     }
     .sidebar-brand {
         display: flex;
