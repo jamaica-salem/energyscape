@@ -81,8 +81,8 @@ st.markdown("""
         background-color: #FFFFFF !important;
         border: 1px solid #E2E8F0 !important;
         border-radius: 18px !important;
-        padding: 1.25rem 1.5rem !important;
-        margin-bottom: 1.25rem !important;
+        padding: 1.4rem 1.65rem !important;
+        margin-bottom: 1.5rem !important;
         box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04) !important;
         box-sizing: border-box !important;
         overflow: visible !important;
@@ -91,11 +91,11 @@ st.markdown("""
     /* Hero Card (CURRENT CONSUMPTION - Green/Blue Energy Landscape Theme) */
     .hero-consumption-card {
         background: linear-gradient(135deg, #0F4C81 0%, #166534 100%) !important;
-        border-radius: 18px !important;
-        padding: 1.5rem 1.75rem !important;
+        border-radius: 20px !important;
+        padding: 1.75rem 2.25rem !important;
         color: #FFFFFF !important;
-        box-shadow: 0 8px 24px -4px rgba(22, 101, 52, 0.35) !important;
-        margin-bottom: 1.25rem !important;
+        box-shadow: 0 10px 30px -5px rgba(22, 101, 52, 0.28) !important;
+        margin-bottom: 1.75rem !important;
         position: relative !important;
         overflow: hidden !important;
         box-sizing: border-box !important;
@@ -108,14 +108,14 @@ st.markdown("""
         letter-spacing: 0.08em !important;
     }
     .hero-card-title {
-        font-size: 1.4rem !important;
+        font-size: 1.5rem !important;
         font-weight: 800 !important;
         color: #FFFFFF !important;
         margin-bottom: 1rem !important;
         letter-spacing: -0.01em !important;
     }
     .hero-metric-val {
-        font-size: 2.2rem !important;
+        font-size: 2.1rem !important;
         font-weight: 800 !important;
         color: #FFFFFF !important;
         letter-spacing: -0.02em !important;
@@ -410,113 +410,117 @@ ets_res = fit_ets_forecast(historical_df, target_school, forecast_horizon=foreca
 
 # --- 1. DASHBOARD (MAIN MOCK GRID LAYOUT) ---
 if navigation_option == "Dashboard":
-    col_main_left, col_main_right = st.columns([1.6, 1])
-    
-    with col_main_left:
-        # 1. CURRENT CONSUMPTION (Hero Card)
-        st.markdown(f"""
-        <div class="hero-consumption-card">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                <div>
-                    <div class="hero-card-label">Baseline Operational Audit</div>
-                    <div class="hero-card-title">CURRENT CONSUMPTION</div>
-                </div>
-                <span class="pill-badge-green">{target_school}</span>
+    # 1. CURRENT CONSUMPTION (Full-Width Hero Section)
+    st.markdown(f"""
+    <div class="hero-consumption-card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem;">
+            <div>
+                <div class="hero-card-label">Baseline Operational Audit</div>
+                <div class="hero-card-title" style="margin-bottom: 0 !important;">CURRENT CONSUMPTION</div>
             </div>
-            <div style="display: flex; gap: 2.5rem; align-items: flex-end; margin-top: 0.5rem;">
-                <div>
-                    <div class="hero-subtext">Monthly Energy Load</div>
-                    <div class="hero-metric-val">{format_kwh(load_summary.get("total_kwh", 2289.10))}</div>
+            <span class="pill-badge-green" style="font-size: 0.85rem; padding: 0.35rem 0.85rem;">{target_school}</span>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.75rem; align-items: center; background: rgba(255, 255, 255, 0.08); padding: 1.25rem 1.5rem; border-radius: 14px;">
+            <div>
+                <div class="hero-subtext">Monthly Energy Load</div>
+                <div class="hero-metric-val">{format_kwh(load_summary.get("total_kwh", 2289.10))}</div>
+            </div>
+            <div>
+                <div class="hero-subtext">Monthly Bill (BAU)</div>
+                <div class="hero-metric-val">{format_currency(bau_base["monthly_cost_php"])}</div>
+            </div>
+            <div>
+                <div class="hero-subtext">Annual Carbon Footprint</div>
+                <div class="hero-metric-val">{bau_base["annual_co2_kg"]/1000:.2f} t CO₂e</div>
+            </div>
+            <div>
+                <div class="hero-subtext">Emission Factor Baseline</div>
+                <div class="hero-metric-val" style="font-size: 1.8rem;">{emission_factor:.2f} kg/kWh</div>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # 2. Middle Row: PRIORITY LOAD & FORECAST (2 Columns: 1.1 : 1)
+    col_p, col_f = st.columns([1.1, 1])
+    
+    with col_p:
+        st.markdown('<h3 style="font-size: 1.15rem; font-weight: 800; color: #0F172A; margin-top: 0.25rem; margin-bottom: 0.85rem;">PRIORITY LOAD</h3>', unsafe_allow_html=True)
+        top_apps = apps_processed.sort_values(by='monthly_kwh', ascending=False).head(3)
+        
+        for idx, row in top_apps.iterrows():
+            st.markdown(f"""
+            <div class="ui-card" style="margin-bottom: 0.85rem !important; padding: 1.1rem 1.35rem !important;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <div style="font-weight: 800; font-size: 1rem; color: #0F172A;">{row['appliance']}</div>
+                        <div style="font-size: 0.82rem; color: #64748B; margin-top: 0.25rem;">
+                            <strong>{format_kwh(row['monthly_kwh'])}</strong> ({row['percentage_share']:.1f}% share) | {format_currency(row['monthly_cost_php'])}/mo
+                        </div>
+                    </div>
+                    <span class="pill-badge-red" style="font-size: 0.78rem; padding: 0.3rem 0.75rem;">{row['priority']}</span>
                 </div>
-                <div>
-                    <div class="hero-subtext">Monthly Bill (BAU)</div>
-                    <div class="hero-metric-val">{format_currency(bau_base["monthly_cost_php"])}</div>
-                </div>
-                <div>
-                    <div class="hero-subtext">Annual Carbon Footprint</div>
-                    <div class="hero-metric-val">{bau_base["annual_co2_kg"]/1000:.2f} t CO₂e</div>
-                </div>
+            </div>
+            """, unsafe_allow_html=True)
+            
+    with col_f:
+        st.markdown('<h3 style="font-size: 1.15rem; font-weight: 800; color: #0F172A; margin-top: 0.25rem; margin-bottom: 0.85rem;">FORECAST SUMMARY</h3>', unsafe_allow_html=True)
+        fc_df = ets_res["forecast_df"]
+        avg_fc_bill = fc_df['forecast_bill'].mean()
+        
+        st.markdown(f"""
+        <div class="ui-card" style="margin-bottom: 0.85rem !important; padding: 1.1rem 1.35rem !important;">
+            <div class="kpi-label">Projected Monthly Avg ({forecast_horizon} Months)</div>
+            <div class="kpi-val" style="font-size: 1.6rem;">{format_currency(avg_fc_bill)}</div>
+            <div style="margin-top: 0.4rem; font-size: 0.82rem; color: #64748B;">
+                MAPE Accuracy: <span style="color: #166534; font-weight: 800;">{ets_res['val_mape']:.2f}%</span> | RMSE: <strong>{format_currency(ets_res['val_rmse'])}</strong>
             </div>
         </div>
         """, unsafe_allow_html=True)
         
-        # Bottom Row: PRIORITY LOAD & FORECAST
-        col_p, col_f = st.columns(2)
-        
-        with col_p:
-            with st.container():
-                st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 0.25rem; margin-bottom: 0.75rem;">PRIORITY LOAD</h3>', unsafe_allow_html=True)
-                top_apps = apps_processed.sort_values(by='monthly_kwh', ascending=False).head(3)
-                
-                for idx, row in top_apps.iterrows():
-                    st.markdown(f"""
-                    <div class="ui-card" style="margin-bottom: 0.6rem !important; padding: 0.85rem 1.1rem !important;">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <div style="font-weight: 700; font-size: 0.92rem; color: #0F172A;">{row['appliance']}</div>
-                                <div style="font-size: 0.78rem; color: #64748B;">{format_kwh(row['monthly_kwh'])} ({row['percentage_share']:.1f}% share)</div>
-                            </div>
-                            <span class="pill-badge-red">{row['priority']}</span>
-                        </div>
-                    </div>
-                    """, unsafe_allow_html=True)
-                    
-        with col_f:
-            with st.container():
-                st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 0.25rem; margin-bottom: 0.75rem;">FORECAST</h3>', unsafe_allow_html=True)
-                fc_df = ets_res["forecast_df"]
-                avg_fc_bill = fc_df['forecast_bill'].mean()
-                
-                st.markdown(f"""
-                <div class="ui-card" style="margin-bottom: 0.6rem !important; padding: 0.85rem 1.1rem !important;">
-                    <div class="kpi-label">Projected Monthly Avg ({forecast_horizon} Mo)</div>
-                    <div class="kpi-val">{format_currency(avg_fc_bill)}</div>
-                    <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
-                        MAPE Accuracy: <strong>{ets_res['val_mape']:.2f}%</strong> | RMSE: <strong>{format_currency(ets_res['val_rmse'])}</strong>
-                    </div>
-                </div>
-                """, unsafe_allow_html=True)
-                
-                st.markdown(f"""
-                <div class="ui-card" style="margin-bottom: 0.6rem !important; padding: 0.85rem 1.1rem !important;">
-                    <div class="kpi-label">Confidence Interval Range</div>
-                    <div style="font-size: 1.05rem; font-weight: 700; color: #1E3A8A;">{format_currency(fc_df['lower_bound'].mean())} – {format_currency(fc_df['upper_bound'].mean())}</div>
-                    <div style="margin-top: 0.4rem; font-size: 0.78rem; color: #64748B;">
-                        Exponential Smoothing (ETS) Baseline
-                    </div>
-                </div>
-                """, unsafe_allow_html=True)
-
-    with col_main_right:
-        with st.container():
-            st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 0.25rem; margin-bottom: 0.75rem;">ELECTRICITY TREND</h3>', unsafe_allow_html=True)
-            plot_df = historical_df[historical_df['bill_php'].notna()]
-            if school_selection != "Both":
-                plot_df = plot_df[plot_df['school'] == school_selection]
-                
-            fig_tr = px.line(
-                plot_df, 
-                x="date_dt", 
-                y="bill_php", 
-                color="school" if school_selection == "Both" else None,
-                markers=True,
-                height=390
-            )
-            fig_tr = apply_blue_theme(fig_tr)
-            fig_tr.update_traces(line=dict(width=2.5))
-            st.plotly_chart(fig_tr, use_container_width=True)
-            
-            st.markdown(f"""
-            <div class="ui-card" style="margin-top: 0.5rem; padding: 0.9rem 1.1rem !important;">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <div class="kpi-label">Historical Average Bill</div>
-                        <div style="font-size: 1.2rem; font-weight: 800; color: #0F172A;">{format_currency(hist_metrics.get("avg_bill", 0))}</div>
-                    </div>
-                    <span class="pill-badge-blue">Peak: {format_currency(hist_metrics.get("max_bill", 0))}</span>
-                </div>
+        st.markdown(f"""
+        <div class="ui-card" style="margin-bottom: 0.85rem !important; padding: 1.1rem 1.35rem !important;">
+            <div class="kpi-label">Confidence Interval Range</div>
+            <div style="font-size: 1.15rem; font-weight: 800; color: #1E3A8A; margin-top: 0.2rem;">{format_currency(fc_df['lower_bound'].mean())} – {format_currency(fc_df['upper_bound'].mean())}</div>
+            <div style="margin-top: 0.4rem; font-size: 0.82rem; color: #64748B;">
+                Exponential Smoothing (ETS) Baseline Projection
             </div>
-            """, unsafe_allow_html=True)
+        </div>
+        """, unsafe_allow_html=True)
+
+    # 3. Bottom Row: ELECTRICITY TREND (Full-Width Section)
+    st.markdown('<h3 style="font-size: 1.15rem; font-weight: 800; color: #0F172A; margin-top: 1.5rem; margin-bottom: 0.85rem;">ELECTRICITY TREND</h3>', unsafe_allow_html=True)
+    plot_df = historical_df[historical_df['bill_php'].notna()]
+    if school_selection != "Both":
+        plot_df = plot_df[plot_df['school'] == school_selection]
+        
+    fig_tr = px.line(
+        plot_df, 
+        x="date_dt", 
+        y="bill_php", 
+        color="school" if school_selection == "Both" else None,
+        markers=True,
+        height=360
+    )
+    fig_tr = apply_blue_theme(fig_tr, "Historical Monthly Electricity Expenditure (₱)")
+    fig_tr.update_traces(line=dict(width=3))
+    st.plotly_chart(fig_tr, use_container_width=True)
+    
+    st.markdown(f"""
+    <div class="ui-card" style="margin-top: 0.75rem; padding: 1.1rem 1.5rem !important;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <div class="kpi-label">Historical Average Bill</div>
+                <div style="font-size: 1.3rem; font-weight: 800; color: #0F172A;">{format_currency(hist_metrics.get("avg_bill", 0))}</div>
+            </div>
+            <div>
+                <div class="kpi-label">Historical Peak Bill</div>
+                <div style="font-size: 1.3rem; font-weight: 800; color: #991B1B;">{format_currency(hist_metrics.get("max_bill", 0))}</div>
+            </div>
+            <span class="pill-badge-blue" style="font-size: 0.82rem; padding: 0.35rem 0.85rem;">Coverage: SY 2021–2026</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
 # --- 2. DATA INPUT ---
 elif navigation_option == "Data Input":
