@@ -350,18 +350,24 @@ st.markdown("""
         box-shadow: 0 8px 24px rgba(16, 185, 129, 0.18) !important;
         transform: translateY(-2px) !important;
     }
-    div[data-testid="stFileUploader"] label[data-testid="stWidgetLabel"] {
+    div[data-testid="stFileUploader"] label[data-testid="stWidgetLabel"],
+    div[data-testid="stFileUploader"] label {
+        display: flex !important;
         justify-content: center !important;
+        align-items: center !important;
         text-align: center !important;
         width: 100% !important;
-        margin-bottom: 0.75rem !important;
+        margin: 0 auto 0.75rem auto !important;
     }
-    div[data-testid="stFileUploader"] label[data-testid="stWidgetLabel"] p {
+    div[data-testid="stFileUploader"] label[data-testid="stWidgetLabel"] p,
+    div[data-testid="stFileUploader"] label p {
         text-align: center !important;
         width: 100% !important;
-        font-size: 1.05rem !important;
+        font-size: 1.1rem !important;
         font-weight: 800 !important;
         color: #0F766E !important;
+        margin: 0 auto !important;
+        display: block !important;
     }
     div[data-testid="stFileUploader"] section {
         background-color: transparent !important;
@@ -684,7 +690,7 @@ elif navigation_option == "Data Input":
     
     # Interactive File Drop Uploader Section matching Wireframe 2
     uploaded_file = st.file_uploader(
-        "DROP FILE HERE OR CLICK TO UPLOAD (Supports CSV billing records & appliance inventories)",
+        "DROP FILE HERE OR CLICK TO UPLOAD",
         type=["csv"],
         key="data_input_uploader",
         help="Drag and drop or click to upload CSV electrical billing records or appliance load inventories."
