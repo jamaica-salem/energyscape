@@ -214,51 +214,69 @@ st.markdown("""
     }
     section[data-testid="stSidebar"] * {
         color: #FFFFFF !important;
+        font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif !important;
     }
     .sidebar-brand {
         display: flex;
         align-items: center;
-        gap: 10px;
-        font-size: 1.35rem;
+        gap: 12px;
+        font-size: 1.5rem;
         font-weight: 800;
         color: #FFFFFF !important;
-        margin-bottom: 1.25rem;
-        padding-bottom: 0.75rem;
-        border-bottom: 1px solid #22C55E;
+        font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif !important;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.85rem;
+        border-bottom: 2px solid #22C55E;
+        letter-spacing: -0.01em;
     }
     .sidebar-section-header {
-        font-size: 0.75rem !important;
+        font-size: 0.82rem !important;
         font-weight: 800 !important;
-        color: #DCFCE7 !important;
+        color: #86EFAC !important;
         text-transform: uppercase !important;
-        letter-spacing: 0.08em !important;
-        margin-top: 1rem !important;
-        margin-bottom: 0.4rem !important;
+        letter-spacing: 0.1em !important;
+        margin-top: 1.2rem !important;
+        margin-bottom: 0.6rem !important;
+        font-family: 'Outfit', sans-serif !important;
     }
 
-    /* Navigation Radio Pill Items (NO EMOJIS) */
+    /* Navigation Radio Items with Enhanced Outfit Typography */
     div[role="radiogroup"] label {
         background-color: transparent !important;
         color: #F0FDF4 !important;
+        font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif !important;
+        font-size: 1.08rem !important;
         font-weight: 700 !important;
-        padding: 9px 14px !important;
-        border-radius: 9999px !important;
-        margin-bottom: 4px !important;
-        transition: all 0.2s ease !important;
+        letter-spacing: 0.02em !important;
+        padding: 11px 18px !important;
+        border-radius: 12px !important;
+        margin-bottom: 6px !important;
+        transition: all 0.22s ease !important;
         display: flex !important;
         align-items: center !important;
     }
+    div[role="radiogroup"] label p,
+    div[role="radiogroup"] label span,
+    div[role="radiogroup"] label div {
+        font-size: 1.08rem !important;
+        font-weight: 700 !important;
+        font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif !important;
+    }
     div[role="radiogroup"] label:hover {
-        background-color: rgba(255, 255, 255, 0.15) !important;
+        background-color: rgba(255, 255, 255, 0.18) !important;
+        transform: translateX(4px) !important;
     }
     div[role="radiogroup"] label[data-checked="true"] {
-        background-color: #FFFFFF !important;
+        background: linear-gradient(135deg, #FFFFFF 0%, #F0FDF4 100%) !important;
         color: #166534 !important;
         font-weight: 800 !important;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+        font-size: 1.1rem !important;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15) !important;
     }
     div[role="radiogroup"] label[data-checked="true"] * {
         color: #166534 !important;
+        font-weight: 800 !important;
+        font-size: 1.1rem !important;
     }
 
     /* Widget Labels & Inputs */
