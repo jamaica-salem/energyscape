@@ -263,18 +263,26 @@ st.markdown("""
         font-size: 0.875rem !important;
     }
     div[data-baseweb="select"] > div,
+    div[data-baseweb="select"] > div *,
     div[data-baseweb="input"],
-    div[data-baseweb="input"] > div,
+    div[data-baseweb="input"] *,
     div[data-baseweb="base-input"],
+    div[data-baseweb="base-input"] *,
     div[data-testid="stNumberInputContainer"],
-    div[data-testid="stNumberInputContainer"] > div,
+    div[data-testid="stNumberInputContainer"] *,
+    button[data-testid*="stNumberInputStep"],
     input[type="number"],
     input[type="text"] {
         background-color: #FFFFFF !important;
         color: #0F172A !important;
         border: none !important;
         box-shadow: none !important;
+    }
+    div[data-testid="stNumberInputContainer"],
+    div[data-baseweb="input"],
+    div[data-baseweb="select"] > div {
         border-radius: 10px !important;
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04) !important;
     }
 
     /* Legend Row */
