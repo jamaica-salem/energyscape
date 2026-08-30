@@ -1093,8 +1093,52 @@ elif navigation_option == "Optimization":
 
 # --- 9. IMPACT ---
 elif navigation_option == "Impact":
-    st.markdown('<h2 style="font-size: 1.5rem; font-weight: 800; color: #0F172A; margin-bottom: 0.5rem;">Institutional Impact & Sensitivity Analysis</h2>', unsafe_allow_html=True)
-    st.markdown('<p style="font-size: 0.88rem; color: #64748B; margin-bottom: 1.25rem;">Comparative analysis between An-anaao and La Paz Integrated Schools & rate sensitivity elasticity.</p>', unsafe_allow_html=True)
+    st.markdown('<h2 style="font-size: 1.5rem; font-weight: 800; color: #0F172A; margin-bottom: 0.5rem;">IMPACT</h2>', unsafe_allow_html=True)
+    st.markdown('<p style="font-size: 0.88rem; color: #64748B; margin-bottom: 1.25rem;">Institutional Impact, Baseline vs. Optimized Savings, & Sensitivity Elasticity</p>', unsafe_allow_html=True)
+    
+    kwh_savings_annual = opt_res["annual_kwh_savings"]
+    cost_savings_annual = opt_res["annual_cost_savings_php"]
+    co2_savings_annual = opt_res["annual_avoided_co2_kg"]
+    
+    col_imp1, col_imp2, col_imp3 = st.columns(3)
+    with col_imp1:
+        st.markdown(f"""
+        <div class="ui-card" style="border-top: 5px solid #166534 !important;">
+            <div class="kpi-label" style="color: #166534 !important;">Energy kWh Saved</div>
+            <div style="font-size: 1.7rem; font-weight: 800; color: #0F172A; margin-top: 0.3rem;">{kwh_savings_annual:,.2f} KWH</div>
+            <div style="font-size: 0.82rem; color: #64748B; margin-top: 0.4rem;">
+                Annual Saved Energy ({opt_res['monthly_kwh_savings']:,.2f} kWh/mo)
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+    with col_imp2:
+        st.markdown(f"""
+        <div class="ui-card" style="border-top: 5px solid #1D4ED8 !important;">
+            <div class="kpi-label" style="color: #1E3A8A !important;">Cost ₱ Saved</div>
+            <div style="font-size: 1.7rem; font-weight: 800; color: #0F172A; margin-top: 0.3rem;">{format_currency(cost_savings_annual)}</div>
+            <div style="font-size: 0.82rem; color: #64748B; margin-top: 0.4rem;">
+                Annual Budget Relief ({format_currency(opt_res['monthly_cost_savings_php'])}/mo)
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+    with col_imp3:
+        st.markdown(f"""
+        <div class="ui-card" style="border-top: 5px solid #D97706 !important;">
+            <div class="kpi-label" style="color: #D97706 !important;">Carbon kg Avoided</div>
+            <div style="font-size: 1.7rem; font-weight: 800; color: #0F172A; margin-top: 0.3rem;">{co2_savings_annual:,.2f} KG</div>
+            <div style="font-size: 0.82rem; color: #64748B; margin-top: 0.4rem;">
+                Annual CO₂e Reduction ({opt_res['monthly_kwh_savings']*emission_factor:,.1f} kg/mo)
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+    st.markdown('<h3 style="font-size: 1.15rem; font-weight: 800; color: #0F172A; margin-top: 1rem; margin-bottom: 0.75rem;">BASELINE VS OPTIMIZED IMPACT TABLE</h3>', unsafe_allow_html=True)
+    imp_table = pd.DataFrame([
+        {"Impact Category": "Monthly Electricity (kWh)", "Baseline (BAU)": format_kwh(opt_res["bau_monthly_kwh"]), "Optimized": format_kwh(opt_res["optimized_monthly_kwh"]), "Annual Net Impact": f"-{kwh_savings_annual:,.2f} kWh Saved/Year"},
+        {"Impact Category": "Monthly Expenditure (₱)", "Baseline (BAU)": format_currency(opt_res["bau_monthly_kwh"] * electricity_rate), "Optimized": format_currency(opt_res["optimized_monthly_kwh"] * electricity_rate), "Annual Net Impact": f"-{format_currency(cost_savings_annual)} Saved/Year"},
+        {"Impact Category": "Monthly Carbon Footprint (kg CO₂e)", "Baseline (BAU)": f"{opt_res['bau_monthly_kwh']*emission_factor:,.2f} kg", "Optimized": f"{opt_res['optimized_monthly_kwh']*emission_factor:,.2f} kg", "Annual Net Impact": f"-{co2_savings_annual:,.2f} kg CO₂e Avoided/Year"},
+    ])
+    st.dataframe(imp_table, use_container_width=True)
     
     m_an = calculate_historical_metrics(historical_df, "An-anaao Integrated School")
     m_lp = calculate_historical_metrics(historical_df, "La Paz Integrated School")
@@ -1110,12 +1154,19 @@ elif navigation_option == "Impact":
         {"Indicator": "Highest Historical Bill (₱)", "An-anaao Integrated School": format_currency(m_an.get("max_bill")), "La Paz Integrated School": format_currency(m_lp.get("max_bill")), "Difference": format_currency(m_lp.get("max_bill", 0) - m_an.get("max_bill", 0))},
         {"Indicator": "Average Forecasted Bill (₱)", "An-anaao Integrated School": format_currency(fc_an_mean), "La Paz Integrated School": format_currency(fc_lp_mean), "Difference": format_currency(fc_lp_mean - fc_an_mean)},
     ])
-    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 0.35rem; margin-bottom: 0.75rem;">Comparative School Benchmark Matrix</h3>', unsafe_allow_html=True)
+    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 1.25rem; margin-bottom: 0.75rem;">Comparative School Benchmark Matrix</h3>', unsafe_allow_html=True)
     st.dataframe(comp_df, use_container_width=True)
     
     sens_df = calculate_sensitivity_analysis()
     st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 1.25rem; margin-bottom: 0.75rem;">Sensitivity Ratios & Rate Elasticity Table</h3>', unsafe_allow_html=True)
     st.dataframe(sens_df, use_container_width=True)
+
+    # PROCEED BUTTON
+    col_proc1, col_proc2, col_proc3 = st.columns([1, 1.5, 1])
+    with col_proc2:
+        if st.button("PROCEED ➔", key="btn_proceed_impact", use_container_width=True):
+            st.session_state["nav_selection"] = "Reports"
+            st.rerun()
 
 # --- 10. REPORTS ---
 elif navigation_option == "Reports":
