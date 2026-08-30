@@ -262,8 +262,13 @@ st.markdown("""
         font-weight: 700 !important;
         font-size: 0.875rem !important;
     }
+    div[data-baseweb="select"],
     div[data-baseweb="select"] > div,
     div[data-baseweb="select"] > div *,
+    div[data-testid="stMultiSelect"] > div,
+    div[data-testid="stMultiSelect"] > div *,
+    div[data-testid="stSelectbox"] > div,
+    div[data-testid="stSelectbox"] > div *,
     div[data-baseweb="input"],
     div[data-baseweb="input"] *,
     div[data-baseweb="base-input"],
@@ -279,10 +284,18 @@ st.markdown("""
         box-shadow: none !important;
     }
     div[data-testid="stNumberInputContainer"],
+    div[data-testid="stMultiSelect"] > div,
+    div[data-testid="stSelectbox"] > div,
     div[data-baseweb="input"],
     div[data-baseweb="select"] > div {
         border-radius: 10px !important;
         box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04) !important;
+    }
+    span[data-baseweb="tag"],
+    div[data-baseweb="tag"] {
+        background-color: #1D4ED8 !important;
+        color: #FFFFFF !important;
+        border-radius: 6px !important;
     }
 
     /* Legend Row */
@@ -737,7 +750,7 @@ elif navigation_option == "Seasonal Analysis":
     </div>
     """, unsafe_allow_html=True)
     
-    with st.container(border=True):
+    with st.container():
         st.markdown('<h4 style="font-size: 0.95rem; font-weight: 700; color: #1E3A8A; margin-bottom: 0.25rem;">Season Classification Parameters</h4>', unsafe_allow_html=True)
         st.markdown('<p style="font-size: 0.82rem; color: #64748B; margin-bottom: 0.75rem;">Select months assigned to the Dry Season. Unselected months automatically populate the Wet Season baseline.</p>', unsafe_allow_html=True)
         
