@@ -264,17 +264,11 @@ st.markdown("""
     }
     div[data-baseweb="select"],
     div[data-baseweb="select"] > div,
-    div[data-baseweb="select"] > div *,
     div[data-testid="stMultiSelect"] > div,
-    div[data-testid="stMultiSelect"] > div *,
     div[data-testid="stSelectbox"] > div,
-    div[data-testid="stSelectbox"] > div *,
     div[data-baseweb="input"],
-    div[data-baseweb="input"] *,
     div[data-baseweb="base-input"],
-    div[data-baseweb="base-input"] *,
     div[data-testid="stNumberInputContainer"],
-    div[data-testid="stNumberInputContainer"] *,
     button[data-testid*="stNumberInputStep"],
     input[type="number"],
     input[type="text"] {
@@ -291,11 +285,21 @@ st.markdown("""
         border-radius: 10px !important;
         box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04) !important;
     }
+
+    /* Multiselect Blue Tag Pills Styling */
     span[data-baseweb="tag"],
-    div[data-baseweb="tag"] {
+    div[data-baseweb="tag"],
+    span[data-baseweb="tag"] *,
+    div[data-baseweb="tag"] * {
         background-color: #1D4ED8 !important;
         color: #FFFFFF !important;
-        border-radius: 6px !important;
+        fill: #FFFFFF !important;
+    }
+    span[data-baseweb="tag"],
+    div[data-baseweb="tag"] {
+        border-radius: 8px !important;
+        padding: 3px 10px !important;
+        margin: 2px !important;
     }
 
     /* Legend Row */
