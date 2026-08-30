@@ -622,7 +622,7 @@ def navigate_to_page(target_page: str):
     st.session_state["nav_selection"] = target_page
 
 with st.sidebar:
-    st.markdown('<div class="sidebar-brand"><span>ENERGYSCAPE</span></div>', unsafe_allow_html=True)
+    st.markdown('<div class="sidebar-brand">⚡ <span>ENERGYSCAPE</span></div>', unsafe_allow_html=True)
     
     st.markdown('<div class="sidebar-section-header">NAVIGATION VIEWS</div>', unsafe_allow_html=True)
     navigation_option = st.radio(
