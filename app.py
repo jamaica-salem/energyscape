@@ -315,48 +315,50 @@ st.markdown("""
     
     /* Form Inputs, Selectboxes, Search Bar & Dropdown Fields - No Black Borders */
     div[data-baseweb="select"],
-    div[data-baseweb="select"] > div,
-    div[data-baseweb="select"] [role="combobox"],
+    div[data-baseweb="select"] *,
     div[data-baseweb="base-input"],
+    div[data-baseweb="base-input"] *,
     div[data-baseweb="input"],
-    div[data-baseweb="input"] > div,
+    div[data-baseweb="input"] *,
     div[data-testid="stTextInput"],
-    div[data-testid="stTextInput"] > div,
-    div[data-testid="stTextInput"] [data-baseweb="input"],
+    div[data-testid="stTextInput"] *,
     div[data-testid="stNumberInputContainer"],
-    div[data-testid="stSelectbox"] > div > div,
-    div[data-testid="stMultiSelect"] > div > div,
+    div[data-testid="stNumberInputContainer"] *,
+    div[data-testid="stSelectbox"] *,
+    div[data-testid="stMultiSelect"] *,
     button[data-testid*="stNumberInputStep"],
     input[type="number"],
-    input[type="text"] {
+    input[type="text"],
+    input {
         background-color: #FFFFFF !important;
         color: #111827 !important;
-        border: 1px solid #EAECF0 !important;
         border-color: #EAECF0 !important;
         border-radius: 12px !important;
         box-shadow: none !important;
         outline: none !important;
+        outline-width: 0 !important;
     }
 
-    div[data-baseweb="select"]:hover > div,
-    div[data-baseweb="select"]:focus-within > div,
-    div[data-baseweb="select"] > div:hover,
-    div[data-baseweb="select"] > div:focus,
-    div[data-baseweb="select"] > div:focus-within,
-    div[data-baseweb="select"] > div:active,
-    div[data-baseweb="input"]:hover,
-    div[data-baseweb="input"]:focus-within,
-    div[data-baseweb="input"] > div:hover,
-    div[data-baseweb="input"] > div:focus-within,
-    div[data-testid="stTextInput"] > div:hover,
-    div[data-testid="stTextInput"] > div:focus-within,
-    div[data-testid="stSelectbox"] > div > div:hover,
-    div[data-testid="stSelectbox"] > div > div:focus-within,
-    div[data-testid="stMultiSelect"] > div > div:hover,
-    div[data-testid="stMultiSelect"] > div > div:focus-within {
+    div[data-baseweb="select"]:hover *,
+    div[data-baseweb="select"]:focus-within *,
+    div[data-baseweb="input"]:hover *,
+    div[data-baseweb="input"]:focus-within *,
+    div[data-baseweb="input"]:active *,
+    div[data-testid="stTextInput"]:hover *,
+    div[data-testid="stTextInput"]:focus-within *,
+    div[data-testid="stTextInput"]:active *,
+    div[data-testid="stSelectbox"]:hover *,
+    div[data-testid="stSelectbox"]:focus-within *,
+    div[data-testid="stMultiSelect"]:hover *,
+    div[data-testid="stMultiSelect"]:focus-within *,
+    input:hover,
+    input:focus,
+    input:active,
+    input:focus-visible {
         border-color: #0B4F46 !important;
         box-shadow: 0 0 0 1px #0B4F46 !important;
         outline: none !important;
+        outline-width: 0 !important;
     }
 
     /* Multiselect Tag Pills (100% Emerald Green #0B4F46) */
