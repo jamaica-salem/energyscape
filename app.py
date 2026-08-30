@@ -341,26 +341,28 @@ st.markdown("""
         outline: none !important;
     }
 
-    /* ABSOLUTE CLEAN SEARCH BAR - NO WHITE RECTANGLE BACKGROUND CONTAINER */
-    div[data-testid="stTextInput"] {
+    /* ABSOLUTE CLEAN SEARCH BAR - NO DOUBLE BOX / NO WHITE RECTANGLE */
+    div[data-testid="stTextInput"],
+    div[data-testid="stTextInput"] > div,
+    div[data-testid="stTextInput"] [data-baseweb="input"] {
         background-color: transparent !important;
         background: transparent !important;
         border: none !important;
+        border-color: transparent !important;
         box-shadow: none !important;
         outline: none !important;
-        border-radius: 9999px !important;
     }
-    div[data-testid="stTextInput"] > div,
-    div[data-testid="stTextInput"] [data-baseweb="input"],
+
     div[data-testid="stTextInput"] [data-baseweb="base-input"],
     div[data-testid="stTextInput"] input {
+        background-color: #FFFFFF !important;
         border: 1px solid #EAECF0 !important;
         border-color: #EAECF0 !important;
-        border-radius: 9999px !important;
-        background-color: #FFFFFF !important;
+        border-radius: 12px !important;
         box-shadow: none !important;
         outline: none !important;
     }
+
     div[data-testid="stTextInput"] *:hover,
     div[data-testid="stTextInput"] *:focus,
     div[data-testid="stTextInput"] *:focus-within,
