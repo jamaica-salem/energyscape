@@ -111,13 +111,13 @@ st.markdown("""
         background: linear-gradient(180deg, #ECFEFF 0%, #FFFFFF 100%) !important;
     }
 
-    /* Hero Card (CURRENT CONSUMPTION - Strict Blue-Green Gradient Theme) */
+    /* Hero Card (CURRENT CONSUMPTION - Matching Wireframe Green Theme) */
     .hero-consumption-card {
-        background: linear-gradient(135deg, #0F4C81 0%, #0D9488 50%, #166534 100%) !important;
-        border-radius: 20px !important;
+        background: linear-gradient(135deg, #529E72 0%, #468B64 100%) !important;
+        border-radius: 22px !important;
         padding: 1.75rem 2.25rem !important;
         color: #FFFFFF !important;
-        box-shadow: 0 12px 32px -5px rgba(13, 148, 136, 0.35) !important;
+        box-shadow: 0 12px 32px -5px rgba(82, 158, 114, 0.35) !important;
         margin-bottom: 1.75rem !important;
         position: relative !important;
         overflow: hidden !important;
@@ -125,7 +125,7 @@ st.markdown("""
     }
     .hero-card-label {
         font-size: 0.85rem !important;
-        color: #99F6E4 !important;
+        color: #E8F5E9 !important;
         font-weight: 700 !important;
         text-transform: uppercase !important;
         letter-spacing: 0.08em !important;
@@ -147,45 +147,45 @@ st.markdown("""
     }
     .hero-subtext {
         font-size: 0.85rem !important;
-        color: #CCFBF1 !important;
+        color: #E8F5E9 !important;
     }
 
     /* Blue-Green Pill Badges */
     .pill-badge-blue {
-        background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%) !important;
-        color: #1E40AF !important;
-        padding: 0.3rem 0.75rem !important;
+        background-color: #3B709E !important;
+        color: #FFFFFF !important;
+        padding: 0.35rem 0.85rem !important;
         border-radius: 9999px !important;
-        font-size: 0.75rem !important;
+        font-size: 0.78rem !important;
         font-weight: 800 !important;
         display: inline-flex !important;
         align-items: center !important;
         white-space: nowrap !important;
-        box-shadow: 0 2px 6px rgba(37, 99, 235, 0.15) !important;
+        box-shadow: 0 2px 8px rgba(59, 112, 158, 0.2) !important;
     }
     .pill-badge-teal {
-        background: linear-gradient(135deg, #CCFBF1 0%, #99F6E4 100%) !important;
-        color: #0F766E !important;
-        padding: 0.3rem 0.75rem !important;
+        background-color: #529E72 !important;
+        color: #FFFFFF !important;
+        padding: 0.35rem 0.85rem !important;
         border-radius: 9999px !important;
-        font-size: 0.75rem !important;
+        font-size: 0.78rem !important;
         font-weight: 800 !important;
         display: inline-flex !important;
         align-items: center !important;
         white-space: nowrap !important;
-        box-shadow: 0 2px 6px rgba(13, 148, 136, 0.15) !important;
+        box-shadow: 0 2px 8px rgba(82, 158, 114, 0.2) !important;
     }
     .pill-badge-green {
-        background: linear-gradient(135deg, #DCFCE7 0%, #BBF7D0 100%) !important;
-        color: #166534 !important;
-        padding: 0.3rem 0.75rem !important;
+        background-color: #468B64 !important;
+        color: #FFFFFF !important;
+        padding: 0.35rem 0.85rem !important;
         border-radius: 9999px !important;
-        font-size: 0.75rem !important;
+        font-size: 0.78rem !important;
         font-weight: 800 !important;
         display: inline-flex !important;
         align-items: center !important;
         white-space: nowrap !important;
-        box-shadow: 0 2px 6px rgba(34, 197, 94, 0.15) !important;
+        box-shadow: 0 2px 8px rgba(70, 139, 100, 0.2) !important;
     }
 
     /* Metric Display */
@@ -207,10 +207,10 @@ st.markdown("""
         white-space: nowrap !important;
     }
 
-    /* Sidebar Base Background & Harmonious Ocean Sapphire Gradient Styling */
+    /* Sidebar Base Background matching reference wireframe image (#529E72 Sage Emerald Green) */
     section[data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #0A2540 0%, #0F4C81 40%, #0D9488 100%) !important;
-        border-right: 1px solid #0D9488 !important;
+        background-color: #529E72 !important;
+        border-right: 1px solid #458861 !important;
     }
     
     /* Strictly Scoped Nav Content Typography (Leaves collapse button untouched) */
@@ -229,7 +229,7 @@ st.markdown("""
         font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif !important;
         margin-bottom: 1.5rem;
         padding-bottom: 0.85rem;
-        border-bottom: 2px solid #0D9488;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.35);
         letter-spacing: -0.01em;
     }
     .sidebar-section-header {
@@ -243,7 +243,7 @@ st.markdown("""
         font-family: 'Outfit', sans-serif !important;
     }
 
-    /* Navigation Radio Items with Enhanced Outfit White Typography */
+    /* Navigation Radio Items matching reference wireframe */
     div[role="radiogroup"] label,
     div[role="radiogroup"] label p,
     div[role="radiogroup"] label span,
@@ -265,22 +265,22 @@ st.markdown("""
         align-items: center !important;
     }
     div[role="radiogroup"] label:hover {
-        background-color: rgba(255, 255, 255, 0.18) !important;
+        background-color: rgba(255, 255, 255, 0.2) !important;
         transform: translateX(4px) !important;
     }
     div[role="radiogroup"] label:hover * {
         color: #FFFFFF !important;
     }
     div[role="radiogroup"] label[data-checked="true"] {
-        background: linear-gradient(135deg, #FFFFFF 0%, #F0FDFA 100%) !important;
-        box-shadow: 0 6px 18px rgba(13, 148, 136, 0.25) !important;
+        background-color: #FFFFFF !important;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12) !important;
     }
     div[role="radiogroup"] label[data-checked="true"],
     div[role="radiogroup"] label[data-checked="true"] p,
     div[role="radiogroup"] label[data-checked="true"] span,
     div[role="radiogroup"] label[data-checked="true"] div,
     div[role="radiogroup"] label[data-checked="true"] * {
-        color: #0F766E !important;
+        color: #3B709E !important;
         font-weight: 800 !important;
         font-size: 1.1rem !important;
     }
@@ -315,12 +315,12 @@ st.markdown("""
         box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04) !important;
     }
 
-    /* Multiselect Blue Tag Pills */
+    /* Multiselect Tag Pills */
     span[data-baseweb="tag"],
     div[data-baseweb="tag"],
     span[data-baseweb="tag"] *,
     div[data-baseweb="tag"] * {
-        background-color: #0D9488 !important;
+        background-color: #3B709E !important;
         color: #FFFFFF !important;
         fill: #FFFFFF !important;
     }
@@ -331,28 +331,27 @@ st.markdown("""
         margin: 2px !important;
     }
 
-    /* Vibrant Green Action Buttons Styling */
+    /* Action Buttons (PROCEED) matching wireframe steel blue (#3B709E) with white border */
     div.stButton > button,
     button[data-testid="stBaseButton-secondary"],
     button[data-testid="stBaseButton-primary"] {
-        background: linear-gradient(135deg, #166534 0%, #15803D 50%, #16A34A 100%) !important;
+        background-color: #3B709E !important;
         color: #FFFFFF !important;
-        border: none !important;
+        border: 3px solid #FFFFFF !important;
         border-radius: 9999px !important;
-        padding: 0.65rem 1.75rem !important;
+        padding: 0.65rem 2rem !important;
         font-weight: 800 !important;
-        font-size: 0.95rem !important;
-        letter-spacing: 0.03em !important;
-        box-shadow: 0 4px 14px rgba(22, 101, 52, 0.35) !important;
+        font-size: 1.05rem !important;
+        letter-spacing: 0.04em !important;
+        box-shadow: 0 6px 18px rgba(59, 112, 158, 0.35) !important;
         transition: all 0.2s ease !important;
     }
     div.stButton > button:hover,
     button[data-testid="stBaseButton-secondary"]:hover,
     button[data-testid="stBaseButton-primary"]:hover {
-        background: linear-gradient(135deg, #15803D 0%, #16A34A 50%, #22C55E 100%) !important;
-        color: #FFFFFF !important;
-        box-shadow: 0 6px 20px rgba(22, 101, 52, 0.45) !important;
+        background-color: #2D5880 !important;
         transform: translateY(-2px) !important;
+        box-shadow: 0 10px 24px rgba(59, 112, 158, 0.5) !important;
     }
     div.stButton > button * {
         color: #FFFFFF !important;
@@ -494,8 +493,8 @@ except Exception as e:
 # ----------------------------------------------------
 # STRICT BLUE-GREEN PLOTLY STYLING HELPER
 # ----------------------------------------------------
-BLUE_PALETTE = ["#0F4C81", "#0D9488", "#10B981", "#06B6D4", "#2563EB", "#14B8A6", "#0284C7"]
-BLUE_GREEN_PALETTE = ["#0F4C81", "#0D9488", "#10B981", "#06B6D4", "#2563EB", "#14B8A6", "#0284C7"]
+BLUE_PALETTE = ["#3B709E", "#529E72", "#5B86E5", "#468B64", "#2D5880", "#81C784"]
+BLUE_GREEN_PALETTE = ["#3B709E", "#529E72", "#5B86E5", "#468B64", "#2D5880", "#81C784"]
 
 def apply_blue_theme(fig, title=""):
     fig.update_layout(
