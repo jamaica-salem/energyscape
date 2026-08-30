@@ -734,6 +734,70 @@ def render_bankio_table(df: pd.DataFrame, first_col_green: bool = False, search_
     st.markdown(''.join(html), unsafe_allow_html=True)
 
 # ----------------------------------------------------
+# APPLICATION ENTRY & WELCOME LANDING STATE
+# ----------------------------------------------------
+if "entered_app" not in st.session_state:
+    st.session_state["entered_app"] = False
+
+def enter_application():
+    st.session_state["entered_app"] = True
+    st.session_state["nav_selection"] = "Dashboard"
+
+def exit_to_welcome():
+    st.session_state["entered_app"] = False
+
+# FULL SCREEN WELCOME LANDING PAGE (FIRST THING USER SEES)
+if not st.session_state["entered_app"]:
+    import base64
+    welcome_bg_path = Path(__file__).parent / "assets" / "welcome_bg.png"
+    bg_b64 = ""
+    if welcome_bg_path.exists():
+        with open(welcome_bg_path, "rb") as f:
+            bg_b64 = base64.b64encode(f.read()).decode()
+
+    # Hide Sidebar and Header for full-screen welcome view
+    st.markdown("""
+    <style>
+        section[data-testid="stSidebar"] {
+            display: none !important;
+        }
+        header[data-testid="stHeader"] {
+            display: none !important;
+        }
+        .main .block-container {
+            padding: 0 !important;
+            max-width: 100% !important;
+        }
+    </style>
+    """, unsafe_allow_html=True)
+
+    st.markdown(f"""
+    <div style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 999999; background-image: linear-gradient(180deg, rgba(11, 79, 70, 0.15) 0%, rgba(11, 79, 70, 0.65) 100%), url('data:image/png;base64,{bg_b64}'); background-size: cover; background-position: center; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem;">
+        <div style="text-align: center; max-width: 960px; width: 90%;">
+            <div style="display: inline-block; padding: 0.4rem 1.4rem; background: rgba(11, 79, 70, 0.75); backdrop-filter: blur(12px); border-radius: 9999px; color: #FFFFFF !important; font-size: 0.9rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.5rem; border: 1px solid rgba(255, 255, 255, 0.35); box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+                <span style="color: #FFFFFF !important;">School Science and Technology Fair 2026</span>
+            </div>
+            <div style="font-family: 'Outfit', 'Inter', sans-serif; font-size: 5.2rem; font-weight: 900; letter-spacing: 0.05em; margin: 0 0 0.85rem 0; line-height: 1.05;">
+                <span style="color: #FFFFFF !important; text-shadow: 0 10px 30px rgba(0, 0, 0, 0.9), -4px -4px 0 #0B4F46, 4px -4px 0 #0B4F46, -4px 4px 0 #0B4F46, 4px 4px 0 #0B4F46 !important;">ENERGYSCAPE</span>
+            </div>
+            <div style="font-family: 'Inter', sans-serif; font-size: 1.45rem; font-weight: 800; letter-spacing: 0.08em; margin-bottom: 2rem; text-transform: uppercase;">
+                <span style="color: #FFFFFF !important; text-shadow: 0 4px 16px rgba(0, 0, 0, 0.9), -1.5px -1.5px 0 #0B4F46, 1.5px -1.5px 0 #0B4F46, -1.5px 1.5px 0 #0B4F46, 1.5px 1.5px 0 #0B4F46 !important;">A MATHEMATICAL-COMPUTATIONAL DECISION SUPPORT SYSTEM</span>
+            </div>
+            <div style="display: inline-block; padding: 0.4rem 1.25rem; background: rgba(11, 79, 70, 0.75); border-radius: 10px; font-size: 0.95rem; font-weight: 600; margin-bottom: 2rem; border: 1px solid rgba(255, 255, 255, 0.2);">
+                <span style="color: #FFFFFF !important; text-shadow: 0 2px 6px rgba(0,0,0,0.6);">Target Institutions: An-anaao Integrated School & La Paz Integrated School</span>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # ENTER button container overlaid in fixed position
+    st.markdown('<div style="position: fixed; top: 72vh; left: 50%; transform: translateX(-50%); z-index: 1000000; width: 280px;">', unsafe_allow_html=True)
+    st.button("ENTER →", key="btn_welcome_enter_fullscreen", on_click=enter_application, use_container_width=True)
+    st.markdown('</div>', unsafe_allow_html=True)
+
+    st.stop()
+
+# ----------------------------------------------------
 # SIDEBAR NAVIGATION (EXACT 10 ITEMS - NO EMOJIS)
 # ----------------------------------------------------
 NAV_OPTIONS = [
@@ -757,6 +821,7 @@ def navigate_to_page(target_page: str):
 
 with st.sidebar:
     st.markdown('<div class="sidebar-brand">⚡ <span>ENERGYSCAPE</span></div>', unsafe_allow_html=True)
+    st.button("🏠 WELCOME LANDING", key="btn_exit_to_welcome", on_click=exit_to_welcome, use_container_width=True)
     
     st.markdown('<div class="sidebar-section-header">NAVIGATION VIEWS</div>', unsafe_allow_html=True)
     navigation_option = st.radio(
@@ -829,6 +894,7 @@ def apply_green_theme(fig, title=""):
 apply_blue_theme = apply_green_theme
 
 PAGE_HEADER_TITLES = {
+    "Welcome": "WELCOME TO ENERGYSCAPE",
     "Dashboard": "ENERGYSCAPE",
     "Data Input": "DATA INPUT",
     "Season": "MULTI-SEASONAL ANALYSIS",
