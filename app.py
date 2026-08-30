@@ -447,37 +447,14 @@ with st.sidebar:
         key="nav_selection",
         label_visibility="collapsed"
     )
-    
-    st.markdown('<div class="sidebar-section-header">SETTINGS & PARAMETERS</div>', unsafe_allow_html=True)
-    
-    school_selection = st.selectbox(
-        "Selected Institution",
-        ["An-anaao Integrated School", "La Paz Integrated School", "Both"]
-    )
-    
-    electricity_rate = st.number_input(
-        "Electricity Rate (₱/kWh)",
-        min_value=1.0, max_value=50.0, value=11.00, step=0.50
-    )
-    
-    emission_factor = st.number_input(
-        "Emission Factor (kg CO₂e/kWh)",
-        min_value=0.10, max_value=2.00, value=0.70, step=0.05
-    )
-    
-    forecast_horizon = st.slider(
-        "Forecast Horizon (Months)",
-        min_value=3, max_value=24, value=12, step=1
-    )
-    
-    st.markdown('<div class="sidebar-section-header">DATA SOURCE</div>', unsafe_allow_html=True)
-    use_project_dataset = st.checkbox("Use Project Datasets", value=True)
-    
-    uploaded_bills = None
-    uploaded_loads = None
-    if not use_project_dataset:
-        uploaded_bills = st.file_uploader("Upload Historical Bills CSV", type=["csv"])
-        uploaded_loads = st.file_uploader("Upload Appliance Loads CSV", type=["csv"])
+
+# System default parameters
+school_selection = "An-anaao Integrated School"
+electricity_rate = 11.00
+emission_factor = 0.70
+forecast_horizon = 12
+uploaded_bills = None
+uploaded_loads = None
 
 # ----------------------------------------------------
 # DATA INGESTION
