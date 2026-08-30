@@ -1733,13 +1733,11 @@ elif navigation_option == "Validation & Sensitivity":
         </div>
         """, unsafe_allow_html=True)
     
-    with st.container(border=True):
-        st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem;">Sensitivity Ratios & Rate Elasticity</h3>', unsafe_allow_html=True)
-        st.dataframe(sens_df, use_container_width=True)
+    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 0.35rem; margin-bottom: 0.75rem;">Sensitivity Ratios & Rate Elasticity</h3>', unsafe_allow_html=True)
+    st.dataframe(sens_df, use_container_width=True)
     
-    with st.container(border=True):
-        st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-bottom: 0.75rem;">Systemic Computational Consistency Audit</h3>', unsafe_allow_html=True)
-        st.dataframe(val_table, use_container_width=True)
+    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 1.25rem; margin-bottom: 0.75rem;">Systemic Computational Consistency Audit</h3>', unsafe_allow_html=True)
+    st.dataframe(val_table, use_container_width=True)
 
     st.markdown(f"""
     <div class="ui-card" style="border-left: 6px solid #1D4ED8; margin-top: 1.25rem; padding: 1.5rem 1.75rem;">
