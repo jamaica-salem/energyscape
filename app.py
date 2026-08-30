@@ -436,6 +436,59 @@ st.markdown("""
         margin-top: 0.5rem !important;
         color: #6B7280 !important;
     }
+
+    /* Table Header Styling (Matching IMG_3512.jpeg - Deep Emerald Top Column Header) */
+    div[data-testid="stTable"] table {
+        border-collapse: separate !important;
+        border-spacing: 0 !important;
+        border: 1px solid #EAECF0 !important;
+        border-radius: 14px !important;
+        overflow: hidden !important;
+        width: 100% !important;
+    }
+    div[data-testid="stTable"] table thead tr th,
+    div[data-testid="stTable"] th,
+    .ui-table thead tr th {
+        background-color: #0B4F46 !important;
+        color: #FFFFFF !important;
+        font-weight: 700 !important;
+        font-size: 0.88rem !important;
+        letter-spacing: 0.04em !important;
+        padding: 12px 16px !important;
+        border-bottom: 2px solid #063B34 !important;
+        border-top: none !important;
+        text-align: left !important;
+    }
+    div[data-testid="stTable"] table thead tr th *,
+    div[data-testid="stTable"] th * {
+        color: #FFFFFF !important;
+    }
+    div[data-testid="stTable"] table tbody tr td,
+    div[data-testid="stTable"] td,
+    .ui-table tbody tr td {
+        background-color: #FFFFFF !important;
+        color: #111827 !important;
+        font-size: 0.88rem !important;
+        padding: 12px 16px !important;
+        border-bottom: 1px solid #F3F4F6 !important;
+    }
+    div[data-testid="stTable"] table tbody tr:hover td {
+        background-color: #F9FAFB !important;
+    }
+
+    /* Streamlit DataFrame Container Header Colors */
+    div[data-testid="stDataFrame"] {
+        border: 1px solid #EAECF0 !important;
+        border-radius: 14px !important;
+        overflow: hidden !important;
+    }
+    div[data-testid="stDataFrame"] [data-testid="stTable"] th,
+    div[data-testid="stDataFrame"] header,
+    div[data-testid="stDataFrame"] div[role="columnheader"] {
+        background-color: #0B4F46 !important;
+        color: #FFFFFF !important;
+        font-weight: 700 !important;
+    }
 </style>
 """, unsafe_allow_html=True)
 
