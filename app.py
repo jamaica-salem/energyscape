@@ -679,40 +679,69 @@ elif navigation_option == "Season":
 
 # --- 4. ENERGY L. ---
 elif navigation_option == "Energy L.":
-    st.markdown('<h2 style="font-size: 1.5rem; font-weight: 800; color: #0F172A; margin-bottom: 0.5rem;">Appliance Electrical Load Quantification</h2>', unsafe_allow_html=True)
-    st.markdown('<p style="font-size: 0.88rem; color: #64748B; margin-bottom: 1.25rem;">Quantify equipment power draw (W), operating hours (H), and Pareto energy concentration.</p>', unsafe_allow_html=True)
+    st.markdown('<h2 style="font-size: 1.5rem; font-weight: 800; color: #0F172A; margin-bottom: 0.5rem;">ENERGY LOAD CHARACTERIZATION</h2>', unsafe_allow_html=True)
+    st.markdown('<p style="font-size: 0.88rem; color: #64748B; margin-bottom: 1.25rem;">Appliance Electrical Load & Consumption Breakdown</p>', unsafe_allow_html=True)
     
-    col_el1, col_el2 = st.columns([1.2, 1])
-    with col_el1:
-        fig_donut = px.pie(
-            apps_processed, 
-            names='appliance', 
-            values='monthly_kwh', 
-            hole=0.45,
-            color_discrete_sequence=BLUE_PALETTE,
-            height=340
-        )
-        fig_donut = apply_blue_theme(fig_donut)
-        st.plotly_chart(fig_donut, use_container_width=True)
-        
-    with col_el2:
-        st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 0.35rem; margin-bottom: 0.75rem;">Pareto Load Concentration Summary</h3>', unsafe_allow_html=True)
-        st.markdown(f"""
-        <div class="ui-card">
-            <div style="font-size: 0.9rem; color: #334155; line-height: 1.55;">
-                Total Campus Load: <strong>{format_kwh(load_summary['total_kwh'])}</strong><br>
-                Top 1 Load ({load_summary['top_appliance']}): <strong>{load_summary['top_share']:.1f}%</strong><br>
-                Top 2 Combined: <strong>{load_summary['top2_combined_share']:.1f}%</strong> of total electricity consumption.
+    # Horizontal Bar Chart for Appliance Load Characterization
+    apps_chart_df = apps_processed.sort_values(by='monthly_kwh', ascending=True)
+    
+    # Custom vibrant color mapping for appliance categories matching wireframe 4
+    color_map = {
+        "Air Conditioner": "#F97316", # Orange
+        "Computers": "#2563EB",        # Blue
+        "Refrigerator": "#EF4444",     # Red
+        "Lighting": "#22C55E",         # Green
+        "Electric Fan": "#06B6D4",     # Cyan
+        "Water Pump": "#8B5CF6",       # Purple
+        "Printer / Scanner": "#EC4899"  # Pink
+    }
+    
+    fig_hbar = px.bar(
+        apps_chart_df,
+        y='appliance',
+        x='monthly_kwh',
+        orientation='h',
+        color='appliance',
+        text='monthly_kwh',
+        color_discrete_map=color_map,
+        height=380
+    )
+    fig_hbar = apply_blue_theme(fig_hbar, "Appliance Monthly Energy Load Characterization (kWh/month)")
+    fig_hbar.update_traces(texttemplate='%{text:.1f} kWh', textposition='outside')
+    fig_hbar.update_layout(showlegend=False)
+    st.plotly_chart(fig_hbar, use_container_width=True)
+    
+    # Bottom Metrics Card matching Wireframe 4
+    st.markdown(f"""
+    <div class="ui-card" style="margin-top: 0.5rem; padding: 1.1rem 1.5rem !important;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div>
+                <div class="kpi-label" style="font-size: 0.85rem !important;">CONTRIBUTION</div>
+                <div style="font-size: 1.4rem; font-weight: 800; color: #1E3A8A;">{load_summary['top2_combined_share']:.1f}% ESTIMATED</div>
+                <div style="font-size: 0.78rem; color: #64748B;">Top 2 Combined Load ({load_summary['top_appliance']} + Computers)</div>
+            </div>
+            <div>
+                <div class="kpi-label" style="font-size: 0.85rem !important;">CONSUMPTION</div>
+                <div style="font-size: 1.4rem; font-weight: 800; color: #166534;">{load_summary['total_kwh']:.2f} KWH</div>
+                <div style="font-size: 0.78rem; color: #64748B;">Total Campus Baseline Monthly Load</div>
             </div>
         </div>
-        """, unsafe_allow_html=True)
-        
-    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 0.35rem; margin-bottom: 0.75rem;">Appliance Load Inventory Matrix</h3>', unsafe_allow_html=True)
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 1rem; margin-bottom: 0.75rem;">Appliance Load Inventory Matrix</h3>', unsafe_allow_html=True)
     if search_term:
         filtered_apps = apps_processed[apps_processed.astype(str).apply(lambda x: x.str.contains(search_term, case=False)).any(axis=1)]
         st.dataframe(filtered_apps[['rank', 'appliance', 'quantity', 'power_watts', 'hours_per_day', 'operating_days', 'monthly_kwh', 'monthly_cost_php', 'percentage_share', 'priority']], use_container_width=True)
     else:
         st.dataframe(apps_processed[['rank', 'appliance', 'quantity', 'power_watts', 'hours_per_day', 'operating_days', 'monthly_kwh', 'monthly_cost_php', 'percentage_share', 'priority']], use_container_width=True)
+
+    # PROCEED BUTTON
+    col_proc1, col_proc2, col_proc3 = st.columns([1, 1.5, 1])
+    with col_proc2:
+        if st.button("PROCEED ➔", key="btn_proceed_energy_l", use_container_width=True):
+            st.session_state["nav_selection"] = "Forecast"
+            st.rerun()
 
 # --- 5. FORECAST ---
 elif navigation_option == "Forecast":
