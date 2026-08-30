@@ -201,12 +201,13 @@ st.markdown("""
         margin-bottom: 0.15rem !important;
     }
     .kpi-val {
-        font-size: 1.55rem !important;
+        font-size: 1.35rem !important;
         font-weight: 800 !important;
         color: #0F172A !important;
         letter-spacing: -0.02em !important;
         margin: 0.15rem 0 !important;
         line-height: 1.2 !important;
+        white-space: nowrap !important;
     }
 
     /* Sidebar Fixes */
@@ -1390,7 +1391,7 @@ elif navigation_option == "Optimization":
         </div>
         """, unsafe_allow_html=True)
     
-    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 1.25rem; margin-bottom: 0.75rem;">Optimized Baseline vs Target Comparison Table</h3>', unsafe_allow_html=True)
+    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 0.25rem; margin-bottom: 0.75rem;">Optimized Baseline vs Target Comparison Table</h3>', unsafe_allow_html=True)
     opt_table = pd.DataFrame([
         {"Indicator": "Monthly Electricity Consumption", "BAU/Current": format_kwh(opt_res["bau_monthly_kwh"]), "Optimized Target": format_kwh(opt_res["optimized_monthly_kwh"]), "Reduction": format_kwh(opt_res["monthly_kwh_savings"])},
         {"Indicator": "Annual Electricity Consumption", "BAU/Current": format_kwh(opt_res["bau_monthly_kwh"] * 12), "Optimized Target": format_kwh(opt_res["optimized_monthly_kwh"] * 12), "Reduction": format_kwh(opt_res["annual_kwh_savings"])},
@@ -1520,7 +1521,7 @@ elif navigation_option == "School Comparison":
         fig_comp.add_trace(go.Bar(x=chart_comp_data["Metric"], y=chart_comp_data["An-anaao"], name="An-anaao Integrated School", marker=dict(color="#1D4ED8", cornerradius=6)))
         fig_comp.add_trace(go.Bar(x=chart_comp_data["Metric"], y=chart_comp_data["La Paz"], name="La Paz Integrated School", marker=dict(color="#60A5FA", cornerradius=6)))
         fig_comp = apply_blue_theme(fig_comp)
-        fig_comp.update_layout(bmode="group")
+        fig_comp.update_layout(barmode="group")
         st.plotly_chart(fig_comp, use_container_width=True)
 
     st.markdown(f"""
