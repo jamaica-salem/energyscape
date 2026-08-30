@@ -476,21 +476,107 @@ st.markdown("""
         background-color: #F9FAFB !important;
     }
 
-    /* Streamlit DataFrame Container Header Colors */
-    div[data-testid="stDataFrame"] {
+    /* Bankio Table Custom Styling (IMG_3512.jpeg Specification: Emerald Top Header & First Column) */
+    .bankio-table-container {
         border: 1px solid #EAECF0 !important;
-        border-radius: 14px !important;
+        border-radius: 16px !important;
         overflow: hidden !important;
+        box-shadow: 0 2px 10px rgba(16, 24, 40, 0.03) !important;
+        margin-top: 0.75rem !important;
+        margin-bottom: 1.25rem !important;
+        background-color: #FFFFFF !important;
     }
-    div[data-testid="stDataFrame"] [data-testid="stTable"] th,
-    div[data-testid="stDataFrame"] header,
-    div[data-testid="stDataFrame"] div[role="columnheader"] {
+    .bankio-table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        font-family: 'Inter', sans-serif !important;
+        font-size: 0.88rem !important;
+    }
+    .bankio-table thead tr {
+        background-color: #0B4F46 !important;
+    }
+    .bankio-table thead tr th {
+        background-color: #0B4F46 !important;
+        color: #FFFFFF !important;
+        font-weight: 700 !important;
+        font-size: 0.82rem !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.05em !important;
+        padding: 14px 18px !important;
+        text-align: left !important;
+        border: none !important;
+    }
+    .bankio-table tbody tr {
+        border-bottom: 1px solid #F3F4F6 !important;
+        transition: background-color 0.15s ease !important;
+    }
+    .bankio-table tbody tr:last-child {
+        border-bottom: none !important;
+    }
+    .bankio-table tbody tr:hover {
+        background-color: #F9FAFB !important;
+    }
+    .bankio-table tbody tr td {
+        padding: 12px 18px !important;
+        color: #111827 !important;
+        vertical-align: middle !important;
+    }
+    /* First Column Emerald Green Highlight (IMG_3512.jpeg Requirement) */
+    .bankio-table tbody tr td.first-col-emerald {
         background-color: #0B4F46 !important;
         color: #FFFFFF !important;
         font-weight: 700 !important;
     }
 </style>
 """, unsafe_allow_html=True)
+
+def render_bankio_table(df: pd.DataFrame, first_col_green: bool = True):
+    """
+    Renders a custom HTML table matching the Bankio UI design in IMG_3512.jpeg.
+    - Top column header row: Deep Emerald Green (#0B4F46) background with White text (#FFFFFF)
+    - First data column: Deep Emerald Green (#0B4F46) background with White text (#FFFFFF)
+    - Rows: Alternating crisp white and soft light gray fills with rounded borders.
+    """
+    if df is None or df.empty:
+        return
+    
+    display_df = df.copy()
+    
+    html = ['<div class="bankio-table-container">']
+    html.append('<table class="bankio-table">')
+    
+    # Header Row
+    html.append('<thead><tr>')
+    for col in display_df.columns:
+        col_title = str(col).replace('_', ' ').title()
+        html.append(f'<th>{col_title}</th>')
+    html.append('</tr></thead>')
+    
+    # Body Rows
+    html.append('<tbody>')
+    for _, row in display_df.iterrows():
+        html.append('<tr>')
+        for i, val in enumerate(row):
+            if isinstance(val, (int, float)):
+                if isinstance(val, float):
+                    val_str = f"{val:,.2f}"
+                else:
+                    val_str = f"{val:,}"
+            else:
+                val_str = str(val)
+                
+            if i == 0 and first_col_green:
+                html.append(f'<td class="first-col-emerald">{val_str}</td>')
+            elif str(val_str).lower() in ['very high', 'high', 'pass']:
+                html.append(f'<td><span class="pill-badge-green">{val_str}</span></td>')
+            elif str(val_str).lower() in ['moderate', 'low']:
+                html.append(f'<td><span class="pill-badge-green" style="opacity: 0.85;">{val_str}</span></td>')
+            else:
+                html.append(f'<td>{val_str}</td>')
+        html.append('</tr>')
+    html.append('</tbody></table></div>')
+    
+    st.markdown(''.join(html), unsafe_allow_html=True)
 
 # ----------------------------------------------------
 # SIDEBAR NAVIGATION (EXACT 10 ITEMS - NO EMOJIS)
@@ -784,7 +870,7 @@ elif navigation_option == "Data Input":
         app_display = appliance_df[appliance_df['appliance'].str.contains(search_term, case=False)]
     else:
         app_display = appliance_df
-    st.dataframe(app_display, use_container_width=True)
+    render_bankio_table(app_display)
     
     # Data Validity Checklist Section matching Bankio Minimal Style
     st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #111827; margin-top: 1.5rem; margin-bottom: 0.75rem;">DATA VALIDITY AUDIT CHECKLIST</h3>', unsafe_allow_html=True)
@@ -961,7 +1047,7 @@ elif navigation_option == "Energy L.":
         apps_view = apps_processed[apps_processed['appliance'].str.contains(search_term, case=False)]
     else:
         apps_view = apps_processed
-    st.dataframe(apps_view[['appliance', 'quantity', 'power_watts', 'hours_per_day', 'operating_days', 'monthly_kwh', 'percentage_share', 'monthly_cost_php', 'priority']], use_container_width=True)
+    render_bankio_table(apps_view[['appliance', 'quantity', 'power_watts', 'hours_per_day', 'operating_days', 'monthly_kwh', 'percentage_share', 'monthly_cost_php', 'priority']])
 
     # PROCEED BUTTON
     col_proc1, col_proc2, col_proc3 = st.columns([1, 1.5, 1])
@@ -1035,7 +1121,7 @@ elif navigation_option == "Forecast":
     """, unsafe_allow_html=True)
     
     st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #111827; margin-top: 1rem; margin-bottom: 0.75rem;">Projected Monthly Expenditure Table</h3>', unsafe_allow_html=True)
-    st.dataframe(fc_df[['date_str', 'month', 'forecast_bill', 'lower_bound', 'upper_bound']], use_container_width=True)
+    render_bankio_table(fc_df[['date_str', 'month', 'forecast_bill', 'lower_bound', 'upper_bound']])
 
     # PROCEED BUTTON
     col_proc1, col_proc2, col_proc3 = st.columns([1, 1.5, 1])
@@ -1096,7 +1182,7 @@ elif navigation_option == "Carbon":
         {"Indicator": "Monthly Carbon Emissions", "Value": format_co2(bau["monthly_co2_kg"])},
         {"Indicator": "Annual Carbon Emissions", "Value": format_co2(bau["annual_co2_kg"])},
     ])
-    st.dataframe(bau_table, use_container_width=True)
+    render_bankio_table(bau_table)
 
     # PROCEED BUTTON
     col_proc1, col_proc2, col_proc3 = st.columns([1, 1.5, 1])
@@ -1163,7 +1249,7 @@ elif navigation_option == "Scenario":
     scenarios_df = simulate_conservation_scenarios(bau_base)
     
     st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #111827; margin-top: 1rem; margin-bottom: 0.75rem;">Simulated Conservation Scenarios Comparison</h3>', unsafe_allow_html=True)
-    st.dataframe(scenarios_df, use_container_width=True)
+    render_bankio_table(scenarios_df)
     
     col_sc1, col_sc2 = st.columns(2)
     with col_sc1:
@@ -1266,7 +1352,7 @@ elif navigation_option == "Optimization":
         {"Indicator": "Annual Electricity Cost", "BAU/Current": format_currency(opt_res["bau_monthly_kwh"] * 12 * electricity_rate), "Optimized Target": format_currency(opt_res["optimized_monthly_kwh"] * 12 * electricity_rate), "Reduction": format_currency(opt_res["annual_cost_savings_php"])},
         {"Indicator": "Reduction Percentage", "BAU/Current": "0%", "Optimized Target": f"{opt_res['reduction_percentage']:.0f}%", "Reduction": f"{opt_res['reduction_percentage']:.0f}%"}
     ])
-    st.dataframe(opt_table, use_container_width=True)
+    render_bankio_table(opt_table)
     
     st.markdown('<h4 style="font-size: 0.95rem; font-weight: 700; color: #111827; margin-top: 1.25rem; margin-bottom: 0.25rem;">Operational Target Monitor Input</h4>', unsafe_allow_html=True)
     col_t1, col_t2 = st.columns(2)
@@ -1348,7 +1434,7 @@ elif navigation_option == "Impact":
         {"Impact Category": "Monthly Expenditure (₱)", "Baseline (BAU)": format_currency(opt_res["bau_monthly_kwh"] * electricity_rate), "Optimized": format_currency(opt_res["optimized_monthly_kwh"] * electricity_rate), "Annual Net Impact": f"-{format_currency(cost_savings_annual)} Saved/Year"},
         {"Impact Category": "Monthly Carbon Footprint (kg CO₂e)", "Baseline (BAU)": f"{opt_res['bau_monthly_kwh']*emission_factor:,.2f} kg", "Optimized": f"{opt_res['optimized_monthly_kwh']*emission_factor:,.2f} kg", "Annual Net Impact": f"-{co2_savings_annual:,.2f} kg CO₂e Avoided/Year"},
     ])
-    st.dataframe(imp_table, use_container_width=True)
+    render_bankio_table(imp_table)
     
     m_an = calculate_historical_metrics(historical_df, "An-anaao Integrated School")
     m_lp = calculate_historical_metrics(historical_df, "La Paz Integrated School")
@@ -1365,11 +1451,11 @@ elif navigation_option == "Impact":
         {"Indicator": "Average Forecasted Bill (₱)", "An-anaao Integrated School": format_currency(fc_an_mean), "La Paz Integrated School": format_currency(fc_lp_mean), "Difference": format_currency(fc_lp_mean - fc_an_mean)},
     ])
     st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #111827; margin-top: 1.25rem; margin-bottom: 0.75rem;">Comparative School Benchmark Matrix</h3>', unsafe_allow_html=True)
-    st.dataframe(comp_df, use_container_width=True)
+    render_bankio_table(comp_df)
     
     sens_df = calculate_sensitivity_analysis()
     st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #111827; margin-top: 1.25rem; margin-bottom: 0.75rem;">Sensitivity Ratios & Rate Elasticity Table</h3>', unsafe_allow_html=True)
-    st.dataframe(sens_df, use_container_width=True)
+    render_bankio_table(sens_df)
 
     # PROCEED BUTTON
     col_proc1, col_proc2, col_proc3 = st.columns([1, 1.5, 1])
@@ -1402,7 +1488,7 @@ elif navigation_option == "Reports":
         {"Metric": "ENERGY REDUCTION", "An-anaao Integrated School": "343.37 kWh / mo (15%)", "La Paz Integrated School": "402.07 kWh / mo (15%)", "Variance": "Multi-tier Duty Cycle"},
         {"Metric": "CO₂ REDUCTION", "An-anaao Integrated School": "2,884.31 kg CO₂e / yr", "La Paz Integrated School": "3,377.39 kg CO₂e / yr", "Variance": "Scope 2 Emission Avoidance"},
     ])
-    st.dataframe(comp_analysis_df, use_container_width=True)
+    render_bankio_table(comp_analysis_df)
     
     col_r1, col_r2, col_r3 = st.columns([1, 1.5, 1])
     with col_r2:
@@ -1474,7 +1560,7 @@ CO₂ avoided: <strong>2,884.31 kg CO₂e / year</strong>
     # 3. METHODOLOGY & REPRODUCIBILITY AUDIT
     st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #111827; margin-bottom: 0.75rem;">Systemic Computational Consistency Audit</h3>', unsafe_allow_html=True)
     val_table = verify_computational_consistency()
-    st.dataframe(val_table, use_container_width=True)
+    render_bankio_table(val_table)
     
     st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #111827; margin-top: 1.25rem; margin-bottom: 0.75rem;">Methodology Formulations</h3>', unsafe_allow_html=True)
     st.latex(r"\text{Monthly Energy Consumption (kWh)} = \frac{P \times Q \times H \times D}{1000}")
