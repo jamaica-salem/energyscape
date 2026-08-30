@@ -51,6 +51,13 @@ st.markdown("""
         background-color: #F3F4F6 !important;
     }
 
+    /* Main Page Container Spacing & Layout */
+    .block-container {
+        padding-top: 2.25rem !important;
+        padding-bottom: 3.5rem !important;
+        max-width: 1320px !important;
+    }
+
     /* Top Streamlit Header Bar (Deploy & Menu) in Pure White #FFFFFF with Bottom Border #EAECF0 */
     header[data-testid="stHeader"],
     div[data-testid="stHeader"] {
@@ -931,10 +938,10 @@ elif navigation_option == "Data Input":
 
 # --- 3. SEASON ---
 elif navigation_option == "Season":
-    st.markdown('<p style="font-size: 0.88rem; color: #6B7280; margin-bottom: 1.25rem;">Multi-Seasonal Load Comparison & Climate Dynamics</p>', unsafe_allow_html=True)
+    st.markdown('<p style="font-size: 0.88rem; color: #6B7280; margin-bottom: 2rem;">Multi-Seasonal Load Comparison & Climate Dynamics</p>', unsafe_allow_html=True)
     
     with st.container():
-        st.markdown('<h4 style="font-size: 0.95rem; font-weight: 700; color: #111827; margin-bottom: 0.25rem;">Season Classification Parameters</h4>', unsafe_allow_html=True)
+        st.markdown('<h4 style="font-size: 0.95rem; font-weight: 700; color: #111827; margin-bottom: 0.6rem;">Season Classification Parameters</h4>', unsafe_allow_html=True)
         all_months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
         dry_months = st.multiselect(
             "Select Dry Season Months",
@@ -946,7 +953,9 @@ elif navigation_option == "Season":
         
     s_metrics = calculate_seasonal_metrics(historical_df, dry_months, wet_months)
     
-    col_sea_left, col_sea_right = st.columns([1.6, 1])
+    st.markdown('<div style="margin-bottom: 2.25rem;"></div>', unsafe_allow_html=True)
+    
+    col_sea_left, col_sea_right = st.columns([1.6, 1], gap="large")
     
     with col_sea_left:
         hist_sea_df = historical_df.dropna(subset=['date_dt', 'bill_php']).copy()
@@ -974,13 +983,15 @@ elif navigation_option == "Season":
             line=dict(color="#047857", width=3.5)
         ))
         fig_sea = apply_blue_theme(fig_sea, "Monthly Electricity Expenditure & Seasonal Index Trend")
-        fig_sea.update_layout(height=320)
+        fig_sea.update_layout(height=340)
         st.plotly_chart(fig_sea, use_container_width=True)
+        
+        st.markdown('<div style="margin-top: 1.5rem;"></div>', unsafe_allow_html=True)
         
         # Bottom Left Metrics
         st.markdown(f"""
-        <div class="ui-card" style="padding: 1rem 1.25rem !important;">
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+        <div class="ui-card" style="padding: 1.25rem 1.5rem !important;">
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
                 <div>
                     <div class="kpi-label">PEAK PERIOD</div>
                     <div style="font-weight: 800; font-size: 1.05rem; color: #0B4F46;">APRIL–MAY</div>
@@ -999,21 +1010,22 @@ elif navigation_option == "Season":
         
     with col_sea_right:
         st.markdown("""
-        <div class="ui-card" style="height: 100%; min-height: 420px;">
-            <h3 style="font-size: 1.1rem; font-weight: 800; color: #111827; margin-bottom: 0.75rem;">INTERPRETATION:</h3>
-            <p style="font-size: 0.88rem; color: #374151; line-height: 1.6; margin-bottom: 0.75rem;">
+        <div class="ui-card" style="height: 100%; min-height: 440px; padding: 1.5rem 1.75rem !important;">
+            <h3 style="font-size: 1.1rem; font-weight: 800; color: #111827; margin-bottom: 1rem;">INTERPRETATION:</h3>
+            <p style="font-size: 0.9rem; color: #374151; line-height: 1.7; margin-bottom: 1.25rem;">
                 <strong>Dry Season Thermal Surge:</strong> Electricity expenditure peaks during April–May due to elevated ambient temperatures in Abra, driving continuous operation of cooling systems (Air Conditioners & Electric Fans).
             </p>
-            <p style="font-size: 0.88rem; color: #374151; line-height: 1.6; margin-bottom: 0.75rem;">
+            <p style="font-size: 0.9rem; color: #374151; line-height: 1.7; margin-bottom: 1.25rem;">
                 <strong>Seasonal Variance:</strong> Dry Season average monthly billing (<strong>₱26,450</strong>) exceeds Wet Season baseline (<strong>₱23,820</strong>) by approximately <strong>11.04%</strong>.
             </p>
-            <p style="font-size: 0.88rem; color: #374151; line-height: 1.6; margin: 0;">
+            <p style="font-size: 0.9rem; color: #374151; line-height: 1.7; margin: 0;">
                 <strong>Operational Action:</strong> Targeted thermal insulation and air conditioner duty-cycle management during the peak April–May window offers maximum potential for load curtailment.
             </p>
         </div>
         """, unsafe_allow_html=True)
 
     # PROCEED BUTTON
+    st.markdown('<div style="margin-top: 2.75rem;"></div>', unsafe_allow_html=True)
     col_proc1, col_proc2, col_proc3 = st.columns([1, 1.5, 1])
     with col_proc2:
         st.button("PROCEED", key="btn_proceed_season", on_click=navigate_to_page, args=("Energy L.",), use_container_width=True)
