@@ -51,10 +51,16 @@ st.markdown("""
         background-color: #F3F4F6 !important;
     }
 
-    /* Remove default Streamlit header decoration */
-    header[data-testid="stHeader"] {
-        background-color: #F3F4F6 !important;
-        border-bottom: 1px solid #EAECF0 !important;
+    /* Top Streamlit Header Bar (Deploy & Menu) in Deep Emerald Green #0B4F46 */
+    header[data-testid="stHeader"],
+    div[data-testid="stHeader"] {
+        background-color: #0B4F46 !important;
+        border-bottom: 1px solid #063B34 !important;
+    }
+    header[data-testid="stHeader"] *,
+    div[data-testid="stHeader"] * {
+        color: #FFFFFF !important;
+        fill: #FFFFFF !important;
     }
     div[data-testid="stDecoration"] {
         display: none !important;
