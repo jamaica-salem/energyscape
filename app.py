@@ -334,14 +334,15 @@ st.markdown("""
         color: #FFFFFF !important;
     }
 
-    /* Stunning Blue-Green Custom File Uploader Styling */
+    /* Stunning Blue-Green Custom File Uploader Styling (Centered Layout) */
     div[data-testid="stFileUploader"] {
         background: linear-gradient(180deg, #F0FDFA 0%, #FFFFFF 100%) !important;
         border: 2.5px dashed #0D9488 !important;
         border-radius: 18px !important;
-        padding: 1.25rem 1.5rem !important;
+        padding: 1.5rem 2rem !important;
         box-shadow: 0 4px 20px rgba(13, 148, 136, 0.08) !important;
         transition: all 0.25s ease !important;
+        text-align: center !important;
     }
     div[data-testid="stFileUploader"]:hover {
         border-color: #10B981 !important;
@@ -349,10 +350,43 @@ st.markdown("""
         box-shadow: 0 8px 24px rgba(16, 185, 129, 0.18) !important;
         transform: translateY(-2px) !important;
     }
+    div[data-testid="stFileUploader"] label[data-testid="stWidgetLabel"] {
+        justify-content: center !important;
+        text-align: center !important;
+        width: 100% !important;
+        margin-bottom: 0.75rem !important;
+    }
+    div[data-testid="stFileUploader"] label[data-testid="stWidgetLabel"] p {
+        text-align: center !important;
+        width: 100% !important;
+        font-size: 1.05rem !important;
+        font-weight: 800 !important;
+        color: #0F766E !important;
+    }
     div[data-testid="stFileUploader"] section {
         background-color: transparent !important;
         border: none !important;
         padding: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
+    }
+    div[data-testid="stFileUploader"] section > div {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
+        gap: 8px !important;
+    }
+    div[data-testid="stFileUploaderDropzoneInstructions"] {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
     }
     div[data-testid="stFileUploader"] section button {
         background: linear-gradient(135deg, #166534 0%, #0D9488 100%) !important;
@@ -360,8 +394,15 @@ st.markdown("""
         border: none !important;
         border-radius: 9999px !important;
         font-weight: 800 !important;
-        padding: 0.5rem 1.25rem !important;
-        box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3) !important;
+        padding: 0.6rem 1.75rem !important;
+        box-shadow: 0 4px 14px rgba(13, 148, 136, 0.35) !important;
+        margin: 0 auto !important;
+    }
+    div[data-testid="stFileUploader"] small {
+        text-align: center !important;
+        display: block !important;
+        margin-top: 0.5rem !important;
+        color: #64748B !important;
     }
 </style>
 """, unsafe_allow_html=True)
