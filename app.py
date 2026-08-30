@@ -94,21 +94,12 @@ st.markdown("""
         box-shadow: 0 10px 25px -3px rgba(16, 24, 40, 0.08) !important;
     }
 
-    /* Strict Blue-Green Color-accented Card Variants */
-    .card-emerald {
-        border-top: 4px solid #10B981 !important;
-        background: #FFFFFF !important;
-    }
-    .card-teal {
-        border-top: 4px solid #0B4F46 !important;
-        background: #FFFFFF !important;
-    }
-    .card-blue {
-        border-top: 4px solid #3B82F6 !important;
-        background: #FFFFFF !important;
-    }
+    /* Clean Minimal Cards (No top colored borders, pure Bankio white style) */
+    .card-emerald,
+    .card-teal,
+    .card-blue,
     .card-cyan {
-        border-top: 4px solid #06B6D4 !important;
+        border-top: 1px solid #EAECF0 !important;
         background: #FFFFFF !important;
     }
 
@@ -151,29 +142,9 @@ st.markdown("""
         color: #D1FAE5 !important;
     }
 
-    /* Bankio Style Pill Badges */
-    .pill-badge-blue {
-        background-color: #E0F2FE !important;
-        color: #0369A1 !important;
-        padding: 0.3rem 0.8rem !important;
-        border-radius: 9999px !important;
-        font-size: 0.78rem !important;
-        font-weight: 600 !important;
-        display: inline-flex !important;
-        align-items: center !important;
-        white-space: nowrap !important;
-    }
-    .pill-badge-teal {
-        background-color: #E6F4EA !important;
-        color: #047857 !important;
-        padding: 0.3rem 0.8rem !important;
-        border-radius: 9999px !important;
-        font-size: 0.78rem !important;
-        font-weight: 600 !important;
-        display: inline-flex !important;
-        align-items: center !important;
-        white-space: nowrap !important;
-    }
+    /* Minimal Green Pill Badges (Pure Black & Green Palette) */
+    .pill-badge-blue,
+    .pill-badge-teal,
     .pill-badge-green {
         background-color: #E6F4EA !important;
         color: #047857 !important;
@@ -239,6 +210,20 @@ st.markdown("""
         margin-top: 1.2rem !important;
         margin-bottom: 0.5rem !important;
         font-family: 'Inter', sans-serif !important;
+    }
+
+    /* Hide Radio Circle Dots Completely for Clean Sidebar Menu Buttons */
+    div[role="radiogroup"] label input[type="radio"],
+    div[role="radiogroup"] label [data-testid="stRadioButtonCustomIcon"],
+    div[role="radiogroup"] label div[aria-hidden="true"],
+    div[role="radiogroup"] label svg {
+        display: none !important;
+        visibility: hidden !important;
+        width: 0 !important;
+        height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        opacity: 0 !important;
     }
 
     /* Navigation Radio Items (Bankio Selected Deep Teal Pill #0B4F46) */
