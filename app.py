@@ -571,6 +571,61 @@ def filter_dataframe_by_search(df: pd.DataFrame, query: str) -> pd.DataFrame:
         
     return df[mask]
 
+def search_entire_system(query: str, historical_df: pd.DataFrame, appliance_df: pd.DataFrame, apps_processed: pd.DataFrame) -> dict:
+    """
+    Scans all 10 system pages and returns a dictionary mapping page names to match status.
+    """
+    if not query or not str(query).strip():
+        return {}
+    
+    q = str(query).strip().lower()
+    matches = {}
+    
+    # 1. Dashboard
+    dash_m = len(filter_dataframe_by_search(appliance_df, q))
+    if dash_m > 0 or any(w in q for w in ["dashboard", "consumption", "baseline"]):
+        matches["Dashboard"] = max(dash_m, 1)
+        
+    # 2. Data Input
+    di_m = len(filter_dataframe_by_search(appliance_df, q)) + len(filter_dataframe_by_search(historical_df, q))
+    if di_m > 0 or any(w in q for w in ["data input", "appliance", "billing", "inventory"]):
+        matches["Data Input"] = max(di_m, 1)
+        
+    # 3. Season
+    if any(m_word in q for m_word in ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec", "dry", "wet", "season", "thermal", "surge", "peak"]):
+        matches["Season"] = 2
+        
+    # 4. Energy L.
+    el_m = len(filter_dataframe_by_search(apps_processed, q))
+    if el_m > 0 or any(w in q for w in ["energy l.", "air conditioner", "computer", "lighting", "fan", "refrigerator", "watt", "kwh"]):
+        matches["Energy L."] = max(el_m, 1)
+        
+    # 5. Forecast
+    if any(w in q for w in ["forecast", "ets", "projection", "mape", "expenditure", "upper", "lower", "bill"]):
+        matches["Forecast"] = 10
+        
+    # 6. Carbon
+    if any(w in q for w in ["carbon", "co2", "emission", "footprint", "greenhouse", "bau", "baseline"]):
+        matches["Carbon"] = 4
+        
+    # 7. Scenario
+    if any(w in q for w in ["scenario", "reduction", "conservation", "intervention", "5%", "10%", "15%"]):
+        matches["Scenario"] = 4
+        
+    # 8. Optimization
+    if any(w in q for w in ["optimization", "goal", "linear", "constraint", "1945", "target", "savings"]):
+        matches["Optimization"] = 5
+        
+    # 9. Impact
+    if any(w in q for w in ["impact", "la paz", "an-anaao", "benchmark", "sensitivity", "elasticity"]):
+        matches["Impact"] = 6
+        
+    # 10. Reports
+    if any(w in q for w in ["report", "executive", "comparative", "methodology", "audit"]):
+        matches["Reports"] = 9
+        
+    return matches
+
 def render_bankio_table(df: pd.DataFrame, first_col_green: bool = False, search_query: str = ""):
     """
     Renders a custom HTML table matching the Bankio UI design in IMG_3512.jpeg.
@@ -755,21 +810,40 @@ def clear_search_callback():
 
 # Render Search Active Status Banner if user enters a search term
 if search_term and search_term.strip():
+    target_sch = "An-anaao Integrated School" if school_selection == "Both" else school_selection
+    apps_proc = calculate_appliance_loads(appliance_df, electricity_rate, target_sch)
+    system_matches = search_entire_system(search_term, historical_df, appliance_df, apps_proc)
+    
     c_s1, c_s2 = st.columns([4, 1])
     with c_s1:
         st.markdown(f"""
-        <div class="ui-card" style="padding: 0.75rem 1.25rem !important; margin-bottom: 1.25rem !important; border-left: 4px solid #0B4F46 !important; background-color: #E8F5E9 !important;">
+        <div class="ui-card" style="padding: 0.75rem 1.25rem !important; margin-bottom: 0.5rem !important; border-left: 4px solid #0B4F46 !important; background-color: #E8F5E9 !important;">
             <div style="display: flex; align-items: center; justify-content: space-between;">
                 <div>
-                    <span style="font-size: 0.85rem; font-weight: 700; color: #1B5E20;">🔍 SEARCH FILTER ACTIVE:</span>
+                    <span style="font-size: 0.85rem; font-weight: 700; color: #1B5E20;">🔍 SYSTEM SEARCH ACTIVE:</span>
                     <span style="font-size: 0.9rem; font-weight: 800; color: #0B4F46; margin-left: 8px;">"{search_term.strip()}"</span>
                 </div>
-                <span style="font-size: 0.8rem; color: #1B5E20;">Filtering system tables & metrics matching query</span>
+                <span style="font-size: 0.8rem; color: #1B5E20;">Scanning all 10 pages in system</span>
             </div>
         </div>
         """, unsafe_allow_html=True)
     with c_s2:
         st.button("CLEAR SEARCH", key="btn_clear_search", on_click=clear_search_callback, use_container_width=True)
+        
+    if system_matches:
+        st.markdown('<div style="font-size: 0.82rem; font-weight: 700; color: #111827; margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.05em;">SYSTEM MATCHES FOUND — CLICK TO JUMP TO PAGE:</div>', unsafe_allow_html=True)
+        match_cols = st.columns(len(system_matches))
+        for idx, (p_name, count) in enumerate(system_matches.items()):
+            with match_cols[idx]:
+                btn_label = f"CURRENT: {p_name}" if p_name == navigation_option else f"GO TO: {p_name}"
+                st.button(
+                    btn_label,
+                    key=f"btn_search_nav_{p_name}",
+                    on_click=navigate_to_page,
+                    args=(p_name,),
+                    use_container_width=True
+                )
+        st.markdown('<div style="margin-bottom: 1rem;"></div>', unsafe_allow_html=True)
 
 # ----------------------------------------------------
 # NAVIGATION VIEWS IMPLEMENTATION
