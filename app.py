@@ -243,14 +243,20 @@ st.markdown("""
         font-family: 'Outfit', sans-serif !important;
     }
 
-    /* Navigation Radio Items with Enhanced Outfit Typography */
-    div[role="radiogroup"] label {
-        background-color: transparent !important;
-        color: #F0FDF4 !important;
+    /* Navigation Radio Items with Enhanced Outfit White Typography */
+    div[role="radiogroup"] label,
+    div[role="radiogroup"] label p,
+    div[role="radiogroup"] label span,
+    div[role="radiogroup"] label div,
+    div[role="radiogroup"] label * {
+        color: #FFFFFF !important;
         font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif !important;
         font-size: 1.08rem !important;
         font-weight: 700 !important;
         letter-spacing: 0.02em !important;
+    }
+    div[role="radiogroup"] label {
+        background-color: transparent !important;
         padding: 11px 18px !important;
         border-radius: 12px !important;
         margin-bottom: 6px !important;
@@ -258,24 +264,21 @@ st.markdown("""
         display: flex !important;
         align-items: center !important;
     }
-    div[role="radiogroup"] label p,
-    div[role="radiogroup"] label span,
-    div[role="radiogroup"] label div {
-        font-size: 1.08rem !important;
-        font-weight: 700 !important;
-        font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif !important;
-    }
     div[role="radiogroup"] label:hover {
         background-color: rgba(255, 255, 255, 0.18) !important;
         transform: translateX(4px) !important;
     }
+    div[role="radiogroup"] label:hover * {
+        color: #FFFFFF !important;
+    }
     div[role="radiogroup"] label[data-checked="true"] {
         background: linear-gradient(135deg, #FFFFFF 0%, #F0FDF4 100%) !important;
-        color: #166534 !important;
-        font-weight: 800 !important;
-        font-size: 1.1rem !important;
         box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15) !important;
     }
+    div[role="radiogroup"] label[data-checked="true"],
+    div[role="radiogroup"] label[data-checked="true"] p,
+    div[role="radiogroup"] label[data-checked="true"] span,
+    div[role="radiogroup"] label[data-checked="true"] div,
     div[role="radiogroup"] label[data-checked="true"] * {
         color: #166534 !important;
         font-weight: 800 !important;
