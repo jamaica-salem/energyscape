@@ -888,23 +888,83 @@ elif navigation_option == "Carbon":
 
 # --- 7. SCENARIO ---
 elif navigation_option == "Scenario":
-    st.markdown('<h2 style="font-size: 1.5rem; font-weight: 800; color: #0F172A; margin-bottom: 0.5rem;">Simulated Conservation Scenarios (5%, 10%, 15%)</h2>', unsafe_allow_html=True)
-    st.markdown('<p style="font-size: 0.88rem; color: #64748B; margin-bottom: 1.25rem;">Evaluate multi-tier energy conservation targets and avoided emissions.</p>', unsafe_allow_html=True)
+    st.markdown('<h2 style="font-size: 1.5rem; font-weight: 800; color: #0F172A; margin-bottom: 0.5rem;">CONSERVATION SCENARIO SIMULATOR</h2>', unsafe_allow_html=True)
+    st.markdown('<p style="font-size: 0.88rem; color: #64748B; margin-bottom: 1.25rem;">Adjust Appliance Duty-Cycles & Simulate Energy Savings Scenarios</p>', unsafe_allow_html=True)
+    
+    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 0.25rem; margin-bottom: 0.75rem;">ADJUST INTERVENTION LEVELS:</h3>', unsafe_allow_html=True)
+    
+    col_sl1, col_sl2, col_sl3 = st.columns(3)
+    with col_sl1:
+        ac_red = st.slider("Air Conditioner Intervention (%)", min_value=0, max_value=100, value=15, step=5)
+    with col_sl2:
+        comp_red = st.slider("Computers Intervention (%)", min_value=0, max_value=100, value=15, step=5)
+    with col_sl3:
+        light_red = st.slider("Lighting & Other Loads (%)", min_value=0, max_value=100, value=10, step=5)
+        
+    avg_red_pct = (ac_red * 0.346 + comp_red * 0.252 + light_red * 0.402)
+    
+    col_sim1, col_sim2, col_sim3 = st.columns([1, 1.5, 1])
+    with col_sim2:
+        run_sim = st.button("⚡ SIMULATE SCENARIO", key="btn_run_sim", use_container_width=True)
+        
+    base_kwh = load_summary.get("total_kwh", 2289.10)
+    sim_kwh = base_kwh * (1.0 - (avg_red_pct / 100.0))
+    kwh_saved = base_kwh - sim_kwh
+    cost_saved_m = kwh_saved * electricity_rate
+    cost_saved_y = cost_saved_m * 12
+    co2_avoided_m = kwh_saved * emission_factor
+    co2_avoided_y = co2_avoided_m * 12
+    
+    st.markdown('<h3 style="font-size: 1.15rem; font-weight: 800; color: #0F172A; margin-top: 1.5rem; margin-bottom: 0.75rem;">SCENARIO RESULT</h3>', unsafe_allow_html=True)
+    
+    st.markdown(f"""
+    <div class="ui-card" style="background-color: #FFFFFF !important; border-left: 6px solid #166534 !important; padding: 1.25rem 1.5rem !important;">
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
+            <div>
+                <div class="kpi-label">BASELINE SCENARIO</div>
+                <div style="font-size: 1.3rem; font-weight: 800; color: #0F172A;">{base_kwh:,.2f} KWH</div>
+                <div style="font-size: 0.78rem; color: #64748B;">Monthly Baseline</div>
+            </div>
+            <div>
+                <div class="kpi-label">PROJECTED SCENARIO</div>
+                <div style="font-size: 1.3rem; font-weight: 800; color: #1E3A8A;">{sim_kwh:,.2f} KWH</div>
+                <div style="font-size: 0.78rem; color: #64748B;">Simulated Monthly Target</div>
+            </div>
+            <div>
+                <div class="kpi-label">ENERGY SAVED REDUCTION</div>
+                <div style="font-size: 1.3rem; font-weight: 800; color: #166534;">{kwh_saved:,.2f} KWH</div>
+                <div style="font-size: 0.78rem; color: #166534; font-weight: 700;">{avg_red_pct:.2f}% REDUCTION</div>
+            </div>
+            <div>
+                <div class="kpi-label">COST SAVED & CO₂ AVOIDED</div>
+                <div style="font-size: 1.15rem; font-weight: 800; color: #1E3A8A;">{format_currency(cost_saved_m)}/mo</div>
+                <div style="font-size: 0.78rem; color: #166534; font-weight: 700;">{co2_avoided_m:,.1f} KG CO₂e / month</div>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
     
     scenarios_df = simulate_conservation_scenarios(bau_base)
     
-    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 0.35rem; margin-bottom: 0.75rem;">Simulated Conservation Scenarios Matrix</h3>', unsafe_allow_html=True)
+    st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 1rem; margin-bottom: 0.75rem;">Simulated Conservation Scenarios Comparison</h3>', unsafe_allow_html=True)
     st.dataframe(scenarios_df, use_container_width=True)
     
     col_sc1, col_sc2 = st.columns(2)
     with col_sc1:
-        fig_sc_kwh = px.bar(scenarios_df, x="Scenario", y="Projected Monthly kWh", color="Scenario", color_discrete_sequence=BLUE_PALETTE, height=340)
+        fig_sc_kwh = px.bar(scenarios_df, x="Scenario", y="Projected Monthly kWh", color="Scenario", color_discrete_sequence=BLUE_PALETTE, height=320)
         fig_sc_kwh = apply_blue_theme(fig_sc_kwh)
         st.plotly_chart(fig_sc_kwh, use_container_width=True)
     with col_sc2:
-        fig_sc_co2 = px.bar(scenarios_df, x="Scenario", y="Annual Avoided CO₂e (kg)", color="Scenario", color_discrete_sequence=BLUE_PALETTE, height=340)
+        fig_sc_co2 = px.bar(scenarios_df, x="Scenario", y="Annual Avoided CO₂e (kg)", color="Scenario", color_discrete_sequence=BLUE_PALETTE, height=320)
         fig_sc_co2 = apply_blue_theme(fig_sc_co2)
         st.plotly_chart(fig_sc_co2, use_container_width=True)
+
+    # PROCEED BUTTON
+    col_proc1, col_proc2, col_proc3 = st.columns([1, 1.5, 1])
+    with col_proc2:
+        if st.button("PROCEED ➔", key="btn_proceed_scenario", use_container_width=True):
+            st.session_state["nav_selection"] = "Optimization"
+            st.rerun()
 
 # --- 8. OPTIMIZATION ---
 elif navigation_option == "Optimization":
