@@ -313,81 +313,72 @@ st.markdown("""
         font-size: 0.875rem !important;
     }
     
-    /* Form Inputs, Selectboxes & Dropdown Fields */
-    div[data-baseweb="select"],
-    div[data-baseweb="select"] *,
-    div[data-baseweb="base-input"],
-    div[data-baseweb="base-input"] *,
+    /* Form Inputs, Selectboxes & Dropdown Outer Containers */
+    div[data-baseweb="select"] > div,
+    div[data-baseweb="base-input"] > div,
     div[data-testid="stNumberInputContainer"],
-    div[data-testid="stNumberInputContainer"] *,
-    div[data-testid="stSelectbox"] *,
-    div[data-testid="stMultiSelect"] *,
+    div[data-testid="stSelectbox"] > div > div,
+    div[data-testid="stMultiSelect"] > div > div,
     button[data-testid*="stNumberInputStep"],
     input[type="number"] {
         background-color: #FFFFFF !important;
         color: #111827 !important;
+        border: 1px solid #EAECF0 !important;
         border-color: #EAECF0 !important;
         border-radius: 12px !important;
         box-shadow: none !important;
         outline: none !important;
-        outline-width: 0 !important;
     }
 
-    div[data-baseweb="select"]:hover *,
-    div[data-baseweb="select"]:focus-within *,
-    div[data-testid="stSelectbox"]:hover *,
-    div[data-testid="stSelectbox"]:focus-within *,
-    div[data-testid="stMultiSelect"]:hover *,
-    div[data-testid="stMultiSelect"]:focus-within * {
+    div[data-baseweb="select"]:hover > div,
+    div[data-baseweb="select"]:focus-within > div,
+    div[data-testid="stSelectbox"] > div > div:hover,
+    div[data-testid="stSelectbox"] > div > div:focus-within,
+    div[data-testid="stMultiSelect"] > div > div:hover,
+    div[data-testid="stMultiSelect"] > div > div:focus-within {
         border-color: #0B4F46 !important;
         box-shadow: 0 0 0 1px #0B4F46 !important;
         outline: none !important;
-        outline-width: 0 !important;
     }
 
     /* ABSOLUTE ZERO EFFECT & ZERO BLACK BORDER ON SEARCH BAR AT ALL TIMES */
-    div[data-testid="stTextInput"],
-    div[data-testid="stTextInput"] *,
-    div[data-testid="stTextInput"] input,
-    div[data-testid="stTextInput"] div,
-    div[data-testid="stTextInput"] [data-baseweb="input"],
-    div[data-testid="stTextInput"] [data-baseweb="base-input"],
-    div[data-testid="stTextInput"]:hover,
-    div[data-testid="stTextInput"]:hover *,
-    div[data-testid="stTextInput"]:focus,
-    div[data-testid="stTextInput"]:focus *,
-    div[data-testid="stTextInput"]:focus-within,
-    div[data-testid="stTextInput"]:focus-within *,
-    div[data-testid="stTextInput"]:active,
-    div[data-testid="stTextInput"]:active *,
-    div[data-testid="stTextInput"] input:hover,
-    div[data-testid="stTextInput"] input:focus,
-    div[data-testid="stTextInput"] input:active,
-    div[data-testid="stTextInput"] input:focus-visible {
+    div[data-testid="stTextInput"] > div,
+    div[data-testid="stTextInput"] input {
         border: 1px solid #EAECF0 !important;
         border-color: #EAECF0 !important;
         border-radius: 9999px !important;
         background-color: #FFFFFF !important;
         box-shadow: none !important;
         outline: none !important;
-        outline-width: 0 !important;
+    }
+    div[data-testid="stTextInput"] > div:hover,
+    div[data-testid="stTextInput"] > div:focus-within,
+    div[data-testid="stTextInput"] input:hover,
+    div[data-testid="stTextInput"] input:focus {
+        border: 1px solid #EAECF0 !important;
+        border-color: #EAECF0 !important;
+        box-shadow: none !important;
+        outline: none !important;
     }
 
-    /* Multiselect Tag Pills (100% Emerald Green #0B4F46 - Transparent Close Icon) */
+    /* Multiselect Tag Pills (100% Solid Emerald Green #0B4F46) */
     [data-baseweb="tag"],
     span[data-baseweb="tag"],
     div[data-baseweb="tag"] {
         background-color: #0B4F46 !important;
         color: #FFFFFF !important;
+        border: none !important;
         border-color: #0B4F46 !important;
         border-radius: 8px !important;
         padding: 3px 10px !important;
         margin: 2px !important;
+        box-shadow: none !important;
+        outline: none !important;
     }
     
-    [data-baseweb="tag"] *,
-    [data-baseweb="tag"] div,
     [data-baseweb="tag"] span,
+    [data-baseweb="tag"] p,
+    [data-baseweb="tag"] div,
     [data-baseweb="tag"] button,
     [data-baseweb="tag"] [role="button"],
     [data-baseweb="tag"] svg,
@@ -397,6 +388,9 @@ st.markdown("""
         color: #FFFFFF !important;
         fill: #FFFFFF !important;
         stroke: #FFFFFF !important;
+        border: none !important;
+        box-shadow: none !important;
+        outline: none !important;
     }
 
     /* Action Buttons (Bankio Deep Teal Pill Button #0B4F46) */
