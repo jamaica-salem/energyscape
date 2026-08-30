@@ -76,7 +76,7 @@ st.markdown("""
         padding-bottom: 0.25rem;
     }
 
-    /* Card Containers */
+    /* Card Containers & Interactive Hover */
     .ui-card {
         background-color: #FFFFFF !important;
         border: 1px solid #E2E8F0 !important;
@@ -86,15 +86,38 @@ st.markdown("""
         box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04) !important;
         box-sizing: border-box !important;
         overflow: visible !important;
+        transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+    }
+    .ui-card:hover {
+        transform: translateY(-3px) !important;
+        box-shadow: 0 12px 28px -4px rgba(15, 23, 42, 0.09) !important;
+    }
+
+    /* Color-accented Card Variants */
+    .card-emerald {
+        border-top: 5px solid #10B981 !important;
+        background: linear-gradient(180deg, #F0FDF4 0%, #FFFFFF 100%) !important;
+    }
+    .card-blue {
+        border-top: 5px solid #3B82F6 !important;
+        background: linear-gradient(180deg, #EFF6FF 0%, #FFFFFF 100%) !important;
+    }
+    .card-amber {
+        border-top: 5px solid #F59E0B !important;
+        background: linear-gradient(180deg, #FFFBEB 0%, #FFFFFF 100%) !important;
+    }
+    .card-purple {
+        border-top: 5px solid #8B5CF6 !important;
+        background: linear-gradient(180deg, #F5F3FF 0%, #FFFFFF 100%) !important;
     }
 
     /* Hero Card (CURRENT CONSUMPTION - Green/Blue Energy Landscape Theme) */
     .hero-consumption-card {
-        background: linear-gradient(135deg, #0F4C81 0%, #166534 100%) !important;
+        background: linear-gradient(135deg, #059669 0%, #0F4C81 50%, #166534 100%) !important;
         border-radius: 20px !important;
         padding: 1.75rem 2.25rem !important;
         color: #FFFFFF !important;
-        box-shadow: 0 10px 30px -5px rgba(22, 101, 52, 0.28) !important;
+        box-shadow: 0 12px 32px -5px rgba(16, 185, 129, 0.32) !important;
         margin-bottom: 1.75rem !important;
         position: relative !important;
         overflow: hidden !important;
@@ -127,50 +150,67 @@ st.markdown("""
         color: #DCFCE7 !important;
     }
 
-    /* Pill Badges */
+    /* Vibrant Pill Badges */
     .pill-badge-blue {
-        background-color: #DBEAFE !important;
+        background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%) !important;
         color: #1E40AF !important;
-        padding: 0.25rem 0.65rem !important;
+        padding: 0.3rem 0.75rem !important;
         border-radius: 9999px !important;
-        font-size: 0.72rem !important;
-        font-weight: 700 !important;
+        font-size: 0.75rem !important;
+        font-weight: 800 !important;
         display: inline-flex !important;
         align-items: center !important;
         white-space: nowrap !important;
+        box-shadow: 0 2px 6px rgba(59, 130, 246, 0.15) !important;
     }
     .pill-badge-green {
-        background-color: #DCFCE7 !important;
+        background: linear-gradient(135deg, #DCFCE7 0%, #BBF7D0 100%) !important;
         color: #166534 !important;
-        padding: 0.25rem 0.65rem !important;
+        padding: 0.3rem 0.75rem !important;
         border-radius: 9999px !important;
-        font-size: 0.72rem !important;
-        font-weight: 700 !important;
+        font-size: 0.75rem !important;
+        font-weight: 800 !important;
         display: inline-flex !important;
         align-items: center !important;
         white-space: nowrap !important;
+        box-shadow: 0 2px 6px rgba(34, 197, 94, 0.15) !important;
     }
     .pill-badge-red {
-        background-color: #FEE2E2 !important;
+        background: linear-gradient(135deg, #FEE2E2 0%, #FCA5A5 100%) !important;
         color: #991B1B !important;
-        padding: 0.25rem 0.65rem !important;
+        padding: 0.3rem 0.75rem !important;
         border-radius: 9999px !important;
-        font-size: 0.72rem !important;
-        font-weight: 700 !important;
+        font-size: 0.75rem !important;
+        font-weight: 800 !important;
         display: inline-flex !important;
         align-items: center !important;
         white-space: nowrap !important;
+        box-shadow: 0 2px 6px rgba(239, 68, 68, 0.15) !important;
+    }
+    .pill-badge-amber {
+        background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%) !important;
+        color: #92400E !important;
+        padding: 0.3rem 0.75rem !important;
+        border-radius: 9999px !important;
+        font-size: 0.75rem !important;
+        font-weight: 800 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        white-space: nowrap !important;
+        box-shadow: 0 2px 6px rgba(245, 158, 11, 0.15) !important;
     }
 
     /* Metric Display */
     .kpi-label {
         font-size: 0.8rem !important;
         color: #64748B !important;
-        font-weight: 600 !important;
+        font-weight: 700 !important;
         margin-bottom: 0.15rem !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.04em !important;
     }
     .kpi-val {
-        font-size: 1.35rem !important;
+        font-size: 1.4rem !important;
         font-weight: 800 !important;
         color: #0F172A !important;
         letter-spacing: -0.02em !important;
@@ -348,30 +388,31 @@ except Exception as e:
     st.stop()
 
 # ----------------------------------------------------
-# BLUE THEME PLOTLY STYLING HELPER
+# VIBRANT PLOTLY STYLING HELPER
 # ----------------------------------------------------
 BLUE_PALETTE = ["#0F4C81", "#1D4ED8", "#2563EB", "#3B82F6", "#60A5FA", "#93C5FD", "#BFDBFE"]
+VIBRANT_PALETTE = ["#10B981", "#3B82F6", "#F59E0B", "#8B5CF6", "#EC4899", "#06B6D4", "#F97316"]
 
 def apply_blue_theme(fig, title=""):
     fig.update_layout(
-        title=dict(text=title, font=dict(family="Plus Jakarta Sans", size=15, color="#0F172A")),
+        title=dict(text=title, font=dict(family="Plus Jakarta Sans", size=15, color="#0F172A", weight="bold")),
         font=dict(family="Plus Jakarta Sans", color="#475569"),
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
-        margin=dict(l=10, r=10, t=30, b=10),
+        margin=dict(l=10, r=10, t=35, b=10),
         xaxis=dict(
             title="",
-            gridcolor="#F1F5F9", 
+            gridcolor="#E2E8F0", 
             showline=True, 
-            linecolor="#E2E8F0", 
-            tickfont=dict(color="#475569")
+            linecolor="#CBD5E1", 
+            tickfont=dict(color="#475569", size=11, weight="bold")
         ),
         yaxis=dict(
             title="",
-            gridcolor="#F1F5F9", 
+            gridcolor="#E2E8F0", 
             showline=True, 
-            linecolor="#E2E8F0", 
-            tickfont=dict(color="#475569")
+            linecolor="#CBD5E1", 
+            tickfont=dict(color="#475569", size=11, weight="bold")
         ),
         legend=dict(
             title="",
@@ -380,7 +421,7 @@ def apply_blue_theme(fig, title=""):
             y=1.02, 
             xanchor="right", 
             x=1, 
-            font=dict(color="#0F172A")
+            font=dict(color="#0F172A", size=11, weight="bold")
         )
     )
     return fig
@@ -621,20 +662,20 @@ elif navigation_option == "Season":
         monthly_summary['month_name'] = [month_names[int(m)-1] for m in monthly_summary['month_num']]
         overall_mean = monthly_summary['bill_php'].mean()
         monthly_summary['seasonal_index'] = monthly_summary['bill_php'] / overall_mean
-        
+        bar_colors = ["#F59E0B" if m in [4, 5, 11, 12, 1, 2, 3] else "#3B82F6" for m in monthly_summary['month_num']]
         fig_sea = go.Figure()
         fig_sea.add_trace(go.Bar(
             x=monthly_summary['month_name'],
             y=monthly_summary['bill_php'],
             name="Avg Monthly Bill (₱)",
-            marker_color="#2563EB"
+            marker_color=bar_colors
         ))
         fig_sea.add_trace(go.Scatter(
             x=monthly_summary['month_name'],
             y=monthly_summary['seasonal_index'] * overall_mean,
             name="Seasonal Trend Index",
             mode="lines+markers",
-            line=dict(color="#166534", width=3)
+            line=dict(color="#10B981", width=3.5)
         ))
         fig_sea = apply_blue_theme(fig_sea, "Monthly Electricity Expenditure & Seasonal Index Trend")
         fig_sea.update_layout(height=320)
@@ -642,11 +683,11 @@ elif navigation_option == "Season":
         
         # Bottom Left Metrics
         st.markdown(f"""
-        <div class="ui-card" style="padding: 1rem 1.25rem !important;">
+        <div class="ui-card card-amber" style="padding: 1rem 1.25rem !important;">
             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
                 <div>
                     <div class="kpi-label">PEAK PERIOD</div>
-                    <div style="font-weight: 800; font-size: 1.05rem; color: #991B1B;">APRIL–MAY</div>
+                    <div style="font-weight: 800; font-size: 1.05rem; color: #D97706;">APRIL–MAY</div>
                 </div>
                 <div>
                     <div class="kpi-label">SEASONAL INDEX</div>
@@ -654,7 +695,7 @@ elif navigation_option == "Season":
                 </div>
                 <div>
                     <div class="kpi-label">LOWEST PERIOD</div>
-                    <div style="font-weight: 800; font-size: 1.05rem; color: #166534;">DECEMBER</div>
+                    <div style="font-weight: 800; font-size: 1.05rem; color: #10B981;">DECEMBER</div>
                 </div>
             </div>
         </div>
@@ -662,7 +703,7 @@ elif navigation_option == "Season":
         
     with col_sea_right:
         st.markdown("""
-        <div class="ui-card" style="height: 100%; min-height: 420px; background-color: #FFFFFF !important; border-left: 6px solid #1D4ED8 !important;">
+        <div class="ui-card card-blue" style="height: 100%; min-height: 420px;">
             <h3 style="font-size: 1.1rem; font-weight: 800; color: #1E3A8A; margin-bottom: 0.75rem;">INTERPRETATION:</h3>
             <p style="font-size: 0.88rem; color: #334155; line-height: 1.6; margin-bottom: 0.75rem;">
                 <strong>Dry Season Thermal Surge:</strong> Electricity expenditure peaks during April–May due to elevated ambient temperatures in Abra, driving continuous operation of cooling systems (Air Conditioners & Electric Fans).
@@ -696,7 +737,7 @@ elif navigation_option == "Energy L.":
         "Air Conditioner": "#F97316", # Orange
         "Computers": "#2563EB",        # Blue
         "Refrigerator": "#EF4444",     # Red
-        "Lighting": "#22C55E",         # Green
+        "Lighting": "#10B981",         # Green
         "Electric Fan": "#06B6D4",     # Cyan
         "Water Pump": "#8B5CF6",       # Purple
         "Printer / Scanner": "#EC4899"  # Pink
@@ -719,16 +760,16 @@ elif navigation_option == "Energy L.":
     
     # Bottom Metrics Card matching Wireframe 4
     st.markdown(f"""
-    <div class="ui-card" style="margin-top: 0.5rem; padding: 1.1rem 1.5rem !important;">
+    <div class="ui-card card-purple" style="margin-top: 0.5rem; padding: 1.1rem 1.5rem !important;">
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
             <div>
-                <div class="kpi-label" style="font-size: 0.85rem !important;">CONTRIBUTION</div>
-                <div style="font-size: 1.4rem; font-weight: 800; color: #1E3A8A;">{load_summary['top2_combined_share']:.1f}% ESTIMATED</div>
+                <div class="kpi-label" style="font-size: 0.85rem !important; color: #8B5CF6 !important;">CONTRIBUTION</div>
+                <div style="font-size: 1.4rem; font-weight: 800; color: #6D28D9;">{load_summary['top2_combined_share']:.1f}% ESTIMATED</div>
                 <div style="font-size: 0.78rem; color: #64748B;">Top 2 Combined Load ({load_summary['top_appliance']} + Computers)</div>
             </div>
             <div>
-                <div class="kpi-label" style="font-size: 0.85rem !important;">CONSUMPTION</div>
-                <div style="font-size: 1.4rem; font-weight: 800; color: #166534;">{load_summary['total_kwh']:.2f} KWH</div>
+                <div class="kpi-label" style="font-size: 0.85rem !important; color: #10B981 !important;">CONSUMPTION</div>
+                <div style="font-size: 1.4rem; font-weight: 800; color: #047857;">{load_summary['total_kwh']:.2f} KWH</div>
                 <div style="font-size: 0.78rem; color: #64748B;">Total Campus Baseline Monthly Load</div>
             </div>
         </div>
@@ -737,10 +778,10 @@ elif navigation_option == "Energy L.":
     
     st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 1rem; margin-bottom: 0.75rem;">Appliance Load Inventory Matrix</h3>', unsafe_allow_html=True)
     if search_term:
-        filtered_apps = apps_processed[apps_processed.astype(str).apply(lambda x: x.str.contains(search_term, case=False)).any(axis=1)]
-        st.dataframe(filtered_apps[['rank', 'appliance', 'quantity', 'power_watts', 'hours_per_day', 'operating_days', 'monthly_kwh', 'monthly_cost_php', 'percentage_share', 'priority']], use_container_width=True)
+        apps_view = apps_processed[apps_processed['appliance'].str.contains(search_term, case=False)]
     else:
-        st.dataframe(apps_processed[['rank', 'appliance', 'quantity', 'power_watts', 'hours_per_day', 'operating_days', 'monthly_kwh', 'monthly_cost_php', 'percentage_share', 'priority']], use_container_width=True)
+        apps_view = apps_processed
+    st.dataframe(apps_view[['appliance', 'quantity', 'power_watts', 'hours_per_day', 'operating_days', 'monthly_kwh', 'percentage_share', 'monthly_cost_php', 'priority']], use_container_width=True)
 
     # PROCEED BUTTON
     col_proc1, col_proc2, col_proc3 = st.columns([1, 1.5, 1])
@@ -752,32 +793,36 @@ elif navigation_option == "Energy L.":
 # --- 5. FORECAST ---
 elif navigation_option == "Forecast":
     st.markdown('<h2 style="font-size: 1.5rem; font-weight: 800; color: #0F172A; margin-bottom: 0.5rem;">ELECTRICITY FORECAST</h2>', unsafe_allow_html=True)
-    st.markdown('<p style="font-size: 0.88rem; color: #64748B; margin-bottom: 1.25rem;">ETS Exponential Smoothing Predictive Model & Confidence Intervals</p>', unsafe_allow_html=True)
+    st.markdown('<p style="font-size: 0.88rem; color: #64748B; margin-bottom: 1.25rem;">Holt-Winters Exponential Smoothing (ETS) Projections</p>', unsafe_allow_html=True)
     
     fc_df = ets_res["forecast_df"]
     
-    # 3-Line Forecast Chart matching Wireframe 5
+    # 3-Line Forecast Chart matching Wireframe 5 with Shaded Confidence Ribbon
     fig_fc_line = go.Figure()
     fig_fc_line.add_trace(go.Scatter(
         x=fc_df['date_str'],
-        y=fc_df['forecast_bill'],
-        name="Forecasted Bill (₱)",
-        mode="lines+markers",
-        line=dict(color="#2563EB", width=3)
+        y=fc_df['lower_bound'],
+        name="Lower Confidence Bound",
+        mode="lines",
+        line=dict(color="rgba(59, 130, 246, 0.3)", width=1, dash="dash"),
+        showlegend=False
     ))
     fig_fc_line.add_trace(go.Scatter(
         x=fc_df['date_str'],
         y=fc_df['upper_bound'],
-        name="Upper Confidence (₱)",
+        name="95% Confidence Interval Band",
         mode="lines",
-        line=dict(color="#DC2626", width=2, dash="dash")
+        fill='tonexty',
+        fillcolor="rgba(59, 130, 246, 0.12)",
+        line=dict(color="rgba(59, 130, 246, 0.3)", width=1, dash="dash")
     ))
     fig_fc_line.add_trace(go.Scatter(
         x=fc_df['date_str'],
-        y=fc_df['lower_bound'],
-        name="Lower Confidence (₱)",
-        mode="lines",
-        line=dict(color="#166534", width=2, dash="dash")
+        y=fc_df['forecast_bill'],
+        name="ETS Forecasted Bill (₱)",
+        mode="lines+markers",
+        line=dict(color="#2563EB", width=3.5),
+        marker=dict(size=7, color="#1D4ED8")
     ))
     fig_fc_line = apply_blue_theme(fig_fc_line, f"Forecasted Electricity Bills — {target_school} ({forecast_horizon} Months)")
     fig_fc_line.update_layout(height=360)
