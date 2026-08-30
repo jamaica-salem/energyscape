@@ -521,21 +521,20 @@ st.markdown("""
         color: #111827 !important;
         vertical-align: middle !important;
     }
-    /* First Column Emerald Green Highlight (IMG_3512.jpeg Requirement) */
-    .bankio-table tbody tr td.first-col-emerald {
-        background-color: #0B4F46 !important;
-        color: #FFFFFF !important;
+    /* Table Styling: First Row (Header) Deep Emerald Green Only */
+    .bankio-table tbody tr td.first-col-bold {
         font-weight: 700 !important;
+        color: #111827 !important;
+        background-color: #FFFFFF !important;
     }
 </style>
 """, unsafe_allow_html=True)
 
-def render_bankio_table(df: pd.DataFrame, first_col_green: bool = True):
+def render_bankio_table(df: pd.DataFrame, first_col_green: bool = False):
     """
     Renders a custom HTML table matching the Bankio UI design in IMG_3512.jpeg.
-    - Top column header row: Deep Emerald Green (#0B4F46) background with White text (#FFFFFF)
-    - First data column: Deep Emerald Green (#0B4F46) background with White text (#FFFFFF)
-    - Rows: Alternating crisp white and soft light gray fills with rounded borders.
+    - TOP HEADER ROW ONLY: Deep Emerald Green (#0B4F46) background with White text (#FFFFFF)
+    - Data rows: Crisp white background with dark charcoal text (#111827).
     """
     if df is None or df.empty:
         return
@@ -545,7 +544,7 @@ def render_bankio_table(df: pd.DataFrame, first_col_green: bool = True):
     html = ['<div class="bankio-table-container">']
     html.append('<table class="bankio-table">')
     
-    # Header Row
+    # Top Header Row (Solid Emerald Green)
     html.append('<thead><tr>')
     for col in display_df.columns:
         col_title = str(col).replace('_', ' ').title()
@@ -565,8 +564,8 @@ def render_bankio_table(df: pd.DataFrame, first_col_green: bool = True):
             else:
                 val_str = str(val)
                 
-            if i == 0 and first_col_green:
-                html.append(f'<td class="first-col-emerald">{val_str}</td>')
+            if i == 0:
+                html.append(f'<td class="first-col-bold">{val_str}</td>')
             elif str(val_str).lower() in ['very high', 'high', 'pass']:
                 html.append(f'<td><span class="pill-badge-green">{val_str}</span></td>')
             elif str(val_str).lower() in ['moderate', 'low']:
