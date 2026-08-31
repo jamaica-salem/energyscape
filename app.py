@@ -25,6 +25,7 @@ from modules.scenarios import calculate_bau_baseline, simulate_conservation_scen
 from modules.optimization import optimize_conservation_target, monitor_target_consumption, calculate_sensitivity_analysis
 from modules.recommendations import generate_appliance_recommendations, generate_executive_summary_recommendation
 from utils.formatting import format_currency, format_kwh, format_co2, format_pct, format_num
+from config import DEFAULT_ELECTRICITY_RATE, DEFAULT_EMISSION_FACTOR, DEFAULT_SCENARIO_REDUCTION_RATES
 
 # Streamlit Page Config
 st.set_page_config(
@@ -1048,8 +1049,9 @@ with st.sidebar:
     )
 
 # System default parameters
-electricity_rate = 11.00
-emission_factor = 0.70
+# Values are centralized in config.py and treated as defaults, not UI choices.
+electricity_rate = DEFAULT_ELECTRICITY_RATE
+emission_factor = DEFAULT_EMISSION_FACTOR
 forecast_horizon = 12
 uploaded_bills = st.session_state.get("uploaded_bills", None)
 uploaded_loads = st.session_state.get("uploaded_loads", None)

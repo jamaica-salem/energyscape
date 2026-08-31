@@ -6,7 +6,9 @@ Calculates carbon footprint (CO2e kg) from electricity consumption (kWh).
 import pandas as pd
 from typing import Dict, Any, Optional
 
-DEFAULT_EMISSION_FACTOR = 0.70  # kg CO2e / kWh
+from config import DEFAULT_EMISSION_FACTOR as CONFIG_DEFAULT_EMISSION_FACTOR
+
+DEFAULT_EMISSION_FACTOR = CONFIG_DEFAULT_EMISSION_FACTOR
 
 def calculate_carbon_emissions(kwh_val: float, emission_factor: float = DEFAULT_EMISSION_FACTOR) -> float:
     """

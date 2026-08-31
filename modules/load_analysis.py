@@ -7,7 +7,9 @@ import pandas as pd
 import numpy as np
 from typing import Dict, Any, Optional
 
-DEFAULT_ELECTRICITY_RATE = 11.00  # ₱/kWh
+from config import DEFAULT_ELECTRICITY_RATE as CONFIG_DEFAULT_ELECTRICITY_RATE
+
+DEFAULT_ELECTRICITY_RATE = CONFIG_DEFAULT_ELECTRICITY_RATE
 
 def calculate_appliance_loads(df: pd.DataFrame, 
                               electricity_rate: float = DEFAULT_ELECTRICITY_RATE,

@@ -6,12 +6,17 @@ Simulates 5%, 10%, and 15% energy reduction scenarios against the BAU baseline.
 import pandas as pd
 from typing import Dict, Any, List, Optional
 from modules.carbon import calculate_carbon_emissions
+from config import (
+    DEFAULT_ELECTRICITY_RATE as CONFIG_DEFAULT_ELECTRICITY_RATE,
+    DEFAULT_EMISSION_FACTOR as CONFIG_DEFAULT_EMISSION_FACTOR,
+    DEFAULT_SCENARIO_REDUCTION_RATES as CONFIG_DEFAULT_SCENARIO_REDUCTION_RATES,
+)
 
-DEFAULT_SCENARIOS = [0.05, 0.10, 0.15]
+DEFAULT_SCENARIOS = CONFIG_DEFAULT_SCENARIO_REDUCTION_RATES
 
 def calculate_bau_baseline(bau_monthly_kwh: float = 0.0, 
-                           electricity_rate: float = 11.00,
-                           emission_factor: float = 0.70) -> Dict[str, Any]:
+                           electricity_rate: float = CONFIG_DEFAULT_ELECTRICITY_RATE,
+                           emission_factor: float = CONFIG_DEFAULT_EMISSION_FACTOR) -> Dict[str, Any]:
     """
     Compute Business-as-Usual (BAU) baseline metrics.
     """

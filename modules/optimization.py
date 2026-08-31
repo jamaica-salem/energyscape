@@ -10,8 +10,15 @@ import numpy as np
 from typing import Dict, Any, List, Optional
 from scipy.optimize import linprog
 
-DEFAULT_ELECTRICITY_RATE = 11.00
-DEFAULT_EMISSION_FACTOR = 0.70
+from config import (
+    DEFAULT_ELECTRICITY_RATE as CONFIG_DEFAULT_ELECTRICITY_RATE,
+    DEFAULT_EMISSION_FACTOR as CONFIG_DEFAULT_EMISSION_FACTOR,
+    DEFAULT_BAU_MONTHLY_KWH as CONFIG_DEFAULT_BAU_MONTHLY_KWH,
+    DEFAULT_SCENARIO_REDUCTION_RATES as CONFIG_DEFAULT_SCENARIO_REDUCTION_RATES,
+)
+
+DEFAULT_ELECTRICITY_RATE = CONFIG_DEFAULT_ELECTRICITY_RATE
+DEFAULT_EMISSION_FACTOR = CONFIG_DEFAULT_EMISSION_FACTOR
 
 def optimize_conservation_target(
     data_df: Optional[Any] = None,
@@ -115,8 +122,8 @@ def optimize_conservation_target(
                 x_other_opt = 1.0 - max_other_red
                 opt_monthly_kwh = e_ac * x_ac_opt + e_comp * x_comp_opt + e_other * x_other_opt
         else:
-            bau_monthly_kwh = 2289.10
-            opt_monthly_kwh = 1945.73
+            bau_monthly_kwh = float(CONFIG_DEFAULT_BAU_MONTHLY_KWH)
+            opt_monthly_kwh = bau_monthly_kwh * 0.85
             x_ac_opt, x_comp_opt, x_other_opt = 0.85, 0.85, 0.90
             
     elif scenarios_df is not None and isinstance(scenarios_df, pd.DataFrame) and not scenarios_df.empty:
@@ -125,17 +132,17 @@ def optimize_conservation_target(
             candidates = candidates.sort_values(by='Projected Monthly kWh', ascending=True).reset_index(drop=True)
             optimal = candidates.iloc[0]
             bau_rows = scenarios_df[scenarios_df['Reduction %'] == 0] if 'Reduction %' in scenarios_df.columns else pd.DataFrame()
-            bau_monthly_kwh = float(bau_rows.iloc[0]["Projected Monthly kWh"]) if not bau_rows.empty else 2289.10
+            bau_monthly_kwh = float(bau_rows.iloc[0]["Projected Monthly kWh"]) if not bau_rows.empty else float(CONFIG_DEFAULT_BAU_MONTHLY_KWH)
             opt_monthly_kwh = float(optimal["Projected Monthly kWh"])
         else:
-            bau_monthly_kwh = 2289.10
-            opt_monthly_kwh = 1945.73
+            bau_monthly_kwh = float(CONFIG_DEFAULT_BAU_MONTHLY_KWH)
+            opt_monthly_kwh = bau_monthly_kwh * 0.85
         x_ac_opt, x_comp_opt, x_other_opt = 1.0 - max_ac_red, 1.0 - max_comp_red, 1.0 - max_other_red
         strategy_focus = "Linear Goal Programming"
         short_tag = "Scenario Target"
     else:
-        bau_monthly_kwh = 2289.10
-        opt_monthly_kwh = 1945.73
+        bau_monthly_kwh = float(CONFIG_DEFAULT_BAU_MONTHLY_KWH)
+        opt_monthly_kwh = bau_monthly_kwh * 0.85
         x_ac_opt, x_comp_opt, x_other_opt = 0.85, 0.85, 0.90
         strategy_focus = "Linear Goal Programming"
         short_tag = "Default Target"
@@ -193,7 +200,9 @@ def monitor_target_consumption(actual_kwh: float, target_kwh: float = 0.0) -> Di
     }
 
 def calculate_sensitivity_analysis(bau_kwh: float = 0.0, 
-                                    test_reductions: List[float] = [0.0, 0.05, 0.10, 0.15]) -> pd.DataFrame:
+                                    test_reductions: List[float] = None) -> pd.DataFrame:
+    if test_reductions is None:
+        test_reductions = [0.0] + list(CONFIG_DEFAULT_SCENARIO_REDUCTION_RATES)
     """
     Compute sensitivity ratio across tested reduction percentages.
     Sensitivity Ratio = (% Change in Output Consumption) / (% Input Reduction)
