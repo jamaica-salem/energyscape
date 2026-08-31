@@ -1213,7 +1213,7 @@ apps_processed = calculate_appliance_loads(appliance_df, electricity_rate, targe
 load_summary = get_load_summary(apps_processed, electricity_rate)
 bau_base = calculate_bau_baseline(load_summary.get("total_kwh", 0.0), electricity_rate, emission_factor)
 scenarios_sim = simulate_conservation_scenarios(bau_base)
-opt_res = optimize_conservation_target(scenarios_sim)
+opt_res = optimize_conservation_target(appliance_df=apps_processed, electricity_rate=electricity_rate, emission_factor=emission_factor)
 ets_res = fit_ets_forecast(historical_df, forecast_school, forecast_horizon=forecast_horizon)
 
 # --- 1. DASHBOARD (MAIN MOCK GRID LAYOUT) ---
@@ -1948,26 +1948,21 @@ elif navigation_option == "Optimization":
     st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #111827; margin-top: 1rem; margin-bottom: 0.75rem;">OPERATIONAL CONSTRAINTS:</h3>', unsafe_allow_html=True)
     col_c1, col_c2, col_c3 = st.columns(3)
     with col_c1:
-        st.markdown(f"""
-        <div class="ui-card" style="padding: 1rem 1.25rem !important;">
-            <div class="kpi-label">MAXIMUM {constraint_top1.upper()} REDUCTION</div>
-            <div style="font-size: 1.3rem; font-weight: 800; color: #0B4F46;">15% Limit</div>
-        </div>
-        """, unsafe_allow_html=True)
+        max_ac_limit = st.slider(f"Max {constraint_top1} Reduction (%)", min_value=5, max_value=35, value=15, step=1, key="opt_limit_ac")
     with col_c2:
-        st.markdown(f"""
-        <div class="ui-card" style="padding: 1rem 1.25rem !important;">
-            <div class="kpi-label">MAXIMUM {constraint_top2.upper()} REDUCTION</div>
-            <div style="font-size: 1.3rem; font-weight: 800; color: #0B4F46;">15% Limit</div>
-        </div>
-        """, unsafe_allow_html=True)
+        max_comp_limit = st.slider(f"Max {constraint_top2} Reduction (%)", min_value=5, max_value=35, value=15, step=1, key="opt_limit_comp")
     with col_c3:
-        st.markdown("""
-        <div class="ui-card" style="padding: 1rem 1.25rem !important;">
-            <div class="kpi-label">MAXIMUM REMAINING LOADS REDUCTION</div>
-            <div style="font-size: 1.3rem; font-weight: 800; color: #0B4F46;">10% Limit</div>
-        </div>
-        """, unsafe_allow_html=True)
+        max_other_limit = st.slider("Max Remaining Loads Reduction (%)", min_value=1, max_value=25, value=10, step=1, key="opt_limit_other")
+
+    # Run Scipy Linear Programming solver dynamically on constraints
+    opt_res = optimize_conservation_target(
+        appliance_df=apps_processed,
+        electricity_rate=electricity_rate,
+        emission_factor=emission_factor,
+        max_ac_red=max_ac_limit / 100.0,
+        max_comp_red=max_comp_limit / 100.0,
+        max_other_red=max_other_limit / 100.0
+    )
         
     col_r1, col_r2, col_r3 = st.columns([1, 1.5, 1])
     with col_r2:
@@ -1978,8 +1973,8 @@ elif navigation_option == "Optimization":
         st.markdown(f"""
         <div style="background-color: #E6F4EA; border: 1px solid #A7F3D0; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 0.75rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
             <div>
-                <div style="font-weight: 700; color: #047857; font-size: 0.98rem;">OPTIMIZATION COMPLETE</div>
-                <div style="font-size: 0.85rem; color: #065F46;">Optimal Target: <b>{format_kwh(opt_res['optimized_monthly_kwh'])}</b> ({opt_res['reduction_percentage']:.0f}% Reduction). Annual Savings: <b>{format_currency(opt_res['annual_cost_savings_php'])}</b></div>
+                <div style="font-weight: 700; color: #047857; font-size: 0.98rem;">OPTIMIZATION COMPLETE (LINEAR GOAL PROGRAMMING)</div>
+                <div style="font-size: 0.85rem; color: #065F46;">Optimal Target: <b>{format_kwh(opt_res['optimized_monthly_kwh'])}</b> ({opt_res['reduction_percentage']:.1f}% Reduction). Annual Savings: <b>{format_currency(opt_res['annual_cost_savings_php'])}</b></div>
             </div>
             <span class="pill-badge-green">OPTIMIZED</span>
         </div>
