@@ -13,6 +13,12 @@ from typing import Tuple, Dict, Any, Optional
 
 DEFAULT_DATA_DIR = Path(__file__).parent.parent / "data"
 
+def _read_csv(file_path_or_buffer: Any) -> pd.DataFrame:
+    """Read CSV paths or uploaded file buffers from the beginning each time."""
+    if hasattr(file_path_or_buffer, "seek"):
+        file_path_or_buffer.seek(0)
+    return pd.read_csv(file_path_or_buffer)
+
 def load_historical_bills(file_path_or_buffer: Optional[Any] = None) -> pd.DataFrame:
     """
     Load and preprocess historical electricity billing data.
@@ -21,7 +27,7 @@ def load_historical_bills(file_path_or_buffer: Optional[Any] = None) -> pd.DataF
     if file_path_or_buffer is None:
         file_path_or_buffer = DEFAULT_DATA_DIR / "historical_bills.csv"
     
-    df = pd.read_csv(file_path_or_buffer)
+    df = _read_csv(file_path_or_buffer)
     
     required_cols = {"school", "date", "school_year", "month", "bill_php"}
     if not required_cols.issubset(set(df.columns)):
@@ -39,7 +45,7 @@ def load_appliance_loads(file_path_or_buffer: Optional[Any] = None) -> pd.DataFr
     if file_path_or_buffer is None:
         file_path_or_buffer = DEFAULT_DATA_DIR / "appliance_loads.csv"
         
-    df = pd.read_csv(file_path_or_buffer)
+    df = _read_csv(file_path_or_buffer)
     
     required_cols = {"school", "appliance", "quantity", "power_watts", "hours_per_day", "operating_days"}
     if not required_cols.issubset(set(df.columns)):
@@ -58,7 +64,7 @@ def load_seasonal_data(file_path_or_buffer: Optional[Any] = None) -> pd.DataFram
     if file_path_or_buffer is None:
         file_path_or_buffer = DEFAULT_DATA_DIR / "seasonal_data.csv"
         
-    df = pd.read_csv(file_path_or_buffer)
+    df = _read_csv(file_path_or_buffer)
     
     required_cols = {"school", "month", "season", "consumption_kwh"}
     if not required_cols.issubset(set(df.columns)):

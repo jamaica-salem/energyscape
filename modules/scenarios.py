@@ -9,7 +9,7 @@ from modules.carbon import calculate_carbon_emissions
 
 DEFAULT_SCENARIOS = [0.05, 0.10, 0.15]
 
-def calculate_bau_baseline(bau_monthly_kwh: float = 2289.10, 
+def calculate_bau_baseline(bau_monthly_kwh: float = 0.0, 
                            electricity_rate: float = 11.00,
                            emission_factor: float = 0.70) -> Dict[str, Any]:
     """

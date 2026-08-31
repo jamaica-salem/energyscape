@@ -24,6 +24,9 @@ def optimize_conservation_target(scenarios_df: pd.DataFrame) -> Dict[str, Any]:
     # Optimal candidate is the 15% scenario
     optimal = candidates.iloc[0]
     bau_row = scenarios_df[scenarios_df['Reduction %'] == 0].iloc[0]
+    monthly_kwh_savings = float(optimal["Monthly Energy Saved (kWh)"])
+    annual_cost_savings = float(optimal["Annual Cost Savings (₱)"])
+    annual_avoided_co2 = float(optimal["Annual Avoided CO₂e (kg)"])
     
     return {
         "status": "Optimal Solution Found",
@@ -31,19 +34,20 @@ def optimize_conservation_target(scenarios_df: pd.DataFrame) -> Dict[str, Any]:
         "reduction_percentage": float(optimal["Reduction %"]),
         "bau_monthly_kwh": float(bau_row["Projected Monthly kWh"]),
         "optimized_monthly_kwh": float(optimal["Projected Monthly kWh"]),
-        "monthly_kwh_savings": float(optimal["Monthly Energy Saved (kWh)"]),
+        "monthly_kwh_savings": monthly_kwh_savings,
         "annual_kwh_savings": float(optimal["Annual Energy Saved (kWh)"]),
         "monthly_cost_savings_php": float(optimal["Monthly Cost Savings (₱)"]),
-        "annual_cost_savings_php": float(optimal["Annual Cost Savings (₱)"]),
-        "annual_avoided_co2_kg": float(optimal["Annual Avoided CO₂e (kg)"]),
+        "annual_cost_savings_php": annual_cost_savings,
+        "annual_avoided_co2_kg": annual_avoided_co2,
         "optimization_rationale": (
-            "The 15% Moderate Conservation Scenario achieves the maximum energy reduction "
-            "(343.36 kWh/month saved, ₱45,323.52/year saved, 2,884.22 kg CO₂e/year avoided) "
+            f"The {optimal['Scenario']} achieves the maximum evaluated energy reduction "
+            f"({monthly_kwh_savings:,.2f} kWh/month saved, ₱{annual_cost_savings:,.2f}/year saved, "
+            f"{annual_avoided_co2:,.2f} kg CO₂e/year avoided) "
             "while maintaining all essential educational operations without requiring physical modification of equipment."
         )
     }
 
-def monitor_target_consumption(actual_kwh: float, target_kwh: float = 1945.74) -> Dict[str, Any]:
+def monitor_target_consumption(actual_kwh: float, target_kwh: float = 0.0) -> Dict[str, Any]:
     """
     Compare actual monthly electricity consumption against the optimized target benchmark.
     Returns status indicator (GREEN if <= target, RED if > target).
@@ -65,7 +69,7 @@ def monitor_target_consumption(actual_kwh: float, target_kwh: float = 1945.74) -
         "is_on_target": is_on_target
     }
 
-def calculate_sensitivity_analysis(bau_kwh: float = 2289.10, 
+def calculate_sensitivity_analysis(bau_kwh: float = 0.0, 
                                     test_reductions: List[float] = [0.0, 0.05, 0.10, 0.15]) -> pd.DataFrame:
     """
     Compute sensitivity ratio across tested reduction percentages.

@@ -626,7 +626,7 @@ def filter_dataframe_by_search(df: pd.DataFrame, query: str) -> pd.DataFrame:
         
     return df[mask]
 
-def search_entire_system(query: str, historical_df: pd.DataFrame, appliance_df: pd.DataFrame, apps_processed: pd.DataFrame) -> dict:
+def search_entire_system(query: str, historical_df: pd.DataFrame, appliance_df: pd.DataFrame, seasonal_df: pd.DataFrame, apps_processed: pd.DataFrame) -> dict:
     """
     Scans all 10 system pages and returns a dictionary mapping page names to match status.
     """
@@ -642,7 +642,11 @@ def search_entire_system(query: str, historical_df: pd.DataFrame, appliance_df: 
         matches["Dashboard"] = max(dash_m, 1)
         
     # 2. Data Input
-    di_m = len(filter_dataframe_by_search(appliance_df, q)) + len(filter_dataframe_by_search(historical_df, q))
+    di_m = (
+        len(filter_dataframe_by_search(appliance_df, q))
+        + len(filter_dataframe_by_search(historical_df, q))
+        + len(filter_dataframe_by_search(seasonal_df, q))
+    )
     if di_m > 0 or any(w in q for w in ["data input", "appliance", "billing", "inventory"]):
         matches["Data Input"] = max(di_m, 1)
         
@@ -737,6 +741,82 @@ def render_bankio_table(df: pd.DataFrame, first_col_green: bool = False, search_
     html.append('</tbody></table></div>')
     
     st.markdown(''.join(html), unsafe_allow_html=True)
+
+MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+MONTH_ABBR = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+MONTH_ORDER = {month: idx + 1 for idx, month in enumerate(MONTH_NAMES)}
+
+def get_dataset_schools(*dfs: pd.DataFrame) -> list:
+    """Return unique school names in the order they appear in active datasets."""
+    schools = []
+    for df in dfs:
+        if df is None or df.empty or "school" not in df.columns:
+            continue
+        for school in df["school"].dropna().astype(str):
+            if school and school not in schools:
+                schools.append(school)
+    return schools
+
+def get_forecast_school(selected_school: str, historical_schools: list) -> str:
+    """Forecasting requires a school with historical billing rows."""
+    if selected_school in historical_schools:
+        return selected_school
+    return historical_schools[0] if historical_schools else selected_school
+
+def get_seasonal_source(seasonal_df: pd.DataFrame, historical_df: pd.DataFrame) -> pd.DataFrame:
+    """Prefer the active seasonal dataset; fall back to historical bills if needed."""
+    if seasonal_df is not None and not seasonal_df.empty and "consumption_kwh" in seasonal_df.columns:
+        return seasonal_df
+    return historical_df
+
+def build_monthly_season_summary(source_df: pd.DataFrame, selected_school: str) -> tuple:
+    """Build month-level seasonal chart data from either kWh seasonal data or bill data."""
+    if source_df is None or source_df.empty:
+        return pd.DataFrame(), "bill_php", "Avg Monthly Bill (₱)"
+
+    data = source_df.copy()
+    if selected_school and "school" in data.columns:
+        data = data[data["school"] == selected_school]
+
+    value_col = "consumption_kwh" if "consumption_kwh" in data.columns else "bill_php"
+    value_label = "Avg Monthly Consumption (kWh)" if value_col == "consumption_kwh" else "Avg Monthly Bill (₱)"
+    needed_cols = ["month", value_col]
+    data = data.dropna(subset=[col for col in needed_cols if col in data.columns])
+    if data.empty:
+        return pd.DataFrame(), value_col, value_label
+
+    monthly_summary = data.groupby("month")[value_col].mean().reset_index()
+    monthly_summary["month_num"] = monthly_summary["month"].map(MONTH_ORDER)
+    monthly_summary = monthly_summary.dropna(subset=["month_num"]).sort_values("month_num")
+    monthly_summary["month_num"] = monthly_summary["month_num"].astype(int)
+    monthly_summary["month_name"] = monthly_summary["month_num"].apply(lambda m: MONTH_ABBR[m - 1])
+    monthly_summary["full_month_name"] = monthly_summary["month_num"].apply(lambda m: MONTH_NAMES[m - 1])
+    overall_mean = monthly_summary[value_col].mean() if not monthly_summary.empty else 1.0
+    monthly_summary["seasonal_index"] = monthly_summary[value_col] / overall_mean if overall_mean > 0 else 1.0
+    return monthly_summary, value_col, value_label
+
+def summarize_school_for_comparison(school: str, historical_df: pd.DataFrame, appliance_df: pd.DataFrame, seasonal_source_df: pd.DataFrame) -> dict:
+    """Calculate all comparative metrics for a school from active datasets."""
+    apps = calculate_appliance_loads(appliance_df, electricity_rate, school)
+    load_sum = get_load_summary(apps, electricity_rate)
+    seasonal = calculate_seasonal_metrics(seasonal_source_df, DEFAULT_DRY_MONTHS, DEFAULT_WET_MONTHS, school)
+    bau = calculate_bau_baseline(load_sum.get("total_kwh", 0.0), electricity_rate, emission_factor)
+    opt = optimize_conservation_target(simulate_conservation_scenarios(bau))
+    forecast = fit_ets_forecast(historical_df, school)
+    forecast_df = forecast["forecast_df"]
+    peak = max(seasonal["monthly_averages"], key=seasonal["monthly_averages"].get) if seasonal.get("monthly_averages") else "N/A"
+    top_load = f"{load_sum.get('top_appliance', 'N/A')} ({load_sum.get('top_kwh', 0):,.0f} kWh)"
+    return {
+        "school": school,
+        "load_summary": load_sum,
+        "seasonal": seasonal,
+        "bau": bau,
+        "opt": opt,
+        "forecast": forecast,
+        "forecast_df": forecast_df,
+        "peak": peak,
+        "top_load": top_load,
+    }
 
 # ----------------------------------------------------
 # APPLICATION ENTRY & WELCOME LANDING STATE
@@ -966,12 +1046,12 @@ with st.sidebar:
     )
 
 # System default parameters
-school_selection = "An-anaao Integrated School"
 electricity_rate = 11.00
 emission_factor = 0.70
 forecast_horizon = 12
 uploaded_bills = st.session_state.get("uploaded_bills", None)
 uploaded_loads = st.session_state.get("uploaded_loads", None)
+uploaded_seasonal = st.session_state.get("uploaded_seasonal", None)
 
 # ----------------------------------------------------
 # DATA INGESTION
@@ -979,10 +1059,36 @@ uploaded_loads = st.session_state.get("uploaded_loads", None)
 try:
     historical_df = load_historical_bills(uploaded_bills)
     appliance_df = load_appliance_loads(uploaded_loads)
-    seasonal_df = load_seasonal_data()
+    seasonal_df = load_seasonal_data(uploaded_seasonal)
 except Exception as e:
     st.error(f"Error loading datasets: {e}")
     st.stop()
+
+historical_schools = get_dataset_schools(historical_df)
+appliance_schools = get_dataset_schools(appliance_df)
+seasonal_schools = get_dataset_schools(seasonal_df)
+available_schools = get_dataset_schools(historical_df, appliance_df, seasonal_df)
+
+if not available_schools:
+    st.error("No school records were found in the active datasets.")
+    st.stop()
+
+current_school = st.session_state.get("school_selection")
+school_index = available_schools.index(current_school) if current_school in available_schools else 0
+
+with st.sidebar:
+    st.markdown('<div class="sidebar-section-header">ACTIVE DATASET</div>', unsafe_allow_html=True)
+    school_selection = st.selectbox(
+        "Institution",
+        available_schools,
+        index=school_index,
+        key="school_selection",
+        label_visibility="collapsed"
+    )
+
+target_school = school_selection
+forecast_school = get_forecast_school(target_school, historical_schools)
+seasonal_source_df = get_seasonal_source(seasonal_df, historical_df)
 
 # ----------------------------------------------------
 # SOOTHING MATCHA & DARK FOREST GREEN PALETTE (NO BRIGHT/NEON GREENS)
@@ -993,12 +1099,11 @@ BLUE_PALETTE = GREEN_PALETTE
 BLUE_GREEN_PALETTE = GREEN_PALETTE
 
 def apply_green_theme(fig, title=""):
-    fig.update_layout(
-        title=dict(text=title, font=dict(family="Inter", size=15, color="#111827", weight="bold")),
+    layout_kwargs = dict(
         font=dict(family="Inter", color="#6B7280"),
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
-        margin=dict(l=10, r=10, t=35, b=10),
+        margin=dict(l=10, r=10, t=50 if title else 30, b=10),
         xaxis=dict(
             title="",
             gridcolor="#F3F4F6", 
@@ -1023,6 +1128,11 @@ def apply_green_theme(fig, title=""):
             font=dict(color="#111827", size=11, weight="bold")
         )
     )
+    if title:
+        layout_kwargs["title"] = dict(text=title, font=dict(family="Inter", size=13, color="#111827", weight="bold"), x=0, xanchor="left", y=0.98, yanchor="top")
+    else:
+        layout_kwargs["title"] = dict(text="")
+    fig.update_layout(**layout_kwargs)
     return fig
 
 apply_blue_theme = apply_green_theme
@@ -1060,9 +1170,8 @@ def clear_search_callback():
 
 # Render Search Active Status Banner if user enters a search term
 if search_term and search_term.strip():
-    target_sch = "An-anaao Integrated School" if school_selection == "Both" else school_selection
-    apps_proc = calculate_appliance_loads(appliance_df, electricity_rate, target_sch)
-    system_matches = search_entire_system(search_term, historical_df, appliance_df, apps_proc)
+    apps_proc = calculate_appliance_loads(appliance_df, electricity_rate, target_school)
+    system_matches = search_entire_system(search_term, historical_df, appliance_df, seasonal_df, apps_proc)
     
     c_s1, c_s2 = st.columns([4, 1])
     with c_s1:
@@ -1099,15 +1208,13 @@ if search_term and search_term.strip():
 # NAVIGATION VIEWS IMPLEMENTATION
 # ----------------------------------------------------
 
-# Target school selection logic
-target_school = "An-anaao Integrated School" if school_selection == "Both" else school_selection
 hist_metrics = calculate_historical_metrics(historical_df, target_school)
 apps_processed = calculate_appliance_loads(appliance_df, electricity_rate, target_school)
 load_summary = get_load_summary(apps_processed, electricity_rate)
-bau_base = calculate_bau_baseline(load_summary.get("total_kwh", 2289.10), electricity_rate, emission_factor)
+bau_base = calculate_bau_baseline(load_summary.get("total_kwh", 0.0), electricity_rate, emission_factor)
 scenarios_sim = simulate_conservation_scenarios(bau_base)
 opt_res = optimize_conservation_target(scenarios_sim)
-ets_res = fit_ets_forecast(historical_df, target_school, forecast_horizon=forecast_horizon)
+ets_res = fit_ets_forecast(historical_df, forecast_school, forecast_horizon=forecast_horizon)
 
 # --- 1. DASHBOARD (MAIN MOCK GRID LAYOUT) ---
 if navigation_option == "Dashboard":
@@ -1124,7 +1231,7 @@ if navigation_option == "Dashboard":
         <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.75rem; align-items: center; background: rgba(255, 255, 255, 0.08); padding: 1.25rem 1.5rem; border-radius: 14px;">
             <div>
                 <div class="hero-subtext">Monthly Energy Load</div>
-                <div class="hero-metric-val">{format_kwh(load_summary.get("total_kwh", 2289.10))}</div>
+                <div class="hero-metric-val">{format_kwh(load_summary.get("total_kwh", 0.0))}</div>
             </div>
             <div>
                 <div class="hero-subtext">Monthly Bill (BAU)</div>
@@ -1192,14 +1299,13 @@ if navigation_option == "Dashboard":
     # 3. Bottom Row: ELECTRICITY TREND (Full-Width Section)
     st.markdown('<h3 style="font-size: 1.15rem; font-weight: 700; color: #111827; margin-top: 1.5rem; margin-bottom: 0.85rem;">ELECTRICITY TREND</h3>', unsafe_allow_html=True)
     plot_df = historical_df[historical_df['bill_php'].notna()]
-    if school_selection != "Both":
-        plot_df = plot_df[plot_df['school'] == school_selection]
+    plot_df = plot_df[plot_df['school'] == target_school]
         
     fig_tr = px.line(
         plot_df, 
         x="date_dt", 
         y="bill_php", 
-        color="school" if school_selection == "Both" else None,
+        color=None,
         color_discrete_sequence=BLUE_GREEN_PALETTE,
         markers=True,
         height=360
@@ -1280,6 +1386,15 @@ elif navigation_option == "Data Input":
                     st.rerun()
                 else:
                     st.success(f"✓ Active Appliance Inventory Dataset: '{uploaded_file.name}' ({len(custom_df)} rows)")
+            elif "consumption_kwh" in cols or "season" in cols:
+                uploaded_file.seek(0)
+                if st.session_state.get("uploaded_seasonal_filename") != uploaded_file.name:
+                    st.session_state["uploaded_seasonal"] = uploaded_file
+                    st.session_state["uploaded_seasonal_filename"] = uploaded_file.name
+                    st.success(f"✓ Seasonal Consumption Dataset '{uploaded_file.name}' loaded & applied system-wide! ({len(custom_df)} rows imported)")
+                    st.rerun()
+                else:
+                    st.success(f"✓ Active Seasonal Consumption Dataset: '{uploaded_file.name}' ({len(custom_df)} rows)")
             else:
                 st.info(f"File '{uploaded_file.name}' imported ({len(custom_df)} rows).")
         except Exception as ex:
@@ -1287,22 +1402,31 @@ elif navigation_option == "Data Input":
     
     st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #111827; margin-top: 1.25rem; margin-bottom: 0.75rem;">Appliance Electrical Load Inventory</h3>', unsafe_allow_html=True)
     app_display = appliance_df.copy()
-    if school_selection != "Both" and 'school' in app_display.columns:
+    if 'school' in app_display.columns:
         app_display = app_display[app_display['school'] == target_school]
     if search_term:
         app_display = app_display[app_display['appliance'].str.contains(search_term, case=False)]
     render_bankio_table(app_display)
+
+    if not seasonal_df.empty:
+        st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #111827; margin-top: 1rem; margin-bottom: 0.75rem;">Seasonal Consumption Records</h3>', unsafe_allow_html=True)
+        seasonal_display = seasonal_df.copy()
+        if 'school' in seasonal_display.columns:
+            seasonal_display = seasonal_display[seasonal_display['school'] == target_school]
+        render_bankio_table(seasonal_display)
     
     # Data Validity Checklist Section matching Bankio Minimal Style
     st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #111827; margin-top: 1.5rem; margin-bottom: 0.75rem;">DATA VALIDITY AUDIT CHECKLIST</h3>', unsafe_allow_html=True)
     
     hist_val = validate_dataset(historical_df, "historical")
     app_val = validate_dataset(appliance_df, "appliance")
+    seasonal_val = validate_dataset(seasonal_df, "seasonal")
 
-    total_missing = int(historical_df.isna().sum().sum() + appliance_df.isna().sum().sum())
+    total_missing = int(historical_df.isna().sum().sum() + appliance_df.isna().sum().sum() + seasonal_df.isna().sum().sum())
     negative_values = int(
         (historical_df.select_dtypes(include="number") < 0).sum().sum()
         + (appliance_df.select_dtypes(include="number") < 0).sum().sum()
+        + (seasonal_df.select_dtypes(include="number") < 0).sum().sum()
     )
     invalid_ranges = int(
         (appliance_df["quantity"] <= 0).sum()
@@ -1373,20 +1497,19 @@ elif navigation_option == "Season":
     
     with st.container():
         st.markdown('<h4 style="font-size: 0.95rem; font-weight: 700; color: #111827; margin-bottom: 0.5rem;">Season Classification Parameters</h4>', unsafe_allow_html=True)
-        all_months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
         dry_months = st.multiselect(
             "Select Dry Season Months",
-            options=all_months,
+            options=MONTH_NAMES,
             default=DEFAULT_DRY_MONTHS,
             label_visibility="collapsed"
         )
-        wet_months = [m for m in all_months if m not in dry_months]
+        wet_months = [m for m in MONTH_NAMES if m not in dry_months]
         
     s_metrics = calculate_seasonal_metrics(
-        historical_df, 
+        seasonal_source_df, 
         dry_months, 
         wet_months, 
-        school_name=target_school if school_selection != "Both" else None
+        school_name=target_school
     )
     
     st.markdown('<div style="margin-bottom: 1.5rem;"></div>', unsafe_allow_html=True)
@@ -1394,30 +1517,20 @@ elif navigation_option == "Season":
     col_sea_left, col_sea_right = st.columns([1.6, 1])
     
     with col_sea_left:
-        hist_sea_df = historical_df.dropna(subset=['date_dt', 'bill_php']).copy()
-        if school_selection != "Both":
-            hist_sea_df = hist_sea_df[hist_sea_df['school'] == target_school]
-        hist_sea_df['month_num'] = hist_sea_df['date_dt'].dt.month
-        monthly_summary = hist_sea_df.groupby('month_num')['bill_php'].mean().reset_index()
-        month_names = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-        full_month_names = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-        
-        monthly_summary['month_name'] = [month_names[int(m)-1] for m in monthly_summary['month_num']]
-        monthly_summary['full_month_name'] = [full_month_names[int(m)-1] for m in monthly_summary['month_num']]
-        
-        overall_mean = monthly_summary['bill_php'].mean() if not monthly_summary.empty else 1.0
-        monthly_summary['seasonal_index'] = monthly_summary['bill_php'] / overall_mean if overall_mean > 0 else 1.0
+        monthly_summary, season_value_col, season_value_label = build_monthly_season_summary(seasonal_source_df, target_school)
+        overall_mean = monthly_summary[season_value_col].mean() if not monthly_summary.empty else 1.0
+        format_season_value = format_kwh if season_value_col == "consumption_kwh" else format_currency
         
         # Determine Peak and Lowest Period dynamically from actual historical dataset
         if not monthly_summary.empty:
-            max_idx = monthly_summary['bill_php'].idxmax()
-            min_idx = monthly_summary['bill_php'].idxmin()
+            max_idx = monthly_summary[season_value_col].idxmax()
+            min_idx = monthly_summary[season_value_col].idxmin()
             
             peak_month_str = monthly_summary.loc[max_idx, 'full_month_name'].upper()
-            peak_val = monthly_summary.loc[max_idx, 'bill_php']
+            peak_val = monthly_summary.loc[max_idx, season_value_col]
             peak_s_index = monthly_summary.loc[max_idx, 'seasonal_index']
             lowest_month_str = monthly_summary.loc[min_idx, 'full_month_name'].upper()
-            lowest_val = monthly_summary.loc[min_idx, 'bill_php']
+            lowest_val = monthly_summary.loc[min_idx, season_value_col]
         else:
             peak_month_str = "N/A"
             peak_val = 0.0
@@ -1428,15 +1541,16 @@ elif navigation_option == "Season":
         peak_pct_str = f"({(peak_s_index - 1.0) * 100:+.0f}% Peak)" if peak_s_index != 1.0 else "(Baseline)"
         
         # Bankio Minimal Green Palette: Deep Emerald for Dry, Soft Matcha for Wet
-        dry_month_numbers = {all_months.index(month) + 1 for month in dry_months}
+        dry_month_numbers = {MONTH_NAMES.index(month) + 1 for month in dry_months}
         bar_colors = ["#0B4F46" if m in dry_month_numbers else "#5A9E87" for m in monthly_summary['month_num']]
+        st.markdown(f'<h3 style="font-size: 1.05rem; font-weight: 700; color: #111827; margin-bottom: 0.75rem;">Monthly {season_value_label} & Seasonal Index Trend — {target_school}</h3>', unsafe_allow_html=True)
         fig_sea = go.Figure()
         fig_sea.add_trace(go.Bar(
             x=monthly_summary['month_name'],
-            y=monthly_summary['bill_php'],
-            name="Avg Monthly Bill (₱)",
+            y=monthly_summary[season_value_col],
+            name=season_value_label,
             marker_color=bar_colors,
-            hovertemplate="Month: %{x}<br>Avg Bill: ₱%{y:,.2f}<extra></extra>"
+            hovertemplate=f"Month: %{{x}}<br>{season_value_label}: %{{y:,.2f}}<extra></extra>"
         ))
         fig_sea.add_trace(go.Scatter(
             x=monthly_summary['month_name'],
@@ -1447,8 +1561,8 @@ elif navigation_option == "Season":
             hovertemplate="Month: %{x}<br>Index: %{text:.2f}<extra></extra>",
             text=monthly_summary['seasonal_index']
         ))
-        fig_sea = apply_blue_theme(fig_sea, f"Monthly Electricity Expenditure & Seasonal Index Trend — {target_school}")
-        fig_sea.update_layout(height=320)
+        fig_sea = apply_blue_theme(fig_sea, "")
+        fig_sea.update_layout(height=320, margin=dict(l=10, r=10, t=35, b=10))
         st.plotly_chart(fig_sea, use_container_width=True)
         
         st.markdown('<div style="margin-top: 1rem;"></div>', unsafe_allow_html=True)
@@ -1479,9 +1593,9 @@ elif navigation_option == "Season":
         pct_diff = s_metrics.get("percentage_difference", 0.0)
         
         if dry_avg >= wet_avg:
-            variance_html = f"Dry Season average monthly billing (<strong>{format_currency(dry_avg)}</strong>) exceeds Wet Season baseline (<strong>{format_currency(wet_avg)}</strong>) by approximately <strong>{abs(pct_diff):.2f}%</strong>."
+            variance_html = f"Dry Season monthly average (<strong>{format_season_value(dry_avg)}</strong>) exceeds Wet Season baseline (<strong>{format_season_value(wet_avg)}</strong>) by approximately <strong>{abs(pct_diff):.2f}%</strong>."
         else:
-            variance_html = f"Wet Season average monthly billing (<strong>{format_currency(wet_avg)}</strong>) exceeds Dry Season baseline (<strong>{format_currency(dry_avg)}</strong>) by approximately <strong>{abs(pct_diff):.2f}%</strong>."
+            variance_html = f"Wet Season monthly average (<strong>{format_season_value(wet_avg)}</strong>) exceeds Dry Season baseline (<strong>{format_season_value(dry_avg)}</strong>) by approximately <strong>{abs(pct_diff):.2f}%</strong>."
             
         dry_months_formatted = ", ".join(dry_months) if dry_months else "None selected"
 
@@ -1489,7 +1603,7 @@ elif navigation_option == "Season":
         <div class="ui-card" style="height: 100%; min-height: 420px;">
             <h3 style="font-size: 1.1rem; font-weight: 800; color: #111827; margin-bottom: 0.75rem;">INTERPRETATION:</h3>
             <p style="font-size: 0.88rem; color: #374151; line-height: 1.6; margin-bottom: 0.75rem;">
-                <strong>Seasonal Load Peak:</strong> Electricity expenditure peaks during <strong>{peak_month_str.title()}</strong> (Average Bill: <strong>{format_currency(peak_val)}</strong>) driven by institutional load demands and seasonal climate variations.
+                <strong>Seasonal Load Peak:</strong> Electricity use peaks during <strong>{peak_month_str.title()}</strong> (Average: <strong>{format_season_value(peak_val)}</strong>) driven by institutional load demands and seasonal climate variations.
             </p>
             <p style="font-size: 0.88rem; color: #374151; line-height: 1.6; margin-bottom: 0.75rem;">
                 <strong>Seasonal Variance:</strong> {variance_html}
@@ -1604,7 +1718,7 @@ elif navigation_option == "Forecast":
     st.plotly_chart(fig_fc_line, use_container_width=True)
     
     # Calculate MAE & Annual Metrics
-    mae_val = ets_res.get("val_mae", 1245.30)
+    mae_val = ets_res.get("val_mae", 0.0)
     ann_kwh = (fc_df['forecast_bill'].sum() / electricity_rate)
     lower_ann_kwh = (fc_df['lower_bound'].sum() / electricity_rate)
     upper_ann_kwh = (fc_df['upper_bound'].sum() / electricity_rate)
@@ -1644,7 +1758,7 @@ elif navigation_option == "Forecast":
 elif navigation_option == "Carbon":
     st.markdown('<p style="font-size: 0.88rem; color: #6B7280; margin-bottom: 1.25rem;">Scope 2 Carbon Footprint Quantification & Projections</p>', unsafe_allow_html=True)
     
-    bau = calculate_bau_baseline(load_summary.get("total_kwh", 2289.10), electricity_rate, emission_factor)
+    bau = calculate_bau_baseline(load_summary.get("total_kwh", 0.0), electricity_rate, emission_factor)
     fc_df = ets_res["forecast_df"]
     fc_annual_kwh = (fc_df['forecast_bill'].sum() / electricity_rate)
     fc_annual_co2 = fc_annual_kwh * emission_factor
@@ -1720,29 +1834,28 @@ elif navigation_option == "Scenario":
     
     st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #111827; margin-top: 0.25rem; margin-bottom: 0.75rem;">ADJUST INTERVENTION LEVELS:</h3>', unsafe_allow_html=True)
     
-    top1_name = load_summary.get("top_appliance", "Air Conditioner")
-    top2_name = load_summary.get("second_appliance", "Computers")
+    top_load_rows = apps_processed.sort_values(by='monthly_kwh', ascending=False).head(2)
+    top1_name = load_summary.get("top_appliance", "Primary Load")
+    top2_name = load_summary.get("second_appliance") or "Secondary Load"
     col_sl1, col_sl2, col_sl3 = st.columns(3)
     with col_sl1:
-        ac_red = st.slider(f"{top1_name} Intervention (%)", min_value=0, max_value=100, value=15, step=5)
+        top1_red = st.slider(f"{top1_name} Intervention (%)", min_value=0, max_value=100, value=15, step=5)
     with col_sl2:
-        comp_red = st.slider(f"{top2_name} Intervention (%)", min_value=0, max_value=100, value=15, step=5)
+        top2_red = st.slider(f"{top2_name} Intervention (%)", min_value=0, max_value=100, value=15, step=5)
     with col_sl3:
-        light_red = st.slider("Lighting & Other Loads (%)", min_value=0, max_value=100, value=10, step=5)
+        other_red = st.slider("Remaining Loads (%)", min_value=0, max_value=100, value=10, step=5)
         
-    ac_rows = apps_processed[apps_processed['appliance'].str.contains('Air Conditioner', case=False, na=False)]
-    comp_rows = apps_processed[apps_processed['appliance'].str.contains('Computer|Laptop', case=False, na=False)]
-    ac_share = (ac_rows['percentage_share'].sum() / 100.0) if not ac_rows.empty else 0.346
-    comp_share = (comp_rows['percentage_share'].sum() / 100.0) if not comp_rows.empty else 0.252
-    light_share = max(0.0, 1.0 - ac_share - comp_share)
+    top1_share = float(top_load_rows.iloc[0]['percentage_share'] / 100.0) if len(top_load_rows) >= 1 else 0.0
+    top2_share = float(top_load_rows.iloc[1]['percentage_share'] / 100.0) if len(top_load_rows) >= 2 else 0.0
+    other_share = max(0.0, 1.0 - top1_share - top2_share)
 
-    avg_red_pct = (ac_red * ac_share + comp_red * comp_share + light_red * light_share)
+    avg_red_pct = (top1_red * top1_share + top2_red * top2_share + other_red * other_share)
     
     col_sim1, col_sim2, col_sim3 = st.columns([1, 1.5, 1])
     with col_sim2:
         run_sim = st.button("SIMULATE SCENARIO", key="btn_run_sim", use_container_width=True)
         
-    base_kwh = load_summary.get("total_kwh", 2289.10)
+    base_kwh = load_summary.get("total_kwh", 0.0)
     sim_kwh = base_kwh * (1.0 - (avg_red_pct / 100.0))
     kwh_saved = base_kwh - sim_kwh
     cost_saved_m = kwh_saved * electricity_rate
@@ -1805,6 +1918,8 @@ elif navigation_option == "Scenario":
 # --- 8. OPTIMIZATION ---
 elif navigation_option == "Optimization":
     st.markdown('<p style="font-size: 0.88rem; color: #6B7280; margin-bottom: 1.25rem;">Linear Goal Programming Optimization & Operational Constraints</p>', unsafe_allow_html=True)
+    constraint_top1 = load_summary.get("top_appliance", "Primary Load")
+    constraint_top2 = load_summary.get("second_appliance") or "Secondary Load"
     
     st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #111827; margin-top: 0.25rem; margin-bottom: 0.75rem;">OBJECTIVE FUNCTION</h3>', unsafe_allow_html=True)
     opt_goal = st.selectbox(
@@ -1821,23 +1936,23 @@ elif navigation_option == "Optimization":
     st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #111827; margin-top: 1rem; margin-bottom: 0.75rem;">OPERATIONAL CONSTRAINTS:</h3>', unsafe_allow_html=True)
     col_c1, col_c2, col_c3 = st.columns(3)
     with col_c1:
-        st.markdown("""
+        st.markdown(f"""
         <div class="ui-card" style="padding: 1rem 1.25rem !important;">
-            <div class="kpi-label">MAXIMUM AIR CONDITIONER REDUCTION</div>
+            <div class="kpi-label">MAXIMUM {constraint_top1.upper()} REDUCTION</div>
             <div style="font-size: 1.3rem; font-weight: 800; color: #0B4F46;">15% Limit</div>
         </div>
         """, unsafe_allow_html=True)
     with col_c2:
-        st.markdown("""
+        st.markdown(f"""
         <div class="ui-card" style="padding: 1rem 1.25rem !important;">
-            <div class="kpi-label">MAXIMUM COMPUTERS REDUCTION</div>
+            <div class="kpi-label">MAXIMUM {constraint_top2.upper()} REDUCTION</div>
             <div style="font-size: 1.3rem; font-weight: 800; color: #0B4F46;">15% Limit</div>
         </div>
         """, unsafe_allow_html=True)
     with col_c3:
         st.markdown("""
         <div class="ui-card" style="padding: 1rem 1.25rem !important;">
-            <div class="kpi-label">MAXIMUM LIGHTING & OTHER REDUCTION</div>
+            <div class="kpi-label">MAXIMUM REMAINING LOADS REDUCTION</div>
             <div style="font-size: 1.3rem; font-weight: 800; color: #0B4F46;">10% Limit</div>
         </div>
         """, unsafe_allow_html=True)
@@ -1911,8 +2026,8 @@ elif navigation_option == "Optimization":
     render_bankio_table(opt_table)
     
     st.markdown('<h4 style="font-size: 0.95rem; font-weight: 700; color: #111827; margin-top: 1.25rem; margin-bottom: 0.25rem;">Operational Target Monitor Input</h4>', unsafe_allow_html=True)
-    actual_default = float(round(load_summary.get("total_kwh", 2289.10), 2))
-    target_default = float(round(opt_res.get("optimized_monthly_kwh", 1945.73), 2))
+    actual_default = float(round(load_summary.get("total_kwh", 0.0), 2))
+    target_default = float(round(opt_res.get("optimized_monthly_kwh", 0.0), 2))
     col_t1, col_t2 = st.columns(2)
     with col_t1:
         actual_input = st.number_input("Actual Monthly Electricity Consumption (kWh)", min_value=0.0, max_value=20000.0, value=actual_default, step=25.0)
@@ -2011,7 +2126,7 @@ elif navigation_option == "Impact":
     st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #111827; margin-top: 1.25rem; margin-bottom: 0.75rem;">Comparative School Benchmark Matrix</h3>', unsafe_allow_html=True)
     render_bankio_table(comp_df)
     
-    sens_df = calculate_sensitivity_analysis()
+    sens_df = calculate_sensitivity_analysis(bau_base["monthly_kwh"])
     st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #111827; margin-top: 1.25rem; margin-bottom: 0.75rem;">Sensitivity Ratios & Rate Elasticity Table</h3>', unsafe_allow_html=True)
     render_bankio_table(sens_df)
 
@@ -2152,5 +2267,5 @@ CO₂ avoided: <strong>{format_co2(rep_opt['annual_avoided_co2_kg'])} / year</st
     
     # 3. COMPUTATIONAL CONSISTENCY AUDIT
     st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #111827; margin-bottom: 0.75rem;">Systemic Computational Consistency Audit</h3>', unsafe_allow_html=True)
-    val_table = verify_computational_consistency()
+    val_table = verify_computational_consistency(bau_base["monthly_kwh"], electricity_rate)
     render_bankio_table(val_table)

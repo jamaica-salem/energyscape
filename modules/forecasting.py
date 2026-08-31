@@ -11,25 +11,6 @@ from typing import Dict, Any, Optional, Tuple
 
 from modules.validation import calculate_mape, calculate_rmse, calculate_mae
 
-REFERENCE_FORECAST_RESULTS = {
-    "An-anaao Integrated School": {
-        "mape": 3.87,
-        "rmse": 152.36,
-        "avg_forecast": 13930.0,
-        "highest_forecast": 14500.0,
-        "lowest_forecast": 13500.0,
-        "range_forecast": 1000.0
-    },
-    "La Paz Integrated School": {
-        "mape": 4.25,
-        "rmse": 176.44,
-        "avg_forecast": 15480.0,
-        "highest_forecast": 15800.0,
-        "lowest_forecast": 14800.0,
-        "range_forecast": 1000.0
-    }
-}
-
 def fit_ets_forecast(df: pd.DataFrame, 
                      school_name: str, 
                      forecast_horizon: int = 12,
@@ -122,6 +103,5 @@ def fit_ets_forecast(df: pd.DataFrame,
         "val_mape": val_mape_val,
         "val_rmse": val_rmse_val,
         "val_mae": val_mae_val,
-        "forecast_df": forecast_df,
-        "reference_data": REFERENCE_FORECAST_RESULTS.get(school_name, {})
+        "forecast_df": forecast_df
     }

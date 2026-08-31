@@ -56,7 +56,7 @@ def interpret_mape(mape_val: float) -> str:
     else:
         return "Inaccurate forecast"
 
-def verify_computational_consistency(bau_kwh: float = 2289.10, electricity_rate: float = 11.00) -> pd.DataFrame:
+def verify_computational_consistency(bau_kwh: float = 0.0, electricity_rate: float = 11.00) -> pd.DataFrame:
     """
     Generate computational validation table comparing manual formula results 
     against Python computed results (Table 20 in paper).
