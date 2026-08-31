@@ -178,13 +178,15 @@ st.markdown("""
         letter-spacing: 0.04em !important;
     }
     .kpi-val {
-        font-size: 1.5rem !important;
+        font-size: 1.35rem !important;
         font-weight: 700 !important;
         color: #111827 !important;
         letter-spacing: -0.02em !important;
         margin: 0.15rem 0 !important;
         line-height: 1.2 !important;
         white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
     }
 
     /* Sidebar Navigation (Deep Emerald Green Theme #0B4F46 - Seamless Borderless) */
@@ -1518,19 +1520,29 @@ elif navigation_option == "Season":
     
     with col_sea_left:
         monthly_summary, season_value_col, season_value_label = build_monthly_season_summary(seasonal_source_df, target_school)
-        overall_mean = monthly_summary[season_value_col].mean() if not monthly_summary.empty else 1.0
         format_season_value = format_kwh if season_value_col == "consumption_kwh" else format_currency
         
-        # Determine Peak and Lowest Period dynamically from actual historical dataset
-        if not monthly_summary.empty:
-            max_idx = monthly_summary[season_value_col].idxmax()
-            min_idx = monthly_summary[season_value_col].idxmin()
+        # Filter monthly_summary dynamically based on chosen months in dry_months dropdown
+        if dry_months:
+            filtered_summary = monthly_summary[monthly_summary['full_month_name'].isin(dry_months)].copy()
+            if filtered_summary.empty:
+                filtered_summary = monthly_summary.copy()
+        else:
+            filtered_summary = monthly_summary.copy()
             
-            peak_month_str = monthly_summary.loc[max_idx, 'full_month_name'].upper()
-            peak_val = monthly_summary.loc[max_idx, season_value_col]
-            peak_s_index = monthly_summary.loc[max_idx, 'seasonal_index']
-            lowest_month_str = monthly_summary.loc[min_idx, 'full_month_name'].upper()
-            lowest_val = monthly_summary.loc[min_idx, season_value_col]
+        overall_mean = filtered_summary[season_value_col].mean() if not filtered_summary.empty else 1.0
+        filtered_summary['seasonal_index'] = filtered_summary[season_value_col] / overall_mean if overall_mean > 0 else 1.0
+
+        # Determine Peak and Lowest Period dynamically from chosen months
+        if not filtered_summary.empty:
+            max_idx = filtered_summary[season_value_col].idxmax()
+            min_idx = filtered_summary[season_value_col].idxmin()
+            
+            peak_month_str = filtered_summary.loc[max_idx, 'full_month_name'].upper()
+            peak_val = filtered_summary.loc[max_idx, season_value_col]
+            peak_s_index = filtered_summary.loc[max_idx, 'seasonal_index']
+            lowest_month_str = filtered_summary.loc[min_idx, 'full_month_name'].upper()
+            lowest_val = filtered_summary.loc[min_idx, season_value_col]
         else:
             peak_month_str = "N/A"
             peak_val = 0.0
@@ -1540,26 +1552,27 @@ elif navigation_option == "Season":
 
         peak_pct_str = f"({(peak_s_index - 1.0) * 100:+.0f}% Peak)" if peak_s_index != 1.0 else "(Baseline)"
         
-        # Bankio Minimal Green Palette: Deep Emerald for Dry, Soft Matcha for Wet
-        dry_month_numbers = {MONTH_NAMES.index(month) + 1 for month in dry_months}
-        bar_colors = ["#0B4F46" if m in dry_month_numbers else "#5A9E87" for m in monthly_summary['month_num']]
-        st.markdown(f'<h3 style="font-size: 1.05rem; font-weight: 700; color: #111827; margin-bottom: 0.75rem;">Monthly {season_value_label} & Seasonal Index Trend — {target_school}</h3>', unsafe_allow_html=True)
+        # Bankio Minimal Green Palette: Emerald for Peak Month, Dark Teal for other Chosen Months
+        peak_full = peak_month_str.title()
+        bar_colors = ["#0B4F46" if m == peak_full else "#286654" for m in filtered_summary['full_month_name']]
+        
+        st.markdown(f'<h3 style="font-size: 1.05rem; font-weight: 700; color: #111827; margin-bottom: 0.75rem;">Filtered Monthly {season_value_label} & Seasonal Index Trend — {target_school}</h3>', unsafe_allow_html=True)
         fig_sea = go.Figure()
         fig_sea.add_trace(go.Bar(
-            x=monthly_summary['month_name'],
-            y=monthly_summary[season_value_col],
+            x=filtered_summary['month_name'],
+            y=filtered_summary[season_value_col],
             name=season_value_label,
             marker_color=bar_colors,
             hovertemplate=f"Month: %{{x}}<br>{season_value_label}: %{{y:,.2f}}<extra></extra>"
         ))
         fig_sea.add_trace(go.Scatter(
-            x=monthly_summary['month_name'],
-            y=monthly_summary['seasonal_index'] * overall_mean,
+            x=filtered_summary['month_name'],
+            y=filtered_summary['seasonal_index'] * overall_mean,
             name="Seasonal Trend Index",
             mode="lines+markers",
             line=dict(color="#047857", width=3.5),
             hovertemplate="Month: %{x}<br>Index: %{text:.2f}<extra></extra>",
-            text=monthly_summary['seasonal_index']
+            text=filtered_summary['seasonal_index']
         ))
         fig_sea = apply_blue_theme(fig_sea, "")
         fig_sea.update_layout(height=320, margin=dict(l=10, r=10, t=35, b=10))
@@ -1988,8 +2001,8 @@ elif navigation_option == "Optimization":
         st.markdown(f"""
         <div class="ui-card">
             <div class="kpi-label">Optimal Strategy</div>
-            <div class="kpi-val">{opt_res["selected_scenario"]}</div>
-            <div style="font-size: 0.78rem; color: #6B7280;">Linear Goal Programming</div>
+            <div class="kpi-val" style="font-size: 1.2rem !important; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{opt_res["selected_scenario"]}</div>
+            <div style="font-size: 0.78rem; color: #6B7280;">{opt_res.get("strategy_focus", "Linear Goal Programming")}</div>
         </div>
         """, unsafe_allow_html=True)
     with op2:

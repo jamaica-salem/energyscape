@@ -29,11 +29,6 @@ def optimize_conservation_target(
         min Z = sum(c_i * E_i * x_i)
     Subject to operational constraints:
         (1 - max_red_i) <= x_i <= 1.0  for each load category i
-    Where c_i depends on the chosen objective function:
-        - MINIMIZE ELECTRICITY LOAD (kWh): c_i = 1.0
-        - MINIMIZE OPERATIONAL EXPENDITURE (₱): c_i weighted by marginal tariff rate & peak demand multipliers
-        - MINIMIZE GREENHOUSE GAS EMISSIONS (kg CO₂e): c_i weighted by Scope 2 grid carbon intensity
-        - MINIMIZE ELECTRICITY + COST + CO₂: Multi-Objective Goal Programming (MOGP) weighted sum
     """
     # Auto-detect whether data_df is an appliance inventory or a scenarios DataFrame
     if data_df is not None:
@@ -66,23 +61,23 @@ def optimize_conservation_target(
         # Objective Function Weighting
         obj_upper = str(objective).upper()
         if "EXPENDITURE" in obj_upper or "COST" in obj_upper and "CO₂" not in obj_upper and "LOAD" not in obj_upper:
-            # Operational Expenditure Objective: Peak demand tariff weighting for heavy cooling loads
             w_ac, w_comp, w_other = 1.15 * electricity_rate, 1.05 * electricity_rate, 1.00 * electricity_rate
-            strategy_name = "Minimizing Expenditure (₱ Focus)"
+            strategy_focus = "Expenditure Focus (₱)"
+            short_tag = "Cost Target"
         elif "GREENHOUSE" in obj_upper or "EMISSIONS" in obj_upper or "CO₂" in obj_upper and "COST" not in obj_upper:
-            # Carbon Footprint Objective: Scope 2 thermal intensity weighting
             w_ac, w_comp, w_other = 1.10 * emission_factor, 1.02 * emission_factor, 1.00 * emission_factor
-            strategy_name = "Minimizing Carbon Footprint (CO₂ Focus)"
+            strategy_focus = "Carbon Focus (CO₂e)"
+            short_tag = "Carbon Target"
         elif "LOAD" in obj_upper or "KWH" in obj_upper and "COST" not in obj_upper:
-            # Pure Electricity Load Objective
             w_ac, w_comp, w_other = 1.0, 1.0, 1.0
-            strategy_name = "Minimizing Energy Demand (kWh Focus)"
+            strategy_focus = "Energy Focus (kWh)"
+            short_tag = "Energy Target"
         else:
-            # Multi-Objective Goal Programming (Balanced)
             w_ac = 1.0 + 0.15 * (electricity_rate / 11.0) + 0.15 * (emission_factor / 0.70)
             w_comp = 1.0 + 0.10 * (electricity_rate / 11.0) + 0.10 * (emission_factor / 0.70)
             w_other = 1.0
-            strategy_name = "Multi-Objective Goal Programming (Balanced Target)"
+            strategy_focus = "Linear Goal Programming"
+            short_tag = "Multi-Goal Target"
 
         if bau_monthly_kwh > 0:
             c = [e_ac * w_ac, e_comp * w_comp, e_other * w_other]
@@ -105,7 +100,6 @@ def optimize_conservation_target(
             bau_monthly_kwh = 2289.10
             opt_monthly_kwh = 1945.73
             x_ac_opt, x_comp_opt, x_other_opt = 0.85, 0.85, 0.90
-            strategy_name = "Default 15% Reduction Target"
             
     elif scenarios_df is not None and not scenarios_df.empty:
         candidates = scenarios_df[scenarios_df['Reduction %'] > 0].copy()
@@ -119,12 +113,14 @@ def optimize_conservation_target(
             bau_monthly_kwh = 2289.10
             opt_monthly_kwh = 1945.73
         x_ac_opt, x_comp_opt, x_other_opt = 1.0 - max_ac_red, 1.0 - max_comp_red, 1.0 - max_other_red
-        strategy_name = "Scenario Target"
+        strategy_focus = "Linear Goal Programming"
+        short_tag = "Scenario Target"
     else:
         bau_monthly_kwh = 2289.10
         opt_monthly_kwh = 1945.73
         x_ac_opt, x_comp_opt, x_other_opt = 0.85, 0.85, 0.90
-        strategy_name = "Default Target"
+        strategy_focus = "Linear Goal Programming"
+        short_tag = "Default Target"
 
     monthly_kwh_savings = bau_monthly_kwh - opt_monthly_kwh
     annual_kwh_savings = monthly_kwh_savings * 12.0
@@ -133,11 +129,12 @@ def optimize_conservation_target(
     annual_avoided_co2 = monthly_kwh_savings * emission_factor * 12.0
     reduction_percentage = (monthly_kwh_savings / bau_monthly_kwh * 100.0) if bau_monthly_kwh > 0 else 0.0
 
-    selected_scenario_name = f"{strategy_name} ({reduction_percentage:.1f}% Reduction)" if reduction_percentage > 0 else "Baseline Target"
+    selected_scenario_name = f"{reduction_percentage:.0f}% {short_tag}" if reduction_percentage > 0 else "Baseline Target"
 
     return {
         "status": "Optimal Solution Found (Linear Programming)",
         "selected_scenario": selected_scenario_name,
+        "strategy_focus": strategy_focus,
         "objective_function": objective,
         "reduction_percentage": float(reduction_percentage),
         "bau_monthly_kwh": float(bau_monthly_kwh),
