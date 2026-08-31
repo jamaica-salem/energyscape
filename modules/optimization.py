@@ -14,7 +14,7 @@ DEFAULT_ELECTRICITY_RATE = 11.00
 DEFAULT_EMISSION_FACTOR = 0.70
 
 def optimize_conservation_target(
-    data_df: Optional[pd.DataFrame] = None,
+    data_df: Optional[Any] = None,
     scenarios_df: Optional[pd.DataFrame] = None,
     electricity_rate: float = DEFAULT_ELECTRICITY_RATE,
     emission_factor: float = DEFAULT_EMISSION_FACTOR,
@@ -30,33 +30,51 @@ def optimize_conservation_target(
     Subject to operational constraints:
         (1 - max_red_i) <= x_i <= 1.0  for each load category i
     """
+    try:
+        electricity_rate = float(electricity_rate)
+    except (TypeError, ValueError):
+        electricity_rate = DEFAULT_ELECTRICITY_RATE
+
+    try:
+        emission_factor = float(emission_factor)
+    except (TypeError, ValueError):
+        emission_factor = DEFAULT_EMISSION_FACTOR
+
     # Auto-detect whether data_df is an appliance inventory or a scenarios DataFrame
-    if data_df is not None:
+    if data_df is not None and isinstance(data_df, pd.DataFrame):
         if 'appliance' in data_df.columns or 'power_watts' in data_df.columns:
             appliance_df = data_df
         elif 'Scenario' in data_df.columns or 'Projected Monthly kWh' in data_df.columns:
             scenarios_df = data_df
 
-    if appliance_df is not None and not appliance_df.empty:
+    strategy_focus = "Linear Goal Programming"
+    short_tag = "Optimal Target"
+
+    if appliance_df is not None and isinstance(appliance_df, pd.DataFrame) and not appliance_df.empty:
         df = appliance_df.copy()
-        if 'monthly_kwh' not in df.columns:
+        if 'monthly_kwh' not in df.columns and all(c in df.columns for c in ['power_watts', 'quantity', 'hours_per_day', 'operating_days']):
             df['monthly_kwh'] = (df['power_watts'] * df['quantity'] * df['hours_per_day'] * df['operating_days']) / 1000.0
             
-        ac_mask = df['appliance'].str.contains('Air Conditioner', case=False, na=False)
-        comp_mask = df['appliance'].str.contains('Computer|Laptop', case=False, na=False)
-        other_mask = ~(ac_mask | comp_mask)
-        
-        e_ac = float(df.loc[ac_mask, 'monthly_kwh'].sum())
-        e_comp = float(df.loc[comp_mask, 'monthly_kwh'].sum())
-        e_other = float(df.loc[other_mask, 'monthly_kwh'].sum())
-        
-        if e_ac == 0 and e_comp == 0 and len(df) >= 2:
+        if 'appliance' in df.columns:
+            ac_mask = df['appliance'].astype(str).str.contains('Air Conditioner', case=False, na=False)
+            comp_mask = df['appliance'].astype(str).str.contains('Computer|Laptop', case=False, na=False)
+            other_mask = ~(ac_mask | comp_mask)
+            
+            e_ac = float(df.loc[ac_mask, 'monthly_kwh'].sum()) if 'monthly_kwh' in df.columns else 0.0
+            e_comp = float(df.loc[comp_mask, 'monthly_kwh'].sum()) if 'monthly_kwh' in df.columns else 0.0
+            e_other = float(df.loc[other_mask, 'monthly_kwh'].sum()) if 'monthly_kwh' in df.columns else 0.0
+        else:
+            e_ac, e_comp, e_other = 0.0, 0.0, 0.0
+            
+        if e_ac == 0 and e_comp == 0 and len(df) >= 2 and 'monthly_kwh' in df.columns:
             sorted_apps = df.sort_values(by='monthly_kwh', ascending=False)
             e_ac = float(sorted_apps.iloc[0]['monthly_kwh'])
             e_comp = float(sorted_apps.iloc[1]['monthly_kwh'])
             e_other = float(sorted_apps.iloc[2:]['monthly_kwh'].sum()) if len(sorted_apps) > 2 else 0.0
             
         bau_monthly_kwh = e_ac + e_comp + e_other
+        if bau_monthly_kwh == 0 and 'monthly_kwh' in df.columns:
+            bau_monthly_kwh = float(df['monthly_kwh'].sum())
         
         # Objective Function Weighting
         obj_upper = str(objective).upper()
@@ -101,13 +119,13 @@ def optimize_conservation_target(
             opt_monthly_kwh = 1945.73
             x_ac_opt, x_comp_opt, x_other_opt = 0.85, 0.85, 0.90
             
-    elif scenarios_df is not None and not scenarios_df.empty:
-        candidates = scenarios_df[scenarios_df['Reduction %'] > 0].copy()
-        if not candidates.empty:
+    elif scenarios_df is not None and isinstance(scenarios_df, pd.DataFrame) and not scenarios_df.empty:
+        candidates = scenarios_df[scenarios_df['Reduction %'] > 0].copy() if 'Reduction %' in scenarios_df.columns else pd.DataFrame()
+        if not candidates.empty and 'Projected Monthly kWh' in candidates.columns:
             candidates = candidates.sort_values(by='Projected Monthly kWh', ascending=True).reset_index(drop=True)
             optimal = candidates.iloc[0]
-            bau_row = scenarios_df[scenarios_df['Reduction %'] == 0].iloc[0]
-            bau_monthly_kwh = float(bau_row["Projected Monthly kWh"])
+            bau_rows = scenarios_df[scenarios_df['Reduction %'] == 0] if 'Reduction %' in scenarios_df.columns else pd.DataFrame()
+            bau_monthly_kwh = float(bau_rows.iloc[0]["Projected Monthly kWh"]) if not bau_rows.empty else 2289.10
             opt_monthly_kwh = float(optimal["Projected Monthly kWh"])
         else:
             bau_monthly_kwh = 2289.10

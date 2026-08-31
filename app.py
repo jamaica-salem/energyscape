@@ -803,7 +803,7 @@ def summarize_school_for_comparison(school: str, historical_df: pd.DataFrame, ap
     load_sum = get_load_summary(apps, electricity_rate)
     seasonal = calculate_seasonal_metrics(seasonal_source_df, DEFAULT_DRY_MONTHS, DEFAULT_WET_MONTHS, school)
     bau = calculate_bau_baseline(load_sum.get("total_kwh", 0.0), electricity_rate, emission_factor)
-    opt = optimize_conservation_target(simulate_conservation_scenarios(bau))
+    opt = optimize_conservation_target(appliance_df=apps, electricity_rate=electricity_rate, emission_factor=emission_factor)
     forecast = fit_ets_forecast(historical_df, school)
     forecast_df = forecast["forecast_df"]
     peak = max(seasonal["monthly_averages"], key=seasonal["monthly_averages"].get) if seasonal.get("monthly_averages") else "N/A"
@@ -2190,8 +2190,8 @@ elif navigation_option == "Reports":
     scen_an = simulate_conservation_scenarios(bau_an)
     scen_lp = simulate_conservation_scenarios(bau_lp)
     
-    opt_an = optimize_conservation_target(scen_an)
-    opt_lp = optimize_conservation_target(scen_lp)
+    opt_an = optimize_conservation_target(appliance_df=apps_an, electricity_rate=electricity_rate, emission_factor=emission_factor)
+    opt_lp = optimize_conservation_target(appliance_df=apps_lp, electricity_rate=electricity_rate, emission_factor=emission_factor)
     
     fc_an = fit_ets_forecast(historical_df, "An-anaao Integrated School")
     fc_lp = fit_ets_forecast(historical_df, "La Paz Integrated School")
@@ -2247,7 +2247,7 @@ elif navigation_option == "Reports":
     rep_s = calculate_seasonal_metrics(historical_df, DEFAULT_DRY_MONTHS, DEFAULT_WET_MONTHS, report_school)
     rep_bau = calculate_bau_baseline(rep_sum.get("total_kwh", 0), electricity_rate, emission_factor)
     rep_scen = simulate_conservation_scenarios(rep_bau)
-    rep_opt = optimize_conservation_target(rep_scen)
+    rep_opt = optimize_conservation_target(appliance_df=rep_apps, electricity_rate=electricity_rate, emission_factor=emission_factor)
     rep_fc = fit_ets_forecast(historical_df, report_school)
     rep_fc_df = rep_fc["forecast_df"]
     
