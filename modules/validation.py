@@ -33,6 +33,16 @@ def calculate_rmse(y_true: np.ndarray, y_pred: np.ndarray) -> float:
     rmse = np.sqrt(np.mean((y_true - y_pred) ** 2))
     return float(rmse)
 
+def calculate_mae(y_true: np.ndarray, y_pred: np.ndarray) -> float:
+    """
+    Calculate Mean Absolute Error (MAE).
+    """
+    y_true = np.asarray(y_true, dtype=float)
+    y_pred = np.asarray(y_pred, dtype=float)
+    
+    mae = np.mean(np.abs(y_true - y_pred))
+    return float(mae)
+
 def interpret_mape(mape_val: float) -> str:
     """
     Interpret MAPE value based on paper's Table 16 scale.

@@ -9,7 +9,7 @@ import numpy as np
 from statsmodels.tsa.holtwinters import ExponentialSmoothing
 from typing import Dict, Any, Optional, Tuple
 
-from modules.validation import calculate_mape, calculate_rmse
+from modules.validation import calculate_mape, calculate_rmse, calculate_mae
 
 REFERENCE_FORECAST_RESULTS = {
     "An-anaao Integrated School": {
@@ -110,6 +110,7 @@ def fit_ets_forecast(df: pd.DataFrame,
     
     val_mape_val = calculate_mape(val_series, val_preds)
     val_rmse_val = calculate_rmse(val_series, val_preds)
+    val_mae_val = calculate_mae(val_series, val_preds)
     
     return {
         "school": school_name,
@@ -120,6 +121,7 @@ def fit_ets_forecast(df: pd.DataFrame,
         "val_predictions": val_preds,
         "val_mape": val_mape_val,
         "val_rmse": val_rmse_val,
+        "val_mae": val_mae_val,
         "forecast_df": forecast_df,
         "reference_data": REFERENCE_FORECAST_RESULTS.get(school_name, {})
     }

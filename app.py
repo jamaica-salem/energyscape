@@ -1208,6 +1208,10 @@ if navigation_option == "Dashboard":
     fig_tr.update_traces(line=dict(width=3, color="#0B4F46"))
     st.plotly_chart(fig_tr, use_container_width=True)
     
+    sy_min = historical_df['school_year'].min() if 'school_year' in historical_df.columns and not historical_df['school_year'].empty else "2021–2022"
+    sy_max = historical_df['school_year'].max() if 'school_year' in historical_df.columns and not historical_df['school_year'].empty else "2025–2026"
+    sy_cov_str = f"Coverage: SY {sy_min}–{sy_max}" if sy_min != sy_max else f"Coverage: SY {sy_min}"
+    
     st.markdown(f"""
     <div class="ui-card" style="margin-top: 0.75rem; padding: 1.1rem 1.5rem !important;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -1219,7 +1223,7 @@ if navigation_option == "Dashboard":
                 <div class="kpi-label">Historical Peak Bill</div>
                 <div style="font-size: 1.3rem; font-weight: 800; color: #0B4F46;">{format_currency(hist_metrics.get("max_bill", 0))}</div>
             </div>
-            <span class="pill-badge-green" style="font-size: 0.82rem; padding: 0.35rem 0.85rem;">Coverage: SY 2021–2026</span>
+            <span class="pill-badge-green" style="font-size: 0.82rem; padding: 0.35rem 0.85rem;">{sy_cov_str}</span>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -1595,7 +1599,7 @@ elif navigation_option == "Forecast":
     st.plotly_chart(fig_fc_line, use_container_width=True)
     
     # Calculate MAE & Annual Metrics
-    mae_val = 1245.30
+    mae_val = ets_res.get("val_mae", 1245.30)
     ann_kwh = (fc_df['forecast_bill'].sum() / electricity_rate)
     lower_ann_kwh = (fc_df['lower_bound'].sum() / electricity_rate)
     upper_ann_kwh = (fc_df['upper_bound'].sum() / electricity_rate)
@@ -1706,7 +1710,13 @@ elif navigation_option == "Scenario":
     with col_sl3:
         light_red = st.slider("Lighting & Other Loads (%)", min_value=0, max_value=100, value=10, step=5)
         
-    avg_red_pct = (ac_red * 0.346 + comp_red * 0.252 + light_red * 0.402)
+    ac_rows = apps_processed[apps_processed['appliance'].str.contains('Air Conditioner', case=False, na=False)]
+    comp_rows = apps_processed[apps_processed['appliance'].str.contains('Computer|Laptop', case=False, na=False)]
+    ac_share = (ac_rows['percentage_share'].sum() / 100.0) if not ac_rows.empty else 0.346
+    comp_share = (comp_rows['percentage_share'].sum() / 100.0) if not comp_rows.empty else 0.252
+    light_share = max(0.0, 1.0 - ac_share - comp_share)
+
+    avg_red_pct = (ac_red * ac_share + comp_red * comp_share + light_red * light_share)
     
     col_sim1, col_sim2, col_sim3 = st.columns([1, 1.5, 1])
     with col_sim2:
@@ -1861,11 +1871,13 @@ elif navigation_option == "Optimization":
     render_bankio_table(opt_table)
     
     st.markdown('<h4 style="font-size: 0.95rem; font-weight: 700; color: #111827; margin-top: 1.25rem; margin-bottom: 0.25rem;">Operational Target Monitor Input</h4>', unsafe_allow_html=True)
+    actual_default = float(round(load_summary.get("total_kwh", 2289.10), 2))
+    target_default = float(round(opt_res.get("optimized_monthly_kwh", 1945.73), 2))
     col_t1, col_t2 = st.columns(2)
     with col_t1:
-        actual_input = st.number_input("Actual Monthly Electricity Consumption (kWh)", min_value=0.0, max_value=10000.0, value=1800.0, step=25.0)
+        actual_input = st.number_input("Actual Monthly Electricity Consumption (kWh)", min_value=0.0, max_value=20000.0, value=actual_default, step=25.0)
     with col_t2:
-        target_input = st.number_input("Target Consumption Benchmark (kWh)", min_value=0.0, max_value=10000.0, value=1945.74, step=25.0)
+        target_input = st.number_input("Target Consumption Benchmark (kWh)", min_value=0.0, max_value=20000.0, value=target_default, step=25.0)
         
     mon_res = monitor_target_consumption(actual_input, target_input)
     if mon_res["is_on_target"]:
@@ -1975,24 +1987,46 @@ elif navigation_option == "Reports":
     # 1. COMPARATIVE ANALYSIS SECTION (Wireframe 1)
     st.markdown('<h3 style="font-size: 1.15rem; font-weight: 700; color: #111827; margin-top: 0.25rem; margin-bottom: 0.75rem;">COMPARATIVE ANALYSIS</h3>', unsafe_allow_html=True)
     
-    m_an = calculate_historical_metrics(historical_df, "An-anaao Integrated School")
-    m_lp = calculate_historical_metrics(historical_df, "La Paz Integrated School")
+    apps_an = calculate_appliance_loads(appliance_df, electricity_rate, "An-anaao Integrated School")
+    apps_lp = calculate_appliance_loads(appliance_df, electricity_rate, "La Paz Integrated School")
+    
+    sum_an = get_load_summary(apps_an, electricity_rate)
+    sum_lp = get_load_summary(apps_lp, electricity_rate)
+    
+    s_an = calculate_seasonal_metrics(historical_df, DEFAULT_DRY_MONTHS, DEFAULT_WET_MONTHS, "An-anaao Integrated School")
+    s_lp = calculate_seasonal_metrics(historical_df, DEFAULT_DRY_MONTHS, DEFAULT_WET_MONTHS, "La Paz Integrated School")
+    
+    bau_an = calculate_bau_baseline(sum_an.get("total_kwh", 0), electricity_rate, emission_factor)
+    bau_lp = calculate_bau_baseline(sum_lp.get("total_kwh", 0), electricity_rate, emission_factor)
+    
+    scen_an = simulate_conservation_scenarios(bau_an)
+    scen_lp = simulate_conservation_scenarios(bau_lp)
+    
+    opt_an = optimize_conservation_target(scen_an)
+    opt_lp = optimize_conservation_target(scen_lp)
+    
     fc_an = fit_ets_forecast(historical_df, "An-anaao Integrated School")
     fc_lp = fit_ets_forecast(historical_df, "La Paz Integrated School")
-    
     fc_an_df = fc_an["forecast_df"]
     fc_lp_df = fc_lp["forecast_df"]
     
+    peak_an_str = "December (Peak)" if not s_an.get("monthly_averages") else f"{max(s_an['monthly_averages'], key=s_an['monthly_averages'].get)}"
+    peak_lp_str = "December (Peak)" if not s_lp.get("monthly_averages") else f"{max(s_lp['monthly_averages'], key=s_lp['monthly_averages'].get)}"
+    
+    kwh_diff = sum_lp.get("total_kwh", 0) - sum_an.get("total_kwh", 0)
+    top_an_str = f"{sum_an.get('top_appliance', 'Air Conditioner')} ({sum_an.get('top_kwh', 0):,.0f} kWh)"
+    top_lp_str = f"{sum_lp.get('top_appliance', 'Air Conditioner')} ({sum_lp.get('top_kwh', 0):,.0f} kWh)"
+    
     comp_analysis_df = pd.DataFrame([
-        {"Metric": "AVERAGE KWH", "An-anaao Integrated School": "2,289.10 kWh / mo", "La Paz Integrated School": "2,680.50 kWh / mo", "Variance": "-391.40 kWh"},
-        {"Metric": "PEAK SEASON", "An-anaao Integrated School": "April – May (Dry)", "La Paz Integrated School": "April – May (Dry)", "Variance": "Identical Peak Pattern"},
-        {"Metric": "HIGHEST LOAD", "An-anaao Integrated School": "Air Conditioner (792 kWh)", "La Paz Integrated School": "Air Conditioner (920 kWh)", "Variance": "Air Conditioner Dominance"},
-        {"Metric": "FORECAST (Avg Bill)", "An-anaao Integrated School": format_currency(fc_an_df['forecast_bill'].mean()), "La Paz Integrated School": format_currency(fc_lp_df['forecast_bill'].mean()), "Variance": format_currency(fc_an_df['forecast_bill'].mean() - fc_lp_df['forecast_bill'].mean())},
+        {"Metric": "AVERAGE KWH", "An-anaao Integrated School": f"{sum_an.get('total_kwh', 0):,.2f} kWh / mo", "La Paz Integrated School": f"{sum_lp.get('total_kwh', 0):,.2f} kWh / mo", "Variance": f"{kwh_diff:+,.2f} kWh / mo"},
+        {"Metric": "PEAK SEASON", "An-anaao Integrated School": peak_an_str, "La Paz Integrated School": peak_lp_str, "Variance": "Seasonal Peak Variant"},
+        {"Metric": "HIGHEST LOAD", "An-anaao Integrated School": top_an_str, "La Paz Integrated School": top_lp_str, "Variance": "Dominant Appliance Load"},
+        {"Metric": "FORECAST (Avg Bill)", "An-anaao Integrated School": format_currency(fc_an_df['forecast_bill'].mean()), "La Paz Integrated School": format_currency(fc_lp_df['forecast_bill'].mean()), "Variance": format_currency(fc_lp_df['forecast_bill'].mean() - fc_an_df['forecast_bill'].mean())},
         {"Metric": "FORECAST (Interval)", "An-anaao Integrated School": f"{format_currency(fc_an_df['lower_bound'].mean())} - {format_currency(fc_an_df['upper_bound'].mean())}", "La Paz Integrated School": f"{format_currency(fc_lp_df['lower_bound'].mean())} - {format_currency(fc_lp_df['upper_bound'].mean())}", "Variance": "Baseline Confidence Range"},
-        {"Metric": "MAPE", "An-anaao Integrated School": f"{fc_an['val_mape']:.2f}% (Highly Accurate)", "La Paz Integrated School": f"{fc_lp['val_mape']:.2f}% (Highly Accurate)", "Variance": "-1.58% Error Difference"},
-        {"Metric": "OPTIMIZED TARGET", "An-anaao Integrated School": "1,945.73 kWh / mo", "La Paz Integrated School": "2,278.43 kWh / mo", "Variance": "15% Target Ceiling"},
-        {"Metric": "ENERGY REDUCTION", "An-anaao Integrated School": "343.37 kWh / mo (15%)", "La Paz Integrated School": "402.07 kWh / mo (15%)", "Variance": "Multi-tier Duty Cycle"},
-        {"Metric": "CO₂ REDUCTION", "An-anaao Integrated School": "2,884.31 kg CO₂e / yr", "La Paz Integrated School": "3,377.39 kg CO₂e / yr", "Variance": "Scope 2 Emission Avoidance"},
+        {"Metric": "MAPE ACCURACY", "An-anaao Integrated School": f"{fc_an['val_mape']:.2f}% ({interpret_mape(fc_an['val_mape'])})", "La Paz Integrated School": f"{fc_lp['val_mape']:.2f}% ({interpret_mape(fc_lp['val_mape'])})", "Variance": f"{fc_lp['val_mape'] - fc_an['val_mape']:+.2f}% Error Diff"},
+        {"Metric": "OPTIMIZED TARGET", "An-anaao Integrated School": f"{opt_an['optimized_monthly_kwh']:,.2f} kWh / mo", "La Paz Integrated School": f"{opt_lp['optimized_monthly_kwh']:,.2f} kWh / mo", "Variance": f"{opt_an['reduction_percentage']:.0f}% Target Ceiling"},
+        {"Metric": "ENERGY REDUCTION", "An-anaao Integrated School": f"{opt_an['monthly_kwh_savings']:,.2f} kWh / mo ({opt_an['reduction_percentage']:.0f}%)", "La Paz Integrated School": f"{opt_lp['monthly_kwh_savings']:,.2f} kWh / mo ({opt_lp['reduction_percentage']:.0f}%)", "Variance": "Multi-tier Duty Cycle"},
+        {"Metric": "CO₂ REDUCTION", "An-anaao Integrated School": f"{opt_an['annual_avoided_co2_kg']:,.2f} kg CO₂e / yr", "La Paz Integrated School": f"{opt_lp['annual_avoided_co2_kg']:,.2f} kg CO₂e / yr", "Variance": "Scope 2 Emission Avoidance"},
     ])
     render_bankio_table(comp_analysis_df)
     
@@ -2007,6 +2041,19 @@ elif navigation_option == "Reports":
     
     report_school = st.selectbox("Selected School", ["An-anaao Integrated School", "La Paz Integrated School"], index=0, key="report_school_select")
     
+    # Dynamic calculations for Executive Report Box
+    rep_apps = calculate_appliance_loads(appliance_df, electricity_rate, report_school)
+    rep_sum = get_load_summary(rep_apps, electricity_rate)
+    rep_s = calculate_seasonal_metrics(historical_df, DEFAULT_DRY_MONTHS, DEFAULT_WET_MONTHS, report_school)
+    rep_bau = calculate_bau_baseline(rep_sum.get("total_kwh", 0), electricity_rate, emission_factor)
+    rep_scen = simulate_conservation_scenarios(rep_bau)
+    rep_opt = optimize_conservation_target(rep_scen)
+    rep_fc = fit_ets_forecast(historical_df, report_school)
+    rep_fc_df = rep_fc["forecast_df"]
+    
+    rep_peak_month = "December" if not rep_s.get("monthly_averages") else max(rep_s['monthly_averages'], key=rep_s['monthly_averages'].get)
+    rep_peak_idx = (max(rep_s['monthly_averages'].values()) / rep_s['overall_avg']) if rep_s.get('overall_avg', 0) > 0 else 1.21
+    
     report_html = f"""<div class="ui-card" style="padding: 1.5rem 1.75rem !important;">
 <div style="font-size: 1.15rem; font-weight: 700; color: #111827; margin-bottom: 1rem;">
 School: <span style="color: #0B4F46;">{report_school}</span>
@@ -2015,39 +2062,39 @@ School: <span style="color: #0B4F46;">{report_school}</span>
 <div style="background: #F9FAFB; padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid #EAECF0;">
 <div class="kpi-label">SEASONAL FINDING</div>
 <div style="font-size: 0.95rem; font-weight: 700; color: #111827; margin-top: 0.3rem;">
-Peak consumption: <span style="color: #0B4F46;">April – May (Seasonal Index: 1.24)</span>
+Peak consumption: <span style="color: #0B4F46;">{rep_peak_month} (Seasonal Index: {rep_peak_idx:.2f})</span>
 </div>
 </div>
 <div style="background: #F9FAFB; padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid #EAECF0;">
 <div class="kpi-label">ENERGY LOAD</div>
 <div style="font-size: 0.95rem; font-weight: 700; color: #111827; margin-top: 0.3rem;">
-Priority load: <span style="color: #0B4F46;">Air Conditioner (792.00 kWh/mo, 34.6% share)</span>
+Priority load: <span style="color: #0B4F46;">{rep_sum['top_appliance']} ({rep_sum['top_kwh']:,.2f} kWh/mo, {rep_sum['top_share']:.1f}% share)</span>
 </div>
 </div>
 <div style="background: #F9FAFB; padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid #EAECF0;">
 <div class="kpi-label">FORECAST</div>
 <div style="font-size: 0.95rem; font-weight: 700; color: #111827; margin-top: 0.3rem;">
-Expected consumption: <span style="color: #0B4F46;">₱15,114.62 / month (MAPE: 12.52%)</span>
+Expected consumption: <span style="color: #0B4F46;">{format_currency(rep_fc_df['forecast_bill'].mean())} / month (MAPE: {rep_fc['val_mape']:.2f}%)</span>
 </div>
 </div>
 <div style="background: #F9FAFB; padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid #EAECF0;">
 <div class="kpi-label">CARBON</div>
 <div style="font-size: 0.95rem; font-weight: 700; color: #111827; margin-top: 0.3rem;">
-Projected emissions: <span style="color: #0B4F46;">19,228.44 kg CO₂e / year</span>
+Projected emissions: <span style="color: #0B4F46;">{rep_bau['annual_co2_kg']:,.2f} kg CO₂e / year</span>
 </div>
 </div>
 <div style="background: #F9FAFB; padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid #EAECF0; grid-column: span 2;">
 <div class="kpi-label">OPTIMIZATION</div>
 <div style="font-size: 0.95rem; font-weight: 700; color: #111827; margin-top: 0.3rem;">
-Recommended strategy: <span style="color: #0B4F46;">15% Multi-Tier Duty Cycle Optimization (1,945.73 kWh / mo target)</span>
+Recommended strategy: <span style="color: #0B4F46;">{rep_opt['selected_scenario']} ({format_kwh(rep_opt['optimized_monthly_kwh'])} target)</span>
 </div>
 </div>
 <div style="background: #E6F4EA; padding: 1.2rem 1.25rem; border-radius: 12px; border: 1px solid #A7F3D0; grid-column: span 2;">
 <div class="kpi-label" style="color: #047857 !important;">IMPACT & SAVINGS</div>
 <div style="font-size: 0.95rem; font-weight: 700; color: #047857; margin-top: 0.4rem; line-height: 1.6;">
-Energy saved: <strong>4,120.44 kWh / year</strong><br>
-Cost saved: <strong>₱45,324.84 / year</strong><br>
-CO₂ avoided: <strong>2,884.31 kg CO₂e / year</strong>
+Energy saved: <strong>{format_kwh(rep_opt['annual_kwh_savings'])} / year</strong><br>
+Cost saved: <strong>{format_currency(rep_opt['annual_cost_savings_php'])} / year</strong><br>
+CO₂ avoided: <strong>{format_co2(rep_opt['annual_avoided_co2_kg'])} / year</strong>
 </div>
 </div>
 </div>
