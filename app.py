@@ -1954,14 +1954,15 @@ elif navigation_option == "Optimization":
     with col_c3:
         max_other_limit = st.slider("Max Remaining Loads Reduction (%)", min_value=1, max_value=25, value=10, step=1, key="opt_limit_other")
 
-    # Run Scipy Linear Programming solver dynamically on constraints
+    # Run Scipy Linear Programming solver dynamically on constraints and selected objective
     opt_res = optimize_conservation_target(
         appliance_df=apps_processed,
         electricity_rate=electricity_rate,
         emission_factor=emission_factor,
         max_ac_red=max_ac_limit / 100.0,
         max_comp_red=max_comp_limit / 100.0,
-        max_other_red=max_other_limit / 100.0
+        max_other_red=max_other_limit / 100.0,
+        objective=opt_goal
     )
         
     col_r1, col_r2, col_r3 = st.columns([1, 1.5, 1])
