@@ -1286,10 +1286,11 @@ elif navigation_option == "Data Input":
             st.error(f"Error parsing uploaded file: {ex}")
     
     st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #111827; margin-top: 1.25rem; margin-bottom: 0.75rem;">Appliance Electrical Load Inventory</h3>', unsafe_allow_html=True)
+    app_display = appliance_df.copy()
+    if school_selection != "Both" and 'school' in app_display.columns:
+        app_display = app_display[app_display['school'] == target_school]
     if search_term:
-        app_display = appliance_df[appliance_df['appliance'].str.contains(search_term, case=False)]
-    else:
-        app_display = appliance_df
+        app_display = app_display[app_display['appliance'].str.contains(search_term, case=False)]
     render_bankio_table(app_display)
     
     # Data Validity Checklist Section matching Bankio Minimal Style
@@ -1532,13 +1533,14 @@ elif navigation_option == "Energy L.":
     st.plotly_chart(fig_hbar, use_container_width=True)
     
     # Bottom Metrics Card matching Bankio Style
+    top2_text = f"{load_summary['top_appliance']} + {load_summary['second_appliance']}" if load_summary.get('second_appliance') else load_summary.get('top_appliance', 'Primary Load')
     st.markdown(f"""
     <div class="ui-card" style="margin-top: 0.5rem; padding: 1.25rem 1.5rem !important;">
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
             <div>
                 <div class="kpi-label">CONTRIBUTION</div>
                 <div style="font-size: 1.4rem; font-weight: 800; color: #111827;">{load_summary['top2_combined_share']:.1f}% ESTIMATED</div>
-                <div style="font-size: 0.78rem; color: #6B7280;">Top 2 Combined Load ({load_summary['top_appliance']} + Computers)</div>
+                <div style="font-size: 0.78rem; color: #6B7280;">Top 2 Combined Load ({top2_text})</div>
             </div>
             <div>
                 <div class="kpi-label">CONSUMPTION</div>
@@ -1718,11 +1720,13 @@ elif navigation_option == "Scenario":
     
     st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #111827; margin-top: 0.25rem; margin-bottom: 0.75rem;">ADJUST INTERVENTION LEVELS:</h3>', unsafe_allow_html=True)
     
+    top1_name = load_summary.get("top_appliance", "Air Conditioner")
+    top2_name = load_summary.get("second_appliance", "Computers")
     col_sl1, col_sl2, col_sl3 = st.columns(3)
     with col_sl1:
-        ac_red = st.slider("Air Conditioner Intervention (%)", min_value=0, max_value=100, value=15, step=5)
+        ac_red = st.slider(f"{top1_name} Intervention (%)", min_value=0, max_value=100, value=15, step=5)
     with col_sl2:
-        comp_red = st.slider("Computers Intervention (%)", min_value=0, max_value=100, value=15, step=5)
+        comp_red = st.slider(f"{top2_name} Intervention (%)", min_value=0, max_value=100, value=15, step=5)
     with col_sl3:
         light_red = st.slider("Lighting & Other Loads (%)", min_value=0, max_value=100, value=10, step=5)
         
