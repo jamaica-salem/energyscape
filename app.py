@@ -1863,6 +1863,18 @@ elif navigation_option == "Scenario":
     co2_avoided_m = kwh_saved * emission_factor
     co2_avoided_y = co2_avoided_m * 12
     
+    if run_sim:
+        st.toast(f"⚡ Scenario simulated ({top1_red:.0f}% {top1_name}, {top2_red:.0f}% {top2_name}, {other_red:.0f}% Other loads)!")
+        st.markdown(f"""
+        <div style="background-color: #E6F4EA; border: 1px solid #A7F3D0; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 0.75rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
+            <div>
+                <div style="font-weight: 700; color: #047857; font-size: 0.98rem;">SIMULATION APPLIED</div>
+                <div style="font-size: 0.85rem; color: #065F46;">Projected Load: <b>{sim_kwh:,.2f} kWh/month</b> ({avg_red_pct:.1f}% Energy Reduction). Annual Savings: <b>{format_currency(cost_saved_y)}</b></div>
+            </div>
+            <span class="pill-badge-green">SIMULATED</span>
+        </div>
+        """, unsafe_allow_html=True)
+    
     st.markdown('<h3 style="font-size: 1.15rem; font-weight: 700; color: #111827; margin-top: 1.5rem; margin-bottom: 0.75rem;">SCENARIO RESULT</h3>', unsafe_allow_html=True)
     
     st.markdown(f"""
@@ -1961,7 +1973,19 @@ elif navigation_option == "Optimization":
     with col_r2:
         run_opt = st.button("RUN OPTIMIZATION", key="btn_run_opt", use_container_width=True)
         
-    st.markdown('<div style="margin-bottom: 2rem;"></div>', unsafe_allow_html=True)
+    if run_opt:
+        st.toast(f"⚡ Linear Goal Programming Optimization executed for {target_school}!")
+        st.markdown(f"""
+        <div style="background-color: #E6F4EA; border: 1px solid #A7F3D0; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 0.75rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
+            <div>
+                <div style="font-weight: 700; color: #047857; font-size: 0.98rem;">OPTIMIZATION COMPLETE</div>
+                <div style="font-size: 0.85rem; color: #065F46;">Optimal Target: <b>{format_kwh(opt_res['optimized_monthly_kwh'])}</b> ({opt_res['reduction_percentage']:.0f}% Reduction). Annual Savings: <b>{format_currency(opt_res['annual_cost_savings_php'])}</b></div>
+            </div>
+            <span class="pill-badge-green">OPTIMIZED</span>
+        </div>
+        """, unsafe_allow_html=True)
+        
+    st.markdown('<div style="margin-bottom: 1.5rem;"></div>', unsafe_allow_html=True)
         
     op1, op2, op3, op4 = st.columns(4)
     with op1:
@@ -2188,6 +2212,18 @@ elif navigation_option == "Reports":
     col_r1, col_r2, col_r3 = st.columns([1, 1.5, 1])
     with col_r2:
         run_comp = st.button("RUN COMPARATIVE ANALYSIS", key="btn_run_comp", use_container_width=True)
+        
+    if run_comp:
+        st.toast("⚡ Comparative Analysis completed across all institutional datasets!")
+        st.markdown("""
+        <div style="background-color: #E6F4EA; border: 1px solid #A7F3D0; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 0.75rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
+            <div>
+                <div style="font-weight: 700; color: #047857; font-size: 0.98rem;">COMPARATIVE ANALYSIS EXECUTED</div>
+                <div style="font-size: 0.85rem; color: #065F46;">Institutional benchmark matrices updated for An-anaao Integrated School vs La Paz Integrated School.</div>
+            </div>
+            <span class="pill-badge-green">UPDATED</span>
+        </div>
+        """, unsafe_allow_html=True)
         
     st.markdown("<hr style='margin: 2rem 0; border: 0; border-top: 1px solid #EAECF0;'>", unsafe_allow_html=True)
     
