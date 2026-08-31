@@ -1204,8 +1204,8 @@ if navigation_option == "Dashboard":
         markers=True,
         height=360
     )
-    fig_tr = apply_blue_theme(fig_tr, "Historical Monthly Electricity Expenditure (₱)")
-    fig_tr.update_traces(line=dict(width=3, color="#0B4F46"))
+    fig_tr = apply_blue_theme(fig_tr, f"Historical Monthly Electricity Expenditure — {target_school} (₱)")
+    fig_tr.update_traces(line=dict(width=3, color="#0B4F46"), hovertemplate="<b>%{x|%b %Y}</b><br>Bill: ₱%{y:,.2f}<extra></extra>")
     st.plotly_chart(fig_tr, use_container_width=True)
     
     sy_min = historical_df['school_year'].min() if 'school_year' in historical_df.columns and not historical_df['school_year'].empty else "2021–2022"
@@ -1446,7 +1446,7 @@ elif navigation_option == "Season":
             hovertemplate="Month: %{x}<br>Index: %{text:.2f}<extra></extra>",
             text=monthly_summary['seasonal_index']
         ))
-        fig_sea = apply_blue_theme(fig_sea, "Monthly Electricity Expenditure & Seasonal Index Trend")
+        fig_sea = apply_blue_theme(fig_sea, f"Monthly Electricity Expenditure & Seasonal Index Trend — {target_school}")
         fig_sea.update_layout(height=320)
         st.plotly_chart(fig_sea, use_container_width=True)
         
@@ -1526,8 +1526,8 @@ elif navigation_option == "Energy L.":
         color_discrete_sequence=green_bar_palette,
         height=380
     )
-    fig_hbar = apply_blue_theme(fig_hbar, "Appliance Monthly Energy Load Characterization (kWh/month)")
-    fig_hbar.update_traces(texttemplate='%{text:.1f} kWh', textposition='outside')
+    fig_hbar = apply_blue_theme(fig_hbar, f"Appliance Monthly Energy Load Breakdown — {target_school} (kWh/month)")
+    fig_hbar.update_traces(texttemplate='%{text:,.1f} kWh', textposition='outside', hovertemplate="<b>%{y}</b><br>Monthly Load: %{x:,.2f} kWh<extra></extra>")
     fig_hbar.update_layout(showlegend=False)
     st.plotly_chart(fig_hbar, use_container_width=True)
     
@@ -1575,6 +1575,7 @@ elif navigation_option == "Forecast":
         name="Lower Confidence Bound",
         mode="lines",
         line=dict(color="rgba(11, 79, 70, 0.3)", width=1, dash="dash"),
+        hovertemplate="Lower Bound: ₱%{y:,.2f}<extra></extra>",
         showlegend=False
     ))
     fig_fc_line.add_trace(go.Scatter(
@@ -1584,7 +1585,8 @@ elif navigation_option == "Forecast":
         mode="lines",
         fill='tonexty',
         fillcolor="rgba(11, 79, 70, 0.12)",
-        line=dict(color="rgba(11, 79, 70, 0.3)", width=1, dash="dash")
+        line=dict(color="rgba(11, 79, 70, 0.3)", width=1, dash="dash"),
+        hovertemplate="Upper Bound: ₱%{y:,.2f}<extra></extra>"
     ))
     fig_fc_line.add_trace(go.Scatter(
         x=fc_df['date_str'],
@@ -1592,7 +1594,8 @@ elif navigation_option == "Forecast":
         name="ETS Forecasted Bill (₱)",
         mode="lines+markers",
         line=dict(color="#0B4F46", width=3.5),
-        marker=dict(size=7, color="#063B34")
+        marker=dict(size=7, color="#063B34"),
+        hovertemplate="<b>%{x}</b><br>Forecast: ₱%{y:,.2f}<extra></extra>"
     ))
     fig_fc_line = apply_blue_theme(fig_fc_line, f"Forecasted Electricity Bills — {target_school} ({forecast_horizon} Months)")
     fig_fc_line.update_layout(height=360)
@@ -1679,6 +1682,19 @@ elif navigation_option == "Carbon":
         </div>
     </div>
     """, unsafe_allow_html=True)
+        
+    fc_df['forecast_co2_kg'] = (fc_df['forecast_bill'] / electricity_rate) * emission_factor
+    fig_carbon = px.bar(
+        fc_df,
+        x='month',
+        y='forecast_co2_kg',
+        color_discrete_sequence=["#0B4F46"],
+        text='forecast_co2_kg',
+        height=340
+    )
+    fig_carbon = apply_blue_theme(fig_carbon, f"Projected Monthly Scope 2 Carbon Footprint — {target_school} (kg CO₂e)")
+    fig_carbon.update_traces(texttemplate='%{text:,.1f} kg', textposition='outside', hovertemplate="Month: %{x}<br>Carbon Footprint: %{y:,.2f} kg CO₂e<extra></extra>")
+    st.plotly_chart(fig_carbon, use_container_width=True)
         
     st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #0F172A; margin-top: 1rem; margin-bottom: 0.75rem;">Business-as-Usual (BAU) Benchmark Table</h3>', unsafe_allow_html=True)
     bau_table = pd.DataFrame([
@@ -1767,12 +1783,14 @@ elif navigation_option == "Scenario":
     
     col_sc1, col_sc2 = st.columns(2)
     with col_sc1:
-        fig_sc_kwh = px.bar(scenarios_df, x="Scenario", y="Projected Monthly kWh", color="Scenario", color_discrete_sequence=GREEN_PALETTE, height=320)
-        fig_sc_kwh = apply_blue_theme(fig_sc_kwh)
+        fig_sc_kwh = px.bar(scenarios_df, x="Scenario", y="Projected Monthly kWh", color="Scenario", text="Projected Monthly kWh", color_discrete_sequence=GREEN_PALETTE, height=320)
+        fig_sc_kwh = apply_blue_theme(fig_sc_kwh, f"Simulated Monthly Load — {target_school}")
+        fig_sc_kwh.update_traces(texttemplate='%{text:,.1f} kWh', textposition='outside', hovertemplate="Scenario: %{x}<br>Projected Load: %{y:,.2f} kWh<extra></extra>")
         st.plotly_chart(fig_sc_kwh, use_container_width=True)
     with col_sc2:
-        fig_sc_co2 = px.bar(scenarios_df, x="Scenario", y="Annual Avoided CO₂e (kg)", color="Scenario", color_discrete_sequence=GREEN_PALETTE, height=320)
-        fig_sc_co2 = apply_blue_theme(fig_sc_co2)
+        fig_sc_co2 = px.bar(scenarios_df, x="Scenario", y="Annual Avoided CO₂e (kg)", color="Scenario", text="Annual Avoided CO₂e (kg)", color_discrete_sequence=GREEN_PALETTE, height=320)
+        fig_sc_co2 = apply_blue_theme(fig_sc_co2, f"Avoided Annual CO₂ Emissions — {target_school}")
+        fig_sc_co2.update_traces(texttemplate='%{text:,.1f} kg', textposition='outside', hovertemplate="Scenario: %{x}<br>Avoided CO₂: %{y:,.2f} kg<extra></extra>")
         st.plotly_chart(fig_sc_co2, use_container_width=True)
 
     # PROCEED BUTTON
@@ -1860,6 +1878,24 @@ elif navigation_option == "Optimization":
         </div>
         """, unsafe_allow_html=True)
         
+    opt_chart_df = pd.DataFrame([
+        {"Strategy": "BAU Baseline", "Monthly Load (kWh)": opt_res["bau_monthly_kwh"]},
+        {"Strategy": "Optimized Target", "Monthly Load (kWh)": opt_res["optimized_monthly_kwh"]}
+    ])
+    fig_opt_bar = px.bar(
+        opt_chart_df,
+        x="Strategy",
+        y="Monthly Load (kWh)",
+        color="Strategy",
+        text="Monthly Load (kWh)",
+        color_discrete_sequence=["#286654", "#0B4F46"],
+        height=280
+    )
+    fig_opt_bar = apply_blue_theme(fig_opt_bar, f"Baseline vs Linear Goal Programming Target — {target_school}")
+    fig_opt_bar.update_traces(texttemplate='%{text:,.1f} kWh', textposition='outside', hovertemplate="Strategy: %{x}<br>Monthly Load: %{y:,.2f} kWh<extra></extra>")
+    fig_opt_bar.update_layout(showlegend=False)
+    st.plotly_chart(fig_opt_bar, use_container_width=True)
+
     st.markdown('<h3 style="font-size: 1.1rem; font-weight: 700; color: #111827; margin-top: 0.5rem; margin-bottom: 0.75rem;">Optimized Baseline vs Target Comparison Table</h3>', unsafe_allow_html=True)
     opt_table = pd.DataFrame([
         {"Indicator": "Monthly Electricity Consumption", "BAU/Current": format_kwh(opt_res["bau_monthly_kwh"]), "Optimized Target": format_kwh(opt_res["optimized_monthly_kwh"]), "Reduction": format_kwh(opt_res["monthly_kwh_savings"])},
