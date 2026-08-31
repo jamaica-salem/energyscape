@@ -1377,7 +1377,12 @@ elif navigation_option == "Season":
         )
         wet_months = [m for m in all_months if m not in dry_months]
         
-    s_metrics = calculate_seasonal_metrics(historical_df, dry_months, wet_months)
+    s_metrics = calculate_seasonal_metrics(
+        historical_df, 
+        dry_months, 
+        wet_months, 
+        school_name=target_school if school_selection != "Both" else None
+    )
     
     st.markdown('<div style="margin-bottom: 1.5rem;"></div>', unsafe_allow_html=True)
     
@@ -1390,9 +1395,32 @@ elif navigation_option == "Season":
         hist_sea_df['month_num'] = hist_sea_df['date_dt'].dt.month
         monthly_summary = hist_sea_df.groupby('month_num')['bill_php'].mean().reset_index()
         month_names = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+        full_month_names = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+        
         monthly_summary['month_name'] = [month_names[int(m)-1] for m in monthly_summary['month_num']]
-        overall_mean = monthly_summary['bill_php'].mean()
-        monthly_summary['seasonal_index'] = monthly_summary['bill_php'] / overall_mean
+        monthly_summary['full_month_name'] = [full_month_names[int(m)-1] for m in monthly_summary['month_num']]
+        
+        overall_mean = monthly_summary['bill_php'].mean() if not monthly_summary.empty else 1.0
+        monthly_summary['seasonal_index'] = monthly_summary['bill_php'] / overall_mean if overall_mean > 0 else 1.0
+        
+        # Determine Peak and Lowest Period dynamically from actual historical dataset
+        if not monthly_summary.empty:
+            max_idx = monthly_summary['bill_php'].idxmax()
+            min_idx = monthly_summary['bill_php'].idxmin()
+            
+            peak_month_str = monthly_summary.loc[max_idx, 'full_month_name'].upper()
+            peak_val = monthly_summary.loc[max_idx, 'bill_php']
+            peak_s_index = monthly_summary.loc[max_idx, 'seasonal_index']
+            lowest_month_str = monthly_summary.loc[min_idx, 'full_month_name'].upper()
+            lowest_val = monthly_summary.loc[min_idx, 'bill_php']
+        else:
+            peak_month_str = "N/A"
+            peak_val = 0.0
+            peak_s_index = 1.0
+            lowest_month_str = "N/A"
+            lowest_val = 0.0
+
+        peak_pct_str = f"({(peak_s_index - 1.0) * 100:+.0f}% Peak)" if peak_s_index != 1.0 else "(Baseline)"
         
         # Bankio Minimal Green Palette: Deep Emerald for Dry, Soft Matcha for Wet
         dry_month_numbers = {all_months.index(month) + 1 for month in dry_months}
@@ -1402,14 +1430,17 @@ elif navigation_option == "Season":
             x=monthly_summary['month_name'],
             y=monthly_summary['bill_php'],
             name="Avg Monthly Bill (₱)",
-            marker_color=bar_colors
+            marker_color=bar_colors,
+            hovertemplate="Month: %{x}<br>Avg Bill: ₱%{y:,.2f}<extra></extra>"
         ))
         fig_sea.add_trace(go.Scatter(
             x=monthly_summary['month_name'],
             y=monthly_summary['seasonal_index'] * overall_mean,
             name="Seasonal Trend Index",
             mode="lines+markers",
-            line=dict(color="#047857", width=3.5)
+            line=dict(color="#047857", width=3.5),
+            hovertemplate="Month: %{x}<br>Index: %{text:.2f}<extra></extra>",
+            text=monthly_summary['seasonal_index']
         ))
         fig_sea = apply_blue_theme(fig_sea, "Monthly Electricity Expenditure & Seasonal Index Trend")
         fig_sea.update_layout(height=320)
@@ -1417,38 +1448,49 @@ elif navigation_option == "Season":
         
         st.markdown('<div style="margin-top: 1rem;"></div>', unsafe_allow_html=True)
         
-        # Bottom Left Metrics
+        # Bottom Left Metrics - NOW DYNAMIC
         st.markdown(f"""
         <div class="ui-card" style="padding: 1rem 1.25rem !important;">
             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
                 <div>
                     <div class="kpi-label">PEAK PERIOD</div>
-                    <div style="font-weight: 800; font-size: 1.05rem; color: #0B4F46;">APRIL–MAY</div>
+                    <div style="font-weight: 800; font-size: 1.05rem; color: #0B4F46;">{peak_month_str}</div>
                 </div>
                 <div>
                     <div class="kpi-label">SEASONAL INDEX</div>
-                    <div style="font-weight: 800; font-size: 1.05rem; color: #111827;">1.24 (24% Peak)</div>
+                    <div style="font-weight: 800; font-size: 1.05rem; color: #111827;">{peak_s_index:.2f} {peak_pct_str}</div>
                 </div>
                 <div>
                     <div class="kpi-label">LOWEST PERIOD</div>
-                    <div style="font-weight: 800; font-size: 1.05rem; color: #047857;">DECEMBER</div>
+                    <div style="font-weight: 800; font-size: 1.05rem; color: #047857;">{lowest_month_str}</div>
                 </div>
             </div>
         </div>
         """, unsafe_allow_html=True)
         
     with col_sea_right:
-        st.markdown("""
+        dry_avg = s_metrics.get("dry_avg", 0.0)
+        wet_avg = s_metrics.get("wet_avg", 0.0)
+        pct_diff = s_metrics.get("percentage_difference", 0.0)
+        
+        if dry_avg >= wet_avg:
+            variance_html = f"Dry Season average monthly billing (<strong>{format_currency(dry_avg)}</strong>) exceeds Wet Season baseline (<strong>{format_currency(wet_avg)}</strong>) by approximately <strong>{abs(pct_diff):.2f}%</strong>."
+        else:
+            variance_html = f"Wet Season average monthly billing (<strong>{format_currency(wet_avg)}</strong>) exceeds Dry Season baseline (<strong>{format_currency(dry_avg)}</strong>) by approximately <strong>{abs(pct_diff):.2f}%</strong>."
+            
+        dry_months_formatted = ", ".join(dry_months) if dry_months else "None selected"
+
+        st.markdown(f"""
         <div class="ui-card" style="height: 100%; min-height: 420px;">
             <h3 style="font-size: 1.1rem; font-weight: 800; color: #111827; margin-bottom: 0.75rem;">INTERPRETATION:</h3>
             <p style="font-size: 0.88rem; color: #374151; line-height: 1.6; margin-bottom: 0.75rem;">
-                <strong>Dry Season Thermal Surge:</strong> Electricity expenditure peaks during April–May due to elevated ambient temperatures in Abra, driving continuous operation of cooling systems (Air Conditioners & Electric Fans).
+                <strong>Seasonal Load Peak:</strong> Electricity expenditure peaks during <strong>{peak_month_str.title()}</strong> (Average Bill: <strong>{format_currency(peak_val)}</strong>) driven by institutional load demands and seasonal climate variations.
             </p>
             <p style="font-size: 0.88rem; color: #374151; line-height: 1.6; margin-bottom: 0.75rem;">
-                <strong>Seasonal Variance:</strong> Dry Season average monthly billing (<strong>₱26,450</strong>) exceeds Wet Season baseline (<strong>₱23,820</strong>) by approximately <strong>11.04%</strong>.
+                <strong>Seasonal Variance:</strong> {variance_html}
             </p>
             <p style="font-size: 0.88rem; color: #374151; line-height: 1.6; margin: 0;">
-                <strong>Operational Action:</strong> Targeted thermal insulation and air conditioner duty-cycle management during the peak April–May window offers maximum potential for load curtailment.
+                <strong>Operational Action:</strong> Targeted energy conservation and load duty-cycle management during classified Dry season months (<em>{dry_months_formatted}</em>) and peak period <strong>{peak_month_str.title()}</strong> offers maximum potential for load curtailment.
             </p>
         </div>
         """, unsafe_allow_html=True)
