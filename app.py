@@ -556,18 +556,29 @@ st.markdown("""
         background-color: #F9FAFB !important;
     }
 
-    /* Bankio Table Custom Styling (IMG_3512.jpeg Specification: Emerald Top Header & First Column) */
-    .bankio-table-container {
+    /* Bankio Table Custom Styling & Horizontal Scrollbar Fix */
+    .bankio-table-container,
+    div[data-testid="stTable"],
+    div[data-testid="stDataFrame"] {
         border: 1px solid #EAECF0 !important;
         border-radius: 16px !important;
-        overflow: hidden !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        display: block !important;
         box-shadow: 0 2px 10px rgba(16, 24, 40, 0.03) !important;
         margin-top: 0.75rem !important;
         margin-bottom: 1.25rem !important;
         background-color: #FFFFFF !important;
+        position: relative !important;
+        scrollbar-width: thin !important;
+        scrollbar-color: #0B4F46 #F3F4F6 !important;
     }
     .bankio-table {
         width: 100% !important;
+        min-width: 720px !important;
         border-collapse: collapse !important;
         font-family: 'Inter', sans-serif !important;
         font-size: 0.88rem !important;
@@ -585,6 +596,7 @@ st.markdown("""
         padding: 14px 18px !important;
         text-align: left !important;
         border: none !important;
+        white-space: nowrap !important;
     }
     .bankio-table tbody tr {
         border-bottom: 1px solid #F3F4F6 !important;
@@ -600,12 +612,125 @@ st.markdown("""
         padding: 12px 18px !important;
         color: #111827 !important;
         vertical-align: middle !important;
+        white-space: nowrap !important;
     }
     /* Table Styling: First Row (Header) Deep Emerald Green Only */
     .bankio-table tbody tr td.first-col-bold {
         font-weight: 700 !important;
         color: #111827 !important;
         background-color: #FFFFFF !important;
+    }
+
+    /* Custom Webkit Horizontal & Vertical Scrollbars for All Table Containers */
+    .bankio-table-container::-webkit-scrollbar,
+    div[data-testid="stTable"]::-webkit-scrollbar,
+    div[data-testid="stDataFrame"]::-webkit-scrollbar,
+    table::-webkit-scrollbar {
+        height: 8px !important;
+        width: 8px !important;
+    }
+    .bankio-table-container::-webkit-scrollbar-track,
+    div[data-testid="stTable"]::-webkit-scrollbar-track,
+    div[data-testid="stDataFrame"]::-webkit-scrollbar-track,
+    table::-webkit-scrollbar-track {
+        background: #F3F4F6 !important;
+        border-radius: 6px !important;
+    }
+    .bankio-table-container::-webkit-scrollbar-thumb,
+    div[data-testid="stTable"]::-webkit-scrollbar-thumb,
+    div[data-testid="stDataFrame"]::-webkit-scrollbar-thumb,
+    table::-webkit-scrollbar-thumb {
+        background-color: #0B4F46 !important;
+        border-radius: 6px !important;
+    }
+    .bankio-table-container::-webkit-scrollbar-thumb:hover,
+    div[data-testid="stTable"]::-webkit-scrollbar-thumb:hover,
+    div[data-testid="stDataFrame"]::-webkit-scrollbar-thumb:hover,
+    table::-webkit-scrollbar-thumb:hover {
+        background-color: #063B34 !important;
+    }
+
+    /* Responsive Grid Utility Classes & Media Queries */
+    .responsive-grid-4 {
+        display: grid !important;
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 1.5rem !important;
+    }
+    .responsive-grid-3 {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 1rem !important;
+    }
+    .responsive-grid-2 {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 1.25rem !important;
+    }
+
+    @media (max-width: 1024px) {
+        .responsive-grid-4 {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 1.25rem !important;
+        }
+        .responsive-grid-3 {
+            grid-template-columns: repeat(2, 1fr) !important;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .responsive-grid-4,
+        .responsive-grid-3,
+        .responsive-grid-2 {
+            grid-template-columns: 1fr !important;
+            gap: 1rem !important;
+        }
+        .hero-consumption-card {
+            padding: 1.25rem 1.25rem !important;
+            border-radius: 16px !important;
+        }
+        .hero-card-title {
+            font-size: 1.25rem !important;
+        }
+        .hero-metric-val {
+            font-size: 1.6rem !important;
+        }
+        .kpi-val {
+            font-size: 1.15rem !important;
+        }
+        .ui-card {
+            padding: 1rem 1.15rem !important;
+            border-radius: 14px !important;
+        }
+        .bankio-table-container {
+            border-radius: 12px !important;
+        }
+        .bankio-table thead tr th {
+            padding: 10px 12px !important;
+            font-size: 0.78rem !important;
+        }
+        .bankio-table tbody tr td {
+            padding: 10px 12px !important;
+            font-size: 0.82rem !important;
+        }
+        .welcome-ref-title {
+            font-size: 3.5rem !important;
+        }
+        .welcome-ref-subtitle {
+            font-size: 1.1rem !important;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .welcome-ref-title {
+            font-size: 2.5rem !important;
+        }
+        .welcome-ref-subtitle {
+            font-size: 0.95rem !important;
+        }
+        div[data-testid="stButton"] button {
+            width: 100% !important;
+            max-width: 100% !important;
+        }
     }
 </style>
 """, unsafe_allow_html=True)
@@ -1232,7 +1357,7 @@ if navigation_option == "Dashboard":
             </div>
             <span class="pill-badge-teal" style="font-size: 0.85rem; padding: 0.35rem 0.85rem;">{target_school}</span>
         </div>
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.75rem; align-items: center; background: rgba(255, 255, 255, 0.08); padding: 1.25rem 1.5rem; border-radius: 14px;">
+        <div class="responsive-grid-4" style="align-items: center; background: rgba(255, 255, 255, 0.08); padding: 1.25rem 1.5rem; border-radius: 14px;">
             <div>
                 <div class="hero-subtext">Monthly Energy Load</div>
                 <div class="hero-metric-val">{format_kwh(load_summary.get("total_kwh", 0.0))}</div>
@@ -1465,7 +1590,7 @@ elif navigation_option == "Data Input":
     
     st.markdown(f"""
     <div class="ui-card" style="padding: 1.25rem 1.5rem !important;">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; font-size: 0.9rem; color: #374151;">
+        <div class="responsive-grid-2" style="font-size: 0.9rem; color: #374151;">
             <div style="display: flex; align-items: center; justify-content: space-between;">
                 <span><span style="color: #047857; margin-right: 8px;">✓</span> NO MISSING VALUES</span>
                 <span class="pill-badge-green">{missing_status} ({total_missing} Missing)</span>
@@ -1482,7 +1607,7 @@ elif navigation_option == "Data Input":
                 <span><span style="color: #047857; margin-right: 8px;">✓</span> COMPLETE DATE TIMESTAMPS</span>
                 <span style="color: #047857; font-weight: 800;">{sequence_status} ({sequence_pct}% Sequence)</span>
             </div>
-            <div style="display: flex; align-items: center; justify-content: space-between; grid-column: span 2; padding-top: 4px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; grid-column: 1 / -1; padding-top: 4px;">
                 <span><span style="color: #0B4F46; margin-right: 8px;">✓</span> POTENTIAL OUTLIERS</span>
                 <span class="pill-badge-green">{outlier_status} ({outlier_count} Potential Peaks)</span>
             </div>
@@ -1585,7 +1710,7 @@ elif navigation_option == "Season":
         # Bottom Left Metrics - NOW DYNAMIC
         st.markdown(f"""
         <div class="ui-card" style="padding: 1rem 1.25rem !important;">
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+            <div class="responsive-grid-3">
                 <div>
                     <div class="kpi-label">PEAK PERIOD</div>
                     <div style="font-weight: 800; font-size: 1.05rem; color: #0B4F46;">{peak_month_str}</div>
@@ -1665,7 +1790,7 @@ elif navigation_option == "Energy L.":
     top2_text = f"{load_summary['top_appliance']} + {load_summary['second_appliance']}" if load_summary.get('second_appliance') else load_summary.get('top_appliance', 'Primary Load')
     st.markdown(f"""
     <div class="ui-card" style="margin-top: 0.5rem; padding: 1.25rem 1.5rem !important;">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div class="responsive-grid-2">
             <div>
                 <div class="kpi-label">CONTRIBUTION</div>
                 <div style="font-size: 1.4rem; font-weight: 800; color: #111827;">{load_summary['top2_combined_share']:.1f}% ESTIMATED</div>
@@ -1741,7 +1866,7 @@ elif navigation_option == "Forecast":
     # Bottom Metrics Card matching Bankio Style
     st.markdown(f"""
     <div class="ui-card" style="margin-top: 0.5rem; padding: 1.25rem 1.5rem !important;">
-        <div style="display: grid; grid-template-columns: 1fr 1.4fr; gap: 24px;">
+        <div class="responsive-grid-2">
             <div>
                 <div class="kpi-label">MODEL PERFORMANCE</div>
                 <div style="font-size: 0.9rem; color: #374151; line-height: 1.6; margin-top: 0.4rem;">
@@ -1894,7 +2019,7 @@ elif navigation_option == "Scenario":
     
     st.markdown(f"""
     <div class="ui-card" style="padding: 1.25rem 1.5rem !important;">
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
+        <div class="responsive-grid-4">
             <div>
                 <div class="kpi-label">BASELINE SCENARIO</div>
                 <div style="font-size: 1.3rem; font-weight: 800; color: #111827;">{base_kwh:,.2f} KWH</div>
@@ -2260,7 +2385,7 @@ elif navigation_option == "Reports":
 <div style="font-size: 1.15rem; font-weight: 700; color: #111827; margin-bottom: 1rem;">
 School: <span style="color: #0B4F46;">{report_school}</span>
 </div>
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+<div class="responsive-grid-2">
 <div style="background: #F9FAFB; padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid #EAECF0;">
 <div class="kpi-label">SEASONAL FINDING</div>
 <div style="font-size: 0.95rem; font-weight: 700; color: #111827; margin-top: 0.3rem;">
@@ -2285,13 +2410,13 @@ Expected consumption: <span style="color: #0B4F46;">{format_currency(rep_fc_df['
 Projected emissions: <span style="color: #0B4F46;">{rep_bau['annual_co2_kg']:,.2f} kg CO₂e / year</span>
 </div>
 </div>
-<div style="background: #F9FAFB; padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid #EAECF0; grid-column: span 2;">
+<div style="background: #F9FAFB; padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid #EAECF0; grid-column: 1 / -1;">
 <div class="kpi-label">OPTIMIZATION</div>
 <div style="font-size: 0.95rem; font-weight: 700; color: #111827; margin-top: 0.3rem;">
 Recommended strategy: <span style="color: #0B4F46;">{rep_opt['selected_scenario']} ({format_kwh(rep_opt['optimized_monthly_kwh'])} target)</span>
 </div>
 </div>
-<div style="background: #E6F4EA; padding: 1.2rem 1.25rem; border-radius: 12px; border: 1px solid #A7F3D0; grid-column: span 2;">
+<div style="background: #E6F4EA; padding: 1.2rem 1.25rem; border-radius: 12px; border: 1px solid #A7F3D0; grid-column: 1 / -1;">
 <div class="kpi-label" style="color: #047857 !important;">IMPACT & SAVINGS</div>
 <div style="font-size: 0.95rem; font-weight: 700; color: #047857; margin-top: 0.4rem; line-height: 1.6;">
 Energy saved: <strong>{format_kwh(rep_opt['annual_kwh_savings'])} / year</strong><br>
