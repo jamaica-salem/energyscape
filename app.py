@@ -782,10 +782,10 @@ def search_entire_system(query: str, historical_df: pd.DataFrame, appliance_df: 
     if any(m_word in q for m_word in ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec", "dry", "wet", "season", "thermal", "surge", "peak"]):
         matches["Season"] = 2
         
-    # 4. Energy L.
+    # 4. Energy Load
     el_m = len(filter_dataframe_by_search(apps_processed, q))
-    if el_m > 0 or any(w in q for w in ["energy l.", "air conditioner", "computer", "lighting", "fan", "refrigerator", "watt", "kwh"]):
-        matches["Energy L."] = max(el_m, 1)
+    if el_m > 0 or any(w in q for w in ["energy load", "energy l.", "air conditioner", "computer", "lighting", "fan", "refrigerator", "watt", "kwh"]):
+        matches["Energy Load"] = max(el_m, 1)
         
     # 5. Forecast
     if any(w in q for w in ["forecast", "ets", "projection", "mape", "expenditure", "upper", "lower", "bill"]):
@@ -1147,7 +1147,7 @@ NAV_OPTIONS = [
     "Dashboard",
     "Data Input",
     "Season",
-    "Energy L.",
+    "Energy Load",
     "Forecast",
     "Carbon",
     "Scenario",
@@ -1271,7 +1271,7 @@ PAGE_HEADER_TITLES = {
     "Dashboard": "ENERGYSCAPE",
     "Data Input": "DATA INPUT",
     "Season": "MULTI-SEASONAL ANALYSIS",
-    "Energy L.": "ENERGY LOAD INVENTORY",
+    "Energy Load": "ENERGY LOAD INVENTORY",
     "Forecast": "ELECTRICITY FORECAST",
     "Carbon": "CARBON FOOTPRINT AUDIT",
     "Scenario": "CONSERVATION SCENARIO MODELING",
@@ -1758,10 +1758,10 @@ elif navigation_option == "Season":
     st.markdown('<div style="margin-top: 1.75rem;"></div>', unsafe_allow_html=True)
     col_proc1, col_proc2, col_proc3 = st.columns([1, 1.5, 1])
     with col_proc2:
-        st.button("PROCEED →", key="btn_proceed_season", on_click=navigate_to_page, args=("Energy L.",), use_container_width=True)
+        st.button("PROCEED →", key="btn_proceed_season", on_click=navigate_to_page, args=("Energy Load",), use_container_width=True)
 
-# --- 4. ENERGY L. ---
-elif navigation_option == "Energy L.":
+# --- 4. ENERGY LOAD ---
+elif navigation_option == "Energy Load":
     st.markdown('<p style="font-size: 0.88rem; color: #64748B; margin-bottom: 1.25rem;">Appliance Electrical Load & Consumption Breakdown</p>', unsafe_allow_html=True)
     
     # Horizontal Bar Chart for Appliance Load Characterization
