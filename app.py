@@ -2433,7 +2433,7 @@ CO₂ avoided: <strong>{format_co2(rep_opt['annual_avoided_co2_kg'])} / year</st
         gen_rep = st.button("GENERATE REPORT", key="btn_gen_rep", use_container_width=True)
         
     if gen_rep:
-        st.success(f"🎉 Executive Energy Audit Report for '{report_school}' successfully generated and ready for export!")
+        st.success(f"🎉 Executive Energy Audit Report for '{report_school}' successfully generated!")
         
     st.markdown("<hr style='margin: 2rem 0; border: 0; border-top: 1px solid #EAECF0;'>", unsafe_allow_html=True)
     
