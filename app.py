@@ -77,7 +77,7 @@ st.markdown("""
     }
 
     .page-title {
-        color: #0B4F46 !important;
+        color: #0B4F71 !important;
     }
 
     /* Top Greeting & Header Bar */
@@ -115,13 +115,13 @@ st.markdown("""
         background: #FFFFFF !important;
     }
 
-    /* Hero Highlight Card (Bankio Solid Flat Deep Emerald Card #0B4F46) */
+    /* Hero Highlight Card (Bankio Solid Flat Deep Emerald Blue Card #0B4F71) */
     .hero-consumption-card {
-        background-color: #0B4F46 !important;
+        background-color: #0B4F71 !important;
         border-radius: 20px !important;
         padding: 1.75rem 2.25rem !important;
         color: #FFFFFF !important;
-        box-shadow: 0 12px 32px -5px rgba(11, 79, 70, 0.3) !important;
+        box-shadow: 0 12px 32px -5px rgba(11, 79, 113, 0.3) !important;
         margin-bottom: 1.75rem !important;
         position: relative !important;
         overflow: hidden !important;
@@ -129,7 +129,7 @@ st.markdown("""
     }
     .hero-card-label {
         font-size: 0.82rem !important;
-        color: #A7F3D0 !important;
+        color: #BAE6FD !important;
         font-weight: 600 !important;
         text-transform: uppercase !important;
         letter-spacing: 0.08em !important;
@@ -151,15 +151,15 @@ st.markdown("""
     }
     .hero-subtext {
         font-size: 0.85rem !important;
-        color: #D1FAE5 !important;
+        color: #E0F2FE !important;
     }
 
-    /* Soothing Matcha Pill Badges (No Bright/Neon Greens) */
+    /* Soothing Emerald Blue Pill Badges */
     .pill-badge-blue,
     .pill-badge-teal,
     .pill-badge-green {
-        background-color: #E8F5E9 !important;
-        color: #1B5E20 !important;
+        background-color: #E0F2FE !important;
+        color: #03496D !important;
         padding: 0.3rem 0.8rem !important;
         border-radius: 9999px !important;
         font-size: 0.78rem !important;
@@ -190,9 +190,9 @@ st.markdown("""
         text-overflow: ellipsis !important;
     }
 
-    /* Sidebar Navigation (Deep Emerald Green Theme #0B4F46 - Seamless Borderless) */
+    /* Sidebar Navigation (Deep Emerald Blue Theme #0B4F71 - Seamless Borderless) */
     section[data-testid="stSidebar"] {
-        background-color: #0B4F46 !important;
+        background-color: #0B4F71 !important;
         border: none !important;
         border-right: none !important;
         box-shadow: none !important;
@@ -264,13 +264,13 @@ st.markdown("""
         opacity: 0 !important;
     }
 
-    /* Navigation Radio Items (Deep Emerald Background with White Text) */
+    /* Navigation Radio Items (Deep Emerald Blue Background with White Text) */
     div[role="radiogroup"] label,
     div[role="radiogroup"] label p,
     div[role="radiogroup"] label span,
     div[role="radiogroup"] label div,
     div[role="radiogroup"] label * {
-        color: #E6F4EA !important;
+        color: #E0F2FE !important;
         font-family: 'Inter', sans-serif !important;
         font-size: 0.98rem !important;
         font-weight: 500 !important;
@@ -301,7 +301,7 @@ st.markdown("""
     div[role="radiogroup"] label[data-checked="true"] span,
     div[role="radiogroup"] label[data-checked="true"] div,
     div[role="radiogroup"] label[data-checked="true"] * {
-        color: #0B4F46 !important;
+        color: #0B4F71 !important;
         font-weight: 800 !important;
         font-size: 1.02rem !important;
     }
@@ -344,8 +344,8 @@ st.markdown("""
     div[data-testid="stSelectbox"] > div > div:focus-within,
     div[data-testid="stMultiSelect"] > div > div:hover,
     div[data-testid="stMultiSelect"] > div > div:focus-within {
-        border-color: #0B4F46 !important;
-        box-shadow: 0 0 0 1px #0B4F46 !important;
+        border-color: #0B4F71 !important;
+        box-shadow: 0 0 0 1px #0B4F71 !important;
         outline: none !important;
     }
 
@@ -380,14 +380,14 @@ st.markdown("""
         outline: none !important;
     }
 
-    /* Multiselect Tag Pills (100% Solid Emerald Green #0B4F46) */
+    /* Multiselect Tag Pills (100% Solid Emerald Blue #0B4F71) */
     [data-baseweb="tag"],
     span[data-baseweb="tag"],
     div[data-baseweb="tag"] {
-        background-color: #0B4F46 !important;
+        background-color: #0B4F71 !important;
         color: #FFFFFF !important;
         border: none !important;
-        border-color: #0B4F46 !important;
+        border-color: #0B4F71 !important;
         border-radius: 8px !important;
         padding: 3px 10px !important;
         margin: 2px !important;
@@ -412,11 +412,11 @@ st.markdown("""
         outline: none !important;
     }
 
-    /* Action Buttons (Bankio Deep Teal Pill Button #0B4F46) */
+    /* Action Buttons (Bankio Deep Emerald Blue Pill Button #0B4F71) */
     div.stButton > button,
     button[data-testid="stBaseButton-secondary"],
     button[data-testid="stBaseButton-primary"] {
-        background-color: #0B4F46 !important;
+        background-color: #0B4F71 !important;
         color: #FFFFFF !important;
         border: none !important;
         border-radius: 9999px !important;
@@ -424,15 +424,15 @@ st.markdown("""
         font-weight: 600 !important;
         font-size: 0.95rem !important;
         letter-spacing: 0.02em !important;
-        box-shadow: 0 4px 14px rgba(11, 79, 70, 0.25) !important;
+        box-shadow: 0 4px 14px rgba(11, 79, 113, 0.25) !important;
         transition: all 0.2s ease !important;
     }
     div.stButton > button:hover,
     button[data-testid="stBaseButton-secondary"]:hover,
     button[data-testid="stBaseButton-primary"]:hover {
-        background-color: #063B34 !important;
+        background-color: #063750 !important;
         transform: translateY(-2px) !important;
-        box-shadow: 0 8px 20px rgba(11, 79, 70, 0.35) !important;
+        box-shadow: 0 8px 20px rgba(11, 79, 113, 0.35) !important;
     }
     div.stButton > button * {
         color: #FFFFFF !important;
@@ -441,17 +441,17 @@ st.markdown("""
     /* Minimal Flat Custom File Uploader Styling (Centered Layout) */
     div[data-testid="stFileUploader"] {
         background-color: #FFFFFF !important;
-        border: 2px dashed #0B4F46 !important;
+        border: 2px dashed #0B4F71 !important;
         border-radius: 18px !important;
         padding: 1.5rem 2rem !important;
-        box-shadow: 0 2px 10px rgba(11, 79, 70, 0.05) !important;
+        box-shadow: 0 2px 10px rgba(11, 79, 113, 0.05) !important;
         transition: all 0.25s ease !important;
         text-align: center !important;
     }
     div[data-testid="stFileUploader"]:hover {
-        border-color: #10B981 !important;
+        border-color: #0284C7 !important;
         background-color: #F9FAFB !important;
-        box-shadow: 0 4px 14px rgba(16, 185, 129, 0.1) !important;
+        box-shadow: 0 4px 14px rgba(2, 132, 199, 0.1) !important;
         transform: translateY(-2px) !important;
     }
     div[data-testid="stFileUploader"] [data-testid="stWidgetLabel"],
@@ -473,7 +473,7 @@ st.markdown("""
         margin: 0 auto !important;
         font-size: 1.1rem !important;
         font-weight: 700 !important;
-        color: #0B4F46 !important;
+        color: #0B4F71 !important;
     }
     div[data-testid="stFileUploader"] section {
         background-color: transparent !important;
@@ -501,13 +501,13 @@ st.markdown("""
         text-align: center !important;
     }
     div[data-testid="stFileUploader"] section button {
-        background-color: #0B4F46 !important;
+        background-color: #0B4F71 !important;
         color: #FFFFFF !important;
         border: none !important;
         border-radius: 9999px !important;
         font-weight: 600 !important;
         padding: 0.6rem 1.75rem !important;
-        box-shadow: 0 4px 12px rgba(11, 79, 70, 0.2) !important;
+        box-shadow: 0 4px 12px rgba(11, 79, 113, 0.2) !important;
         margin: 0 auto !important;
     }
     div[data-testid="stFileUploader"] small {
@@ -517,7 +517,7 @@ st.markdown("""
         color: #6B7280 !important;
     }
 
-    /* Table Header Styling (Matching IMG_3512.jpeg - Deep Emerald Top Column Header) */
+    /* Table Header Styling (Deep Emerald Blue Top Column Header) */
     div[data-testid="stTable"] table {
         border-collapse: separate !important;
         border-spacing: 0 !important;
@@ -529,13 +529,13 @@ st.markdown("""
     div[data-testid="stTable"] table thead tr th,
     div[data-testid="stTable"] th,
     .ui-table thead tr th {
-        background-color: #0B4F46 !important;
+        background-color: #0B4F71 !important;
         color: #FFFFFF !important;
         font-weight: 700 !important;
         font-size: 0.88rem !important;
         letter-spacing: 0.04em !important;
         padding: 12px 16px !important;
-        border-bottom: 2px solid #063B34 !important;
+        border-bottom: 2px solid #063750 !important;
         border-top: none !important;
         text-align: left !important;
     }
@@ -574,7 +574,7 @@ st.markdown("""
         background-color: #FFFFFF !important;
         position: relative !important;
         scrollbar-width: thin !important;
-        scrollbar-color: #0B4F46 #F3F4F6 !important;
+        scrollbar-color: #0B4F71 #F3F4F6 !important;
     }
     .bankio-table {
         width: 100% !important;
@@ -584,10 +584,10 @@ st.markdown("""
         font-size: 0.88rem !important;
     }
     .bankio-table thead tr {
-        background-color: #0B4F46 !important;
+        background-color: #0B4F71 !important;
     }
     .bankio-table thead tr th {
-        background-color: #0B4F46 !important;
+        background-color: #0B4F71 !important;
         color: #FFFFFF !important;
         font-weight: 700 !important;
         font-size: 0.82rem !important;
@@ -614,7 +614,7 @@ st.markdown("""
         vertical-align: middle !important;
         white-space: nowrap !important;
     }
-    /* Table Styling: First Row (Header) Deep Emerald Green Only */
+    /* Table Styling: First Row (Header) Deep Emerald Blue Only */
     .bankio-table tbody tr td.first-col-bold {
         font-weight: 700 !important;
         color: #111827 !important;
@@ -640,14 +640,14 @@ st.markdown("""
     div[data-testid="stTable"]::-webkit-scrollbar-thumb,
     div[data-testid="stDataFrame"]::-webkit-scrollbar-thumb,
     table::-webkit-scrollbar-thumb {
-        background-color: #0B4F46 !important;
+        background-color: #0B4F71 !important;
         border-radius: 6px !important;
     }
     .bankio-table-container::-webkit-scrollbar-thumb:hover,
     div[data-testid="stTable"]::-webkit-scrollbar-thumb:hover,
     div[data-testid="stDataFrame"]::-webkit-scrollbar-thumb:hover,
     table::-webkit-scrollbar-thumb:hover {
-        background-color: #063B34 !important;
+        background-color: #063750 !important;
     }
 
     /* Responsive Grid Utility Classes & Media Queries */
@@ -815,8 +815,8 @@ def search_entire_system(query: str, historical_df: pd.DataFrame, appliance_df: 
 
 def render_bankio_table(df: pd.DataFrame, first_col_green: bool = False, search_query: str = ""):
     """
-    Renders a custom HTML table matching the Bankio UI design in IMG_3512.jpeg.
-    - TOP HEADER ROW ONLY: Deep Emerald Green (#0B4F46) background with White text (#FFFFFF)
+    Renders a custom HTML table matching the Bankio UI design.
+    - TOP HEADER ROW ONLY: Deep Emerald Blue (#0B4F71) background with White text (#FFFFFF)
     - Data rows: Crisp white background with dark charcoal text (#111827).
     - Automatically filters rows when a search query is active!
     """
@@ -837,7 +837,7 @@ def render_bankio_table(df: pd.DataFrame, first_col_green: bool = False, search_
     html = ['<div class="bankio-table-container">']
     html.append('<table class="bankio-table">')
     
-    # Top Header Row (Solid Emerald Green)
+    # Top Header Row (Solid Emerald Blue)
     html.append('<thead><tr>')
     for col in display_df.columns:
         col_title = str(col).replace('_', ' ').title()
@@ -1048,8 +1048,8 @@ if not st.session_state["entered_app"]:
             font-family: 'Fredoka', 'Outfit', sans-serif !important;
             font-size: 5.8rem !important;
             font-weight: 900 !important;
-            color: #0B4F46 !important;
-            -webkit-text-fill-color: #0B4F46 !important;
+            color: #0B4F71 !important;
+            -webkit-text-fill-color: #0B4F71 !important;
             text-shadow: 
                 -4px -4px 0 #FFFFFF, 
                  4px -4px 0 #FFFFFF, 
@@ -1071,8 +1071,8 @@ if not st.session_state["entered_app"]:
             font-family: 'Fredoka', 'Inter', sans-serif !important;
             font-size: 1.7rem !important;
             font-weight: 800 !important;
-            color: #0B4F46 !important;
-            -webkit-text-fill-color: #0B4F46 !important;
+            color: #0B4F71 !important;
+            -webkit-text-fill-color: #0B4F71 !important;
             text-shadow: 
                 -2.5px -2.5px 0 #FFFFFF, 
                  2.5px -2.5px 0 #FFFFFF, 
@@ -1100,7 +1100,7 @@ if not st.session_state["entered_app"]:
             width: 100% !important;
         }}
         div[data-testid="stButton"] button {{
-            background: linear-gradient(180deg, #0B4F46 0%, #194D40 100%) !important;
+            background: linear-gradient(180deg, #0B4F71 0%, #155272 100%) !important;
             color: #FFFFFF !important;
             font-family: 'Fredoka', 'Outfit', sans-serif !important;
             font-size: 1.75rem !important;
@@ -1109,18 +1109,18 @@ if not st.session_state["entered_app"]:
             padding: 0.75rem 2rem !important;
             border-radius: 9999px !important;
             border: 4px solid #FFFFFF !important;
-            box-shadow: 0 10px 24px rgba(11, 79, 70, 0.5), 0 4px 10px rgba(0,0,0,0.3) !important;
+            box-shadow: 0 10px 24px rgba(11, 79, 113, 0.5), 0 4px 10px rgba(0,0,0,0.3) !important;
             transition: all 0.25s ease !important;
             width: 320px !important;
             max-width: 320px !important;
             margin: 0 auto !important;
             display: block !important;
-            text-shadow: -2px -2px 0 #0B4F46, 2px -2px 0 #0B4F46, -2px 2px 0 #0B4F46, 2px 2px 0 #0B4F46 !important;
+            text-shadow: -2px -2px 0 #0B4F71, 2px -2px 0 #0B4F71, -2px 2px 0 #0B4F71, 2px 2px 0 #0B4F71 !important;
         }}
         div[data-testid="stButton"] button:hover {{
             transform: scale(1.06) !important;
-            background: linear-gradient(180deg, #194D40 0%, #0B4F46 100%) !important;
-            box-shadow: 0 14px 32px rgba(11, 79, 70, 0.7), 0 6px 16px rgba(0,0,0,0.4) !important;
+            background: linear-gradient(180deg, #155272 0%, #0B4F71 100%) !important;
+            box-shadow: 0 14px 32px rgba(11, 79, 113, 0.7), 0 6px 16px rgba(0,0,0,0.4) !important;
             border-color: #FFFFFF !important;
         }}
     </style>
@@ -1220,14 +1220,14 @@ forecast_school = get_forecast_school(target_school, historical_schools)
 seasonal_source_df = get_seasonal_source(seasonal_df, historical_df)
 
 # ----------------------------------------------------
-# SOOTHING MATCHA & DARK FOREST GREEN PALETTE (NO BRIGHT/NEON GREENS)
+# ELEGANT DEEP EMERALD BLUE PALETTE
 # ----------------------------------------------------
-GREEN_PALETTE = ["#0B4F46", "#194D40", "#286654", "#3C826D", "#5A9E87", "#7CAF9B", "#A0CFC0", "#C8E6DC"]
+GREEN_PALETTE = ["#0B4F71", "#155272", "#1F698E", "#3487B2", "#539EC5", "#7EB8D2", "#A9D6EA", "#CFE8F6"]
 GREEN_MONO_PALETTE = GREEN_PALETTE
 BLUE_PALETTE = GREEN_PALETTE
 BLUE_GREEN_PALETTE = GREEN_PALETTE
 
-def apply_green_theme(fig, title=""):
+def apply_blue_theme(fig, title=""):
     layout_kwargs = dict(
         font=dict(family="Inter", color="#6B7280"),
         paper_bgcolor="rgba(0,0,0,0)",
@@ -1264,7 +1264,7 @@ def apply_green_theme(fig, title=""):
     fig.update_layout(**layout_kwargs)
     return fig
 
-apply_blue_theme = apply_green_theme
+apply_green_theme = apply_blue_theme
 
 PAGE_HEADER_TITLES = {
     "Welcome": "WELCOME TO ENERGYSCAPE",
@@ -1305,13 +1305,13 @@ if search_term and search_term.strip():
     c_s1, c_s2 = st.columns([4, 1])
     with c_s1:
         st.markdown(f"""
-        <div class="ui-card" style="padding: 0.75rem 1.25rem !important; margin-bottom: 0.5rem !important; border-left: 4px solid #0B4F46 !important; background-color: #E8F5E9 !important;">
+        <div class="ui-card" style="padding: 0.75rem 1.25rem !important; margin-bottom: 0.5rem !important; border-left: 4px solid #0B4F71 !important; background-color: #E0F2FE !important;">
             <div style="display: flex; align-items: center; justify-content: space-between;">
                 <div>
-                    <span style="font-size: 0.85rem; font-weight: 700; color: #1B5E20;">🔍 SYSTEM SEARCH ACTIVE:</span>
-                    <span style="font-size: 0.9rem; font-weight: 800; color: #0B4F46; margin-left: 8px;">"{search_term.strip()}"</span>
+                    <span style="font-size: 0.85rem; font-weight: 700; color: #03496D;">🔍 SYSTEM SEARCH ACTIVE:</span>
+                    <span style="font-size: 0.9rem; font-weight: 800; color: #0B4F71; margin-left: 8px;">"{search_term.strip()}"</span>
                 </div>
-                <span style="font-size: 0.8rem; color: #1B5E20;">Scanning all 10 pages in system</span>
+                <span style="font-size: 0.8rem; color: #03496D;">Scanning all 10 pages in system</span>
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -1408,9 +1408,9 @@ if navigation_option == "Dashboard":
         st.markdown(f"""
         <div class="ui-card" style="margin-bottom: 0.85rem !important; padding: 1.1rem 1.35rem !important;">
             <div class="kpi-label">Projected Monthly Avg ({forecast_horizon} Months)</div>
-            <div class="kpi-val" style="font-size: 1.6rem; color: #0B4F46;">{format_currency(avg_fc_bill)}</div>
+            <div class="kpi-val" style="font-size: 1.6rem; color: #0B4F71;">{format_currency(avg_fc_bill)}</div>
             <div style="margin-top: 0.4rem; font-size: 0.82rem; color: #6B7280;">
-                MAPE Accuracy: <span style="color: #047857; font-weight: 800;">{ets_res['val_mape']:.2f}%</span> | RMSE: <strong>{format_currency(ets_res['val_rmse'])}</strong>
+                MAPE Accuracy: <span style="color: #03496D; font-weight: 800;">{ets_res['val_mape']:.2f}%</span> | RMSE: <strong>{format_currency(ets_res['val_rmse'])}</strong>
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -1418,7 +1418,7 @@ if navigation_option == "Dashboard":
         st.markdown(f"""
         <div class="ui-card" style="margin-bottom: 0.85rem !important; padding: 1.1rem 1.35rem !important;">
             <div class="kpi-label">Confidence Interval Range</div>
-            <div style="font-size: 1.15rem; font-weight: 800; color: #047857; margin-top: 0.2rem;">{format_currency(fc_df['lower_bound'].mean())} – {format_currency(fc_df['upper_bound'].mean())}</div>
+            <div style="font-size: 1.15rem; font-weight: 800; color: #03496D; margin-top: 0.2rem;">{format_currency(fc_df['lower_bound'].mean())} – {format_currency(fc_df['upper_bound'].mean())}</div>
             <div style="margin-top: 0.4rem; font-size: 0.82rem; color: #6B7280;">
                 Exponential Smoothing (ETS) Baseline Projection
             </div>
@@ -1440,7 +1440,7 @@ if navigation_option == "Dashboard":
         height=360
     )
     fig_tr = apply_blue_theme(fig_tr, f"Historical Monthly Electricity Expenditure — {target_school} (₱)")
-    fig_tr.update_traces(line=dict(width=3, color="#0B4F46"), hovertemplate="<b>%{x|%b %Y}</b><br>Bill: ₱%{y:,.2f}<extra></extra>")
+    fig_tr.update_traces(line=dict(width=3, color="#0B4F71"), hovertemplate="<b>%{x|%b %Y}</b><br>Bill: ₱%{y:,.2f}<extra></extra>")
     st.plotly_chart(fig_tr, use_container_width=True)
     
     sy_min = historical_df['school_year'].min() if 'school_year' in historical_df.columns and not historical_df['school_year'].empty else "2021–2022"
@@ -1456,7 +1456,7 @@ if navigation_option == "Dashboard":
             </div>
             <div>
                 <div class="kpi-label">Historical Peak Bill</div>
-                <div style="font-size: 1.3rem; font-weight: 800; color: #0B4F46;">{format_currency(hist_metrics.get("max_bill", 0))}</div>
+                <div style="font-size: 1.3rem; font-weight: 800; color: #0B4F71;">{format_currency(hist_metrics.get("max_bill", 0))}</div>
             </div>
             <span class="pill-badge-green" style="font-size: 0.82rem; padding: 0.35rem 0.85rem;">{sy_cov_str}</span>
         </div>
@@ -1478,7 +1478,7 @@ elif navigation_option == "Data Input":
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <div>
                 <div class="kpi-label">SELECTED INSTITUTION</div>
-                <div style="font-size: 1.2rem; font-weight: 800; color: #0F766E;">{target_school}</div>
+                <div style="font-size: 1.2rem; font-weight: 800; color: #0B4F71;">{target_school}</div>
             </div>
             <span class="pill-badge-teal">Active Dataset</span>
         </div>
@@ -1592,23 +1592,23 @@ elif navigation_option == "Data Input":
     <div class="ui-card" style="padding: 1.25rem 1.5rem !important;">
         <div class="responsive-grid-2" style="font-size: 0.9rem; color: #374151;">
             <div style="display: flex; align-items: center; justify-content: space-between;">
-                <span><span style="color: #047857; margin-right: 8px;">✓</span> NO MISSING VALUES</span>
+                <span><span style="color: #03496D; margin-right: 8px;">✓</span> NO MISSING VALUES</span>
                 <span class="pill-badge-green">{missing_status} ({total_missing} Missing)</span>
             </div>
             <div style="display: flex; align-items: center; justify-content: space-between;">
-                <span><span style="color: #047857; margin-right: 8px;">✓</span> NON-NEGATIVE VALUES</span>
+                <span><span style="color: #03496D; margin-right: 8px;">✓</span> NON-NEGATIVE VALUES</span>
                 <span class="pill-badge-green">{nonnegative_status} ({negative_values} Invalid)</span>
             </div>
             <div style="display: flex; align-items: center; justify-content: space-between;">
-                <span><span style="color: #047857; margin-right: 8px;">✓</span> VALID RANGES (Hours 1-24, Days 1-31)</span>
+                <span><span style="color: #03496D; margin-right: 8px;">✓</span> VALID RANGES (Hours 1-24, Days 1-31)</span>
                 <span class="pill-badge-green">{range_status} ({invalid_ranges} Invalid)</span>
             </div>
             <div style="display: flex; align-items: center; justify-content: space-between;">
-                <span><span style="color: #047857; margin-right: 8px;">✓</span> COMPLETE DATE TIMESTAMPS</span>
-                <span style="color: #047857; font-weight: 800;">{sequence_status} ({sequence_pct}% Sequence)</span>
+                <span><span style="color: #03496D; margin-right: 8px;">✓</span> COMPLETE DATE TIMESTAMPS</span>
+                <span style="color: #03496D; font-weight: 800;">{sequence_status} ({sequence_pct}% Sequence)</span>
             </div>
             <div style="display: flex; align-items: center; justify-content: space-between; grid-column: 1 / -1; padding-top: 4px;">
-                <span><span style="color: #0B4F46; margin-right: 8px;">✓</span> POTENTIAL OUTLIERS</span>
+                <span><span style="color: #0B4F71; margin-right: 8px;">✓</span> POTENTIAL OUTLIERS</span>
                 <span class="pill-badge-green">{outlier_status} ({outlier_count} Potential Peaks)</span>
             </div>
         </div>
@@ -1679,9 +1679,9 @@ elif navigation_option == "Season":
 
         peak_pct_str = f"({(peak_s_index - 1.0) * 100:+.0f}% Peak)" if peak_s_index != 1.0 else "(Baseline)"
         
-        # Bankio Minimal Green Palette: Emerald for Peak Month, Dark Teal for other Chosen Months
+        # Emerald Blue Palette: Deep Emerald Blue for Peak Month, Ocean Blue for other Chosen Months
         peak_full = peak_month_str.title()
-        bar_colors = ["#0B4F46" if m == peak_full else "#286654" for m in filtered_summary['full_month_name']]
+        bar_colors = ["#0B4F71" if m == peak_full else "#1F698E" for m in filtered_summary['full_month_name']]
         
         st.markdown(f'<h3 style="font-size: 1.05rem; font-weight: 700; color: #111827; margin-bottom: 0.75rem;">Filtered Monthly {season_value_label} & Seasonal Index Trend — {target_school}</h3>', unsafe_allow_html=True)
         fig_sea = go.Figure()
@@ -1697,7 +1697,7 @@ elif navigation_option == "Season":
             y=filtered_summary['seasonal_index'] * overall_mean,
             name="Seasonal Trend Index",
             mode="lines+markers",
-            line=dict(color="#047857", width=3.5),
+            line=dict(color="#03496D", width=3.5),
             hovertemplate="Month: %{x}<br>Index: %{text:.2f}<extra></extra>",
             text=filtered_summary['seasonal_index']
         ))
@@ -1707,13 +1707,13 @@ elif navigation_option == "Season":
         
         st.markdown('<div style="margin-top: 1rem;"></div>', unsafe_allow_html=True)
         
-        # Bottom Left Metrics - NOW DYNAMIC
+        # Bottom Left Metrics - DYNAMIC
         st.markdown(f"""
         <div class="ui-card" style="padding: 1rem 1.25rem !important;">
             <div class="responsive-grid-3">
                 <div>
                     <div class="kpi-label">PEAK PERIOD</div>
-                    <div style="font-weight: 800; font-size: 1.05rem; color: #0B4F46;">{peak_month_str}</div>
+                    <div style="font-weight: 800; font-size: 1.05rem; color: #0B4F71;">{peak_month_str}</div>
                 </div>
                 <div>
                     <div class="kpi-label">SEASONAL INDEX</div>
@@ -1721,7 +1721,7 @@ elif navigation_option == "Season":
                 </div>
                 <div>
                     <div class="kpi-label">LOWEST PERIOD</div>
-                    <div style="font-weight: 800; font-size: 1.05rem; color: #047857;">{lowest_month_str}</div>
+                    <div style="font-weight: 800; font-size: 1.05rem; color: #03496D;">{lowest_month_str}</div>
                 </div>
             </div>
         </div>
@@ -1768,8 +1768,8 @@ elif navigation_option == "Energy Load":
     apps_filtered = filter_dataframe_by_search(apps_processed, search_term)
     apps_chart_df = apps_filtered.sort_values(by='monthly_kwh', ascending=True)
     
-    # Soothing Matcha & Dark Forest Green Palette (No Bright/Neon Greens)
-    green_bar_palette = ["#063B34", "#0B4F46", "#194D40", "#286654", "#3C826D", "#5A9E87", "#7CAF9B", "#A0CFC0"]
+    # Emerald Blue Palette
+    green_bar_palette = ["#063750", "#0B4F71", "#155272", "#1F698E", "#3487B2", "#539EC5", "#7EB8D2", "#A9D6EA"]
     
     fig_hbar = px.bar(
         apps_chart_df,
@@ -1798,7 +1798,7 @@ elif navigation_option == "Energy Load":
             </div>
             <div>
                 <div class="kpi-label">CONSUMPTION</div>
-                <div style="font-size: 1.4rem; font-weight: 800; color: #0B4F46;">{load_summary['total_kwh']:.2f} KWH</div>
+                <div style="font-size: 1.4rem; font-weight: 800; color: #0B4F71;">{load_summary['total_kwh']:.2f} KWH</div>
                 <div style="font-size: 0.78rem; color: #6B7280;">Total Campus Baseline Monthly Load</div>
             </div>
         </div>
@@ -1823,14 +1823,14 @@ elif navigation_option == "Forecast":
     
     fc_df = ets_res["forecast_df"]
     
-    # 3-Line Forecast Chart matching Bankio Green Theme
+    # 3-Line Forecast Chart matching Bankio Emerald Blue Theme
     fig_fc_line = go.Figure()
     fig_fc_line.add_trace(go.Scatter(
         x=fc_df['date_str'],
         y=fc_df['lower_bound'],
         name="Lower Confidence Bound",
         mode="lines",
-        line=dict(color="rgba(11, 79, 70, 0.3)", width=1, dash="dash"),
+        line=dict(color="rgba(11, 79, 113, 0.3)", width=1, dash="dash"),
         hovertemplate="Lower Bound: ₱%{y:,.2f}<extra></extra>",
         showlegend=False
     ))
@@ -1840,8 +1840,8 @@ elif navigation_option == "Forecast":
         name="95% Confidence Interval Band",
         mode="lines",
         fill='tonexty',
-        fillcolor="rgba(11, 79, 70, 0.12)",
-        line=dict(color="rgba(11, 79, 70, 0.3)", width=1, dash="dash"),
+        fillcolor="rgba(11, 79, 113, 0.12)",
+        line=dict(color="rgba(11, 79, 113, 0.3)", width=1, dash="dash"),
         hovertemplate="Upper Bound: ₱%{y:,.2f}<extra></extra>"
     ))
     fig_fc_line.add_trace(go.Scatter(
@@ -1849,8 +1849,8 @@ elif navigation_option == "Forecast":
         y=fc_df['forecast_bill'],
         name="ETS Forecasted Bill (₱)",
         mode="lines+markers",
-        line=dict(color="#0B4F46", width=3.5),
-        marker=dict(size=7, color="#063B34"),
+        line=dict(color="#0B4F71", width=3.5),
+        marker=dict(size=7, color="#063750"),
         hovertemplate="<b>%{x}</b><br>Forecast: ₱%{y:,.2f}<extra></extra>"
     ))
     fig_fc_line = apply_blue_theme(fig_fc_line, f"Forecasted Electricity Bills — {target_school} ({forecast_horizon} Months)")
@@ -1872,7 +1872,7 @@ elif navigation_option == "Forecast":
                 <div style="font-size: 0.9rem; color: #374151; line-height: 1.6; margin-top: 0.4rem;">
                     <strong>MAE:</strong> {format_currency(mae_val)}<br>
                     <strong>RMSE:</strong> {format_currency(ets_res["val_rmse"])}<br>
-                    <strong>MAPE:</strong> <span style="color: #047857; font-weight: 800;">{ets_res["val_mape"]:.2f}%</span> ({interpret_mape(ets_res["val_mape"])})
+                    <strong>MAPE:</strong> <span style="color: #03496D; font-weight: 800;">{ets_res["val_mape"]:.2f}%</span> ({interpret_mape(ets_res["val_mape"])})
                 </div>
             </div>
             <div>
@@ -1919,7 +1919,7 @@ elif navigation_option == "Carbon":
         st.markdown(f"""
         <div class="ui-card">
             <div class="kpi-label">FORECAST</div>
-            <div style="font-size: 1.8rem; font-weight: 800; color: #0B4F46; margin-top: 0.3rem;">{(fc_annual_co2/12):,.2f} kg CO₂e</div>
+            <div style="font-size: 1.8rem; font-weight: 800; color: #0B4F71; margin-top: 0.3rem;">{(fc_annual_co2/12):,.2f} kg CO₂e</div>
             <div style="font-size: 0.82rem; color: #6B7280; margin-top: 0.4rem;">
                 Projected Monthly Average ({fc_annual_co2/1000:.2f} t CO₂e / Year)
             </div>
@@ -1934,7 +1934,7 @@ elif navigation_option == "Carbon":
                 <div style="font-size: 1.1rem; font-weight: 800; color: #111827;">Projected Annual CO₂</div>
                 <div style="font-size: 0.82rem; color: #6B7280;">Calculated with Grid Emission Factor = {emission_factor:.2f} kg CO₂e/kWh</div>
             </div>
-            <div style="font-size: 1.8rem; font-weight: 800; color: #0B4F46;">{bau['annual_co2_kg']:,.0f} kg CO₂e</div>
+            <div style="font-size: 1.8rem; font-weight: 800; color: #0B4F71;">{bau['annual_co2_kg']:,.0f} kg CO₂e</div>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -1944,7 +1944,7 @@ elif navigation_option == "Carbon":
         fc_df,
         x='month',
         y='forecast_co2_kg',
-        color_discrete_sequence=["#0B4F46"],
+        color_discrete_sequence=["#0B4F71"],
         text='forecast_co2_kg',
         height=340
     )
@@ -2006,10 +2006,10 @@ elif navigation_option == "Scenario":
     if run_sim:
         st.toast(f"⚡ Scenario simulated ({top1_red:.0f}% {top1_name}, {top2_red:.0f}% {top2_name}, {other_red:.0f}% Other loads)!")
         st.markdown(f"""
-        <div style="background-color: #E6F4EA; border: 1px solid #A7F3D0; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 0.75rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
+        <div style="background-color: #E0F2FE; border: 1px solid #BAE6FD; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 0.75rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
             <div>
-                <div style="font-weight: 700; color: #047857; font-size: 0.98rem;">SIMULATION APPLIED</div>
-                <div style="font-size: 0.85rem; color: #065F46;">Projected Load: <b>{sim_kwh:,.2f} kWh/month</b> ({avg_red_pct:.1f}% Energy Reduction). Annual Savings: <b>{format_currency(cost_saved_y)}</b></div>
+                <div style="font-weight: 700; color: #03496D; font-size: 0.98rem;">SIMULATION APPLIED</div>
+                <div style="font-size: 0.85rem; color: #03496D;">Projected Load: <b>{sim_kwh:,.2f} kWh/month</b> ({avg_red_pct:.1f}% Energy Reduction). Annual Savings: <b>{format_currency(cost_saved_y)}</b></div>
             </div>
             <span class="pill-badge-green">SIMULATED</span>
         </div>
@@ -2027,18 +2027,18 @@ elif navigation_option == "Scenario":
             </div>
             <div>
                 <div class="kpi-label">PROJECTED SCENARIO</div>
-                <div style="font-size: 1.3rem; font-weight: 800; color: #0B4F46;">{sim_kwh:,.2f} KWH</div>
+                <div style="font-size: 1.3rem; font-weight: 800; color: #0B4F71;">{sim_kwh:,.2f} KWH</div>
                 <div style="font-size: 0.78rem; color: #6B7280;">Simulated Monthly Target</div>
             </div>
             <div>
                 <div class="kpi-label">ENERGY SAVED REDUCTION</div>
-                <div style="font-size: 1.3rem; font-weight: 800; color: #047857;">{kwh_saved:,.2f} KWH</div>
-                <div style="font-size: 0.78rem; color: #047857; font-weight: 700;">{avg_red_pct:.2f}% REDUCTION</div>
+                <div style="font-size: 1.3rem; font-weight: 800; color: #03496D;">{kwh_saved:,.2f} KWH</div>
+                <div style="font-size: 0.78rem; color: #03496D; font-weight: 700;">{avg_red_pct:.2f}% REDUCTION</div>
             </div>
             <div>
                 <div class="kpi-label">COST SAVED & CO₂ AVOIDED</div>
-                <div style="font-size: 1.15rem; font-weight: 800; color: #0B4F46;">{format_currency(cost_saved_m)}/mo</div>
-                <div style="font-size: 0.78rem; color: #047857; font-weight: 700;">{co2_avoided_m:,.1f} KG CO₂e / month</div>
+                <div style="font-size: 1.15rem; font-weight: 800; color: #0B4F71;">{format_currency(cost_saved_m)}/mo</div>
+                <div style="font-size: 0.78rem; color: #03496D; font-weight: 700;">{co2_avoided_m:,.1f} KG CO₂e / month</div>
             </div>
         </div>
     </div>
@@ -2112,10 +2112,10 @@ elif navigation_option == "Optimization":
     if run_opt:
         st.toast(f"⚡ Linear Goal Programming Optimization executed for {target_school}!")
         st.markdown(f"""
-        <div style="background-color: #E6F4EA; border: 1px solid #A7F3D0; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 0.75rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
+        <div style="background-color: #E0F2FE; border: 1px solid #BAE6FD; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 0.75rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
             <div>
-                <div style="font-weight: 700; color: #047857; font-size: 0.98rem;">OPTIMIZATION COMPLETE (LINEAR GOAL PROGRAMMING)</div>
-                <div style="font-size: 0.85rem; color: #065F46;">Optimal Target: <b>{format_kwh(opt_res['optimized_monthly_kwh'])}</b> ({opt_res['reduction_percentage']:.1f}% Reduction). Annual Savings: <b>{format_currency(opt_res['annual_cost_savings_php'])}</b></div>
+                <div style="font-weight: 700; color: #03496D; font-size: 0.98rem;">OPTIMIZATION COMPLETE (LINEAR GOAL PROGRAMMING)</div>
+                <div style="font-size: 0.85rem; color: #03496D;">Optimal Target: <b>{format_kwh(opt_res['optimized_monthly_kwh'])}</b> ({opt_res['reduction_percentage']:.1f}% Reduction). Annual Savings: <b>{format_currency(opt_res['annual_cost_savings_php'])}</b></div>
             </div>
             <span class="pill-badge-green">OPTIMIZED</span>
         </div>
@@ -2167,7 +2167,7 @@ elif navigation_option == "Optimization":
         y="Monthly Load (kWh)",
         color="Strategy",
         text="Monthly Load (kWh)",
-        color_discrete_sequence=["#286654", "#0B4F46"],
+        color_discrete_sequence=["#1F698E", "#0B4F71"],
         height=280
     )
     fig_opt_bar = apply_blue_theme(fig_opt_bar, f"Baseline vs Linear Goal Programming Target — {target_school}")
@@ -2197,10 +2197,10 @@ elif navigation_option == "Optimization":
     mon_res = monitor_target_consumption(actual_input, target_input)
     if mon_res["is_on_target"]:
         st.markdown(f"""
-        <div style="background-color: #E6F4EA; border: 1px solid #A7F3D0; border-radius: 12px; padding: 1.25rem 1.5rem; display: flex; align-items: center; justify-content: space-between; margin-top: 0.5rem; margin-bottom: 1.25rem;">
+        <div style="background-color: #E0F2FE; border: 1px solid #BAE6FD; border-radius: 12px; padding: 1.25rem 1.5rem; display: flex; align-items: center; justify-content: space-between; margin-top: 0.5rem; margin-bottom: 1.25rem;">
             <div>
-                <h4 style="color: #047857; font-size: 1.05rem; font-weight: 700; margin: 0;">STATUS: COMPLIANT WITH ENERGY TARGET</h4>
-                <p style="color: #047857; font-size: 0.88rem; margin: 0.25rem 0 0 0;">Actual consumption ({format_kwh(mon_res['actual_kwh'])}) is below target ceiling ({format_kwh(mon_res['target_kwh'])}).</p>
+                <h4 style="color: #03496D; font-size: 1.05rem; font-weight: 700; margin: 0;">STATUS: COMPLIANT WITH ENERGY TARGET</h4>
+                <p style="color: #03496D; font-size: 0.88rem; margin: 0.25rem 0 0 0;">Actual consumption ({format_kwh(mon_res['actual_kwh'])}) is below target ceiling ({format_kwh(mon_res['target_kwh'])}).</p>
             </div>
             <span class="pill-badge-green" style="font-size: 0.95rem; padding: 0.4rem 1rem;">COMPLIANT</span>
         </div>
@@ -2234,7 +2234,7 @@ elif navigation_option == "Impact":
         st.markdown(f"""
         <div class="ui-card">
             <div class="kpi-label">Energy kWh Saved</div>
-            <div style="font-size: 1.7rem; font-weight: 800; color: #047857; margin-top: 0.3rem;">{kwh_savings_annual:,.2f} KWH</div>
+            <div style="font-size: 1.7rem; font-weight: 800; color: #03496D; margin-top: 0.3rem;">{kwh_savings_annual:,.2f} KWH</div>
             <div style="font-size: 0.82rem; color: #6B7280; margin-top: 0.4rem;">
                 Annual Saved Energy ({opt_res['monthly_kwh_savings']:,.2f} kWh/mo)
             </div>
@@ -2254,7 +2254,7 @@ elif navigation_option == "Impact":
         st.markdown(f"""
         <div class="ui-card">
             <div class="kpi-label">Carbon kg Avoided</div>
-            <div style="font-size: 1.7rem; font-weight: 800; color: #0B4F46; margin-top: 0.3rem;">{co2_savings_annual:,.2f} KG</div>
+            <div style="font-size: 1.7rem; font-weight: 800; color: #0B4F71; margin-top: 0.3rem;">{co2_savings_annual:,.2f} KG</div>
             <div style="font-size: 0.82rem; color: #6B7280; margin-top: 0.4rem;">
                 Annual CO₂e Reduction ({opt_res['monthly_kwh_savings']*emission_factor:,.1f} kg/mo)
             </div>
@@ -2352,10 +2352,10 @@ elif navigation_option == "Reports":
     if run_comp:
         st.toast("⚡ Comparative Analysis completed across all institutional datasets!")
         st.markdown("""
-        <div style="background-color: #E6F4EA; border: 1px solid #A7F3D0; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 0.75rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
+        <div style="background-color: #E0F2FE; border: 1px solid #BAE6FD; border-radius: 12px; padding: 1rem 1.25rem; margin-top: 0.75rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
             <div>
-                <div style="font-weight: 700; color: #047857; font-size: 0.98rem;">COMPARATIVE ANALYSIS EXECUTED</div>
-                <div style="font-size: 0.85rem; color: #065F46;">Institutional benchmark matrices updated for An-anaao Integrated School vs La Paz Integrated School.</div>
+                <div style="font-weight: 700; color: #03496D; font-size: 0.98rem;">COMPARATIVE ANALYSIS EXECUTED</div>
+                <div style="font-size: 0.85rem; color: #03496D;">Institutional benchmark matrices updated for An-anaao Integrated School vs La Paz Integrated School.</div>
             </div>
             <span class="pill-badge-green">UPDATED</span>
         </div>
@@ -2383,42 +2383,42 @@ elif navigation_option == "Reports":
     
     report_html = f"""<div class="ui-card" style="padding: 1.5rem 1.75rem !important;">
 <div style="font-size: 1.15rem; font-weight: 700; color: #111827; margin-bottom: 1rem;">
-School: <span style="color: #0B4F46;">{report_school}</span>
+School: <span style="color: #0B4F71;">{report_school}</span>
 </div>
 <div class="responsive-grid-2">
 <div style="background: #F9FAFB; padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid #EAECF0;">
 <div class="kpi-label">SEASONAL FINDING</div>
 <div style="font-size: 0.95rem; font-weight: 700; color: #111827; margin-top: 0.3rem;">
-Peak consumption: <span style="color: #0B4F46;">{rep_peak_month} (Seasonal Index: {rep_peak_idx:.2f})</span>
+Peak consumption: <span style="color: #0B4F71;">{rep_peak_month} (Seasonal Index: {rep_peak_idx:.2f})</span>
 </div>
 </div>
 <div style="background: #F9FAFB; padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid #EAECF0;">
 <div class="kpi-label">ENERGY LOAD</div>
 <div style="font-size: 0.95rem; font-weight: 700; color: #111827; margin-top: 0.3rem;">
-Priority load: <span style="color: #0B4F46;">{rep_sum['top_appliance']} ({rep_sum['top_kwh']:,.2f} kWh/mo, {rep_sum['top_share']:.1f}% share)</span>
+Priority load: <span style="color: #0B4F71;">{rep_sum['top_appliance']} ({rep_sum['top_kwh']:,.2f} kWh/mo, {rep_sum['top_share']:.1f}% share)</span>
 </div>
 </div>
 <div style="background: #F9FAFB; padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid #EAECF0;">
 <div class="kpi-label">FORECAST</div>
 <div style="font-size: 0.95rem; font-weight: 700; color: #111827; margin-top: 0.3rem;">
-Expected consumption: <span style="color: #0B4F46;">{format_currency(rep_fc_df['forecast_bill'].mean())} / month (MAPE: {rep_fc['val_mape']:.2f}%)</span>
+Expected consumption: <span style="color: #0B4F71;">{format_currency(rep_fc_df['forecast_bill'].mean())} / month (MAPE: {rep_fc['val_mape']:.2f}%)</span>
 </div>
 </div>
 <div style="background: #F9FAFB; padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid #EAECF0;">
 <div class="kpi-label">CARBON</div>
 <div style="font-size: 0.95rem; font-weight: 700; color: #111827; margin-top: 0.3rem;">
-Projected emissions: <span style="color: #0B4F46;">{rep_bau['annual_co2_kg']:,.2f} kg CO₂e / year</span>
+Projected emissions: <span style="color: #0B4F71;">{rep_bau['annual_co2_kg']:,.2f} kg CO₂e / year</span>
 </div>
 </div>
 <div style="background: #F9FAFB; padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid #EAECF0; grid-column: 1 / -1;">
 <div class="kpi-label">OPTIMIZATION</div>
 <div style="font-size: 0.95rem; font-weight: 700; color: #111827; margin-top: 0.3rem;">
-Recommended strategy: <span style="color: #0B4F46;">{rep_opt['selected_scenario']} ({format_kwh(rep_opt['optimized_monthly_kwh'])} target)</span>
+Recommended strategy: <span style="color: #0B4F71;">{rep_opt['selected_scenario']} ({format_kwh(rep_opt['optimized_monthly_kwh'])} target)</span>
 </div>
 </div>
-<div style="background: #E6F4EA; padding: 1.2rem 1.25rem; border-radius: 12px; border: 1px solid #A7F3D0; grid-column: 1 / -1;">
-<div class="kpi-label" style="color: #047857 !important;">IMPACT & SAVINGS</div>
-<div style="font-size: 0.95rem; font-weight: 700; color: #047857; margin-top: 0.4rem; line-height: 1.6;">
+<div style="background: #E0F2FE; padding: 1.2rem 1.25rem; border-radius: 12px; border: 1px solid #BAE6FD; grid-column: 1 / -1;">
+<div class="kpi-label" style="color: #03496D !important;">IMPACT & SAVINGS</div>
+<div style="font-size: 0.95rem; font-weight: 700; color: #03496D; margin-top: 0.4rem; line-height: 1.6;">
 Energy saved: <strong>{format_kwh(rep_opt['annual_kwh_savings'])} / year</strong><br>
 Cost saved: <strong>{format_currency(rep_opt['annual_cost_savings_php'])} / year</strong><br>
 CO₂ avoided: <strong>{format_co2(rep_opt['annual_avoided_co2_kg'])} / year</strong>
